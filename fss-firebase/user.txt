@@ -1,0 +1,4 @@
+email:testuser@test.test
+password:testpass
+
+Enter the details directly after the :
