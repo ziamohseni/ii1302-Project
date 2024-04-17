@@ -14,3 +14,11 @@ state["door"] = True
 time.sleep(5)
 
 firebase.fbset(state)
+
+def streamhandler(message):
+    print(message)
+
+stream = firebase.fbstream(streamhandler)
+
+time.sleep(25)
+stream.close()

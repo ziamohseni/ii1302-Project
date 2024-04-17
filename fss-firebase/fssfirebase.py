@@ -38,7 +38,8 @@ class FssFirebase:
         for entry in entries:
             dictionary[entry.key()] = entry.val()
         return dictionary
-    
+    def fbstream(self,streamHandler):
+        return self.db.child("devices/"+self.uid+"/"+self.devNum).stream(streamHandler,self.loginret["idToken"])
 
 
 
