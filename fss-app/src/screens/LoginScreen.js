@@ -6,9 +6,12 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Image,
+  Alert,
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
+import logo from "../../assets/fss-logo.png";
 
 // Styles
 import globalStyles from "../styles/globalStyles";
@@ -45,6 +48,9 @@ function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={logo} style={{ width: 200, height: 200 }} />
+      </View>
       <TextInput
         style={styles.input}
         value={email}
@@ -63,6 +69,11 @@ function LoginScreen() {
       <TouchableOpacity style={styles.buttonActive} onPress={handleLogin}>
         <Text style={styles.text}>LOG IN</Text>
       </TouchableOpacity>
+      <Button
+        title="FORGOT YOUR PASSWORD?"
+        color={globalStyles.darkColor.color}
+        onPress={() => Alert.alert("Forgot pass button pressed")}
+      />
     </View>
   );
 }
@@ -76,17 +87,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: globalStyles.lightColor.color,
   },
+  logoContainer: {
+    alignItems: "center",
+    marginBottom: 30,
+  },
   input: {
-    backgroundColor: globalStyles.lightColor.color,
+    fontWeight: "bold",
+    backgroundColor: "#eeeeee",
     color: globalStyles.darkColor.color,
-    height: 60,
+    height: 65,
     borderColor: globalStyles.secondLightColor.color,
     borderWidth: 1,
     borderRadius: 15,
     marginVertical: 10,
     padding: 10,
     shadowColor: globalStyles.darkColor.color,
-    shadowOffset: { width: 0, height: 3 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3.84,
     elevation: 25,
@@ -97,6 +113,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginTop: 30,
+    marginBottom: 15,
     borderRadius: 10,
     elevation: 3,
     backgroundColor: globalStyles.primaryColor.color,

@@ -5,10 +5,10 @@ const globalStyles = StyleSheet.create({
     color: "#1E90FF",
   },
   lightColor: {
-    color: "#ededed",
+    color: "#f9f9f9",
   },
   secondLightColor: {
-    color: "#b5b5b5",
+    color: "#dddddd",
   },
   darkColor: {
     color: "#111111",
