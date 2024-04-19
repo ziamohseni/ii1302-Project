@@ -55,6 +55,8 @@ function LoginScreen() {
         style={styles.input}
         value={email}
         autoCapitalize="none"
+        inputMode="email"
+        returnKeyType="next"
         placeholder="Email address"
         onChangeText={(text) => setEmail(text)}
       />
@@ -63,6 +65,7 @@ function LoginScreen() {
         style={styles.input}
         value={password}
         autoCapitalize="none"
+        returnKeyType="done"
         placeholder="Password"
         onChangeText={(text) => setPassword(text)}
       />
