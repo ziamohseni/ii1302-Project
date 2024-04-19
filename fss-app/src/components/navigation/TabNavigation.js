@@ -24,7 +24,7 @@ function TabNavigation() {
           tabBarInactiveTintColor: globalStyles.darkColor.color,
           tabBarStyle: {
             backgroundColor: globalStyles.lightColor.color,
-            borderTopColor: globalStyles.borderColor.borderColor,
+            borderTopColor: globalStyles.secondLightColor.color,
             height: Platform.OS === "ios" ? 84 : 54,
             paddingTop: 5,
           },
