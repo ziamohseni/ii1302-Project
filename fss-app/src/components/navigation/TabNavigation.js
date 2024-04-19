@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../../services/firebaseConfig";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Platform } from "react-native";
+import { ActivityIndicator, Platform } from "react-native";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 
@@ -12,9 +15,32 @@ import ProfileScreen from "../../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
-const isLoggedIn = false;
-
 function TabNavigation() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check if user is logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsLoggedIn(true);
+        setIsLoading(false);
+      } else {
+        setIsLoggedIn(false);
+        setIsLoading(false);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  // Show loading spinner while checking if user is logged in
+  if (isLoading) {
+    return (
+      <ActivityIndicator size="large" color={globalStyles.primaryColor.color} />
+    );
+  }
+
   return (
     <>
       <Tab.Navigator
