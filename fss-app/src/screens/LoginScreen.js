@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Text,
   TextInput,
   View,
-  StyleSheet,
   TouchableOpacity,
   Image,
   Alert,
