@@ -11,6 +11,9 @@ import {
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
+import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
+
+// Assets
 import logo from "../../assets/fss-logo.png";
 
 // Styles
@@ -22,9 +25,11 @@ function LoginScreen() {
   const [password, setPassword] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Login function
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -36,6 +41,7 @@ function LoginScreen() {
     } catch (error) {
       Alert.alert("Error logging in", error.message);
     }
+    setIsLoading(false);
   };
 
   // Check if email is valid
@@ -52,6 +58,11 @@ function LoginScreen() {
       setIsButtonActive(false);
     }
   }, [email, password]);
+
+  // Show loading spinner while logging in
+  if (isLoading) {
+    return <ActivityIndicatorComponent />;
+  }
 
   return (
     <ScrollView
