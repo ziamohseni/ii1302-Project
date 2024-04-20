@@ -61,6 +61,11 @@ const loginScreenStyles = StyleSheet.create({
     letterSpacing: 0.25,
     color: "white",
   },
+  errorText: {
+    color: "red",
+    marginBottom: 5,
+    marginLeft: 5,
+  },
 });
 
 export default loginScreenStyles;

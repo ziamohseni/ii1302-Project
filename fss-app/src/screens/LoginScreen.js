@@ -20,6 +20,7 @@ import styles from "../styles/loginScreenStyles";
 function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   // Login function
@@ -33,13 +34,19 @@ function LoginScreen() {
       const user = userCredential.user;
       console.log("User logged in!", user);
     } catch (error) {
-      console.error("Error logging in:", error);
+      Alert.alert("Error logging in", error.message);
     }
   };
 
+  // Check if email is valid
+  useEffect(() => {
+    const emailRegex = /\S+@\S+\.\S+/;
+    setIsValidEmail(emailRegex.test(email));
+  }, [email]);
+
   // Check if email and password are not empty
   useEffect(() => {
-    if (email.length > 0 && password.length > 0) {
+    if (email.length > 0 && password.length > 0 && isValidEmail) {
       setIsButtonActive(true);
     } else {
       setIsButtonActive(false);
@@ -66,6 +73,9 @@ function LoginScreen() {
           placeholder="Email address"
           onChangeText={(text) => setEmail(text)}
         />
+        {email.length > 0 && !isValidEmail && (
+          <Text style={styles.errorText}>Email is not valid.</Text>
+        )}
         <TextInput
           secureTextEntry={true}
           style={styles.input}
