@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Button,
   Text,
@@ -20,6 +20,7 @@ import styles from "../styles/loginScreenStyles";
 function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isButtonActive, setIsButtonActive] = useState(false);
 
   // Login function
   const handleLogin = async () => {
@@ -35,6 +36,15 @@ function LoginScreen() {
       console.error("Error logging in:", error);
     }
   };
+
+  // Check if email and password are not empty
+  useEffect(() => {
+    if (email.length > 0 && password.length > 0) {
+      setIsButtonActive(true);
+    } else {
+      setIsButtonActive(false);
+    }
+  }, [email, password]);
 
   return (
     <ScrollView
@@ -65,7 +75,11 @@ function LoginScreen() {
           placeholder="Password"
           onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity style={styles.buttonActive} onPress={handleLogin}>
+        <TouchableOpacity
+          style={isButtonActive ? styles.buttonActive : styles.buttonDisabled}
+          onPress={handleLogin}
+          disabled={!isButtonActive}
+        >
           <Text style={styles.text}>LOG IN</Text>
         </TouchableOpacity>
         <Button

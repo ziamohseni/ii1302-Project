@@ -49,6 +49,7 @@ const loginScreenStyles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     marginTop: 30,
+    marginBottom: 15,
     borderRadius: 15,
     elevation: 3,
     backgroundColor: globalStyles.secondLightColor.color,
