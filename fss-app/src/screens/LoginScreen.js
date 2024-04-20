@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ScrollView,
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
@@ -37,37 +38,44 @@ function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image source={logo} style={{ width: 200, height: 200 }} />
+    <ScrollView
+      automaticallyAdjustKeyboardInsets
+      contentContainerStyle={styles.scrollContainer}
+      alwaysBounceVertical={false}
+      alwaysBounceHorizontal={false}
+    >
+      <View style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image source={logo} style={{ width: 200, height: 200 }} />
+        </View>
+        <TextInput
+          style={styles.input}
+          value={email}
+          autoCapitalize="none"
+          inputMode="email"
+          returnKeyType="next"
+          placeholder="Email address"
+          onChangeText={(text) => setEmail(text)}
+        />
+        <TextInput
+          secureTextEntry={true}
+          style={styles.input}
+          value={password}
+          autoCapitalize="none"
+          returnKeyType="done"
+          placeholder="Password"
+          onChangeText={(text) => setPassword(text)}
+        />
+        <TouchableOpacity style={styles.buttonActive} onPress={handleLogin}>
+          <Text style={styles.text}>LOG IN</Text>
+        </TouchableOpacity>
+        <Button
+          title="FORGOT YOUR PASSWORD?"
+          color={globalStyles.darkColor.color}
+          onPress={() => Alert.alert("Forgot pass button pressed")}
+        />
       </View>
-      <TextInput
-        style={styles.input}
-        value={email}
-        autoCapitalize="none"
-        inputMode="email"
-        returnKeyType="next"
-        placeholder="Email address"
-        onChangeText={(text) => setEmail(text)}
-      />
-      <TextInput
-        secureTextEntry={true}
-        style={styles.input}
-        value={password}
-        autoCapitalize="none"
-        returnKeyType="done"
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
-      />
-      <TouchableOpacity style={styles.buttonActive} onPress={handleLogin}>
-        <Text style={styles.text}>LOG IN</Text>
-      </TouchableOpacity>
-      <Button
-        title="FORGOT YOUR PASSWORD?"
-        color={globalStyles.darkColor.color}
-        onPress={() => Alert.alert("Forgot pass button pressed")}
-      />
-    </View>
+    </ScrollView>
   );
 }
 

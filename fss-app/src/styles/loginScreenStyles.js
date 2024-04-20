@@ -2,6 +2,10 @@ import { StyleSheet } from "react-native";
 import globalStyles from "./globalStyles";
 
 const loginScreenStyles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
