@@ -4,7 +4,11 @@ defaultState = {"door":False,
                     "flood":False,
                     "smoke":False}
 
-firebase = fssfirebase.FssFirebase()
+with open("user.txt","r") as userfile:
+    username = userfile.readline().split(":")[1].split("\n")[0]
+    password = userfile.readline().split(":")[1].split("\n")[0]
+
+firebase = fssfirebase.FssFirebase(username,password)
 firebase.fbset(defaultState)
 
 state = firebase.fbget()

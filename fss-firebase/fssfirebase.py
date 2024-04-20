@@ -4,10 +4,9 @@ import json
 
 class FssFirebase:
     def __init__(self,email,password):
-        with open("firebaseconfig.json","r") as fcfile: #get the firebase config file here: https://console.firebase.google.com/project/ii1302-5sense/settings/general/web:Njg5MmUwNzctODQyMy00Y2Q5LTlmMzAtZjc5NmIwNGE1NGVl
+        with open("firebaseconfig.json","r") as fcfile: 
             firebaseConfig = json.load(fcfile)
-            #example of how the firebase config file should look: https://jontek.xyz/examplefirebaseconfig.json
-
+           
         fireb = firebase.initialize_app(firebaseConfig) 
 
         auth = fireb.auth()
