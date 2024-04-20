@@ -3,7 +3,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../services/firebaseConfig";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { ActivityIndicator, Platform, StyleSheet, View } from "react-native";
+import { Platform } from "react-native";
+import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 
@@ -36,14 +37,7 @@ function TabNavigation() {
 
   // Show loading spinner while checking if user is logged in
   if (isLoading) {
-    return (
-      <View style={[styles.container, styles.horizontal]}>
-        <ActivityIndicator
-          size="large"
-          color={globalStyles.primaryColor.color}
-        />
-      </View>
-    );
+    return <ActivityIndicatorComponent />;
   }
 
   return (
@@ -123,17 +117,5 @@ function TabNavigation() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  horizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10,
-  },
-});
 
 export default TabNavigation;
