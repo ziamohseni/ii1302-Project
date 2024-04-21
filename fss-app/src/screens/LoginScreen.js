@@ -75,6 +75,10 @@ function LoginScreen() {
         <View style={styles.logoContainer}>
           <Image source={logo} style={{ width: 200, height: 200 }} />
         </View>
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeTitle}>Welcome!</Text>
+          <Text style={styles.welcomeSubtitle}>To Five Sense Security</Text>
+        </View>
         <TextInput
           style={styles.input}
           value={email}
@@ -105,7 +109,7 @@ function LoginScreen() {
         </TouchableOpacity>
         <Button
           title="FORGOT YOUR PASSWORD?"
-          color={globalStyles.darkColor.color}
+          color={globalStyles.primaryColor.color}
           onPress={() => Alert.alert("Forgot pass button pressed")}
         />
       </View>

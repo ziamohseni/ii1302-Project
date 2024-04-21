@@ -16,6 +16,19 @@ const loginScreenStyles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 30,
   },
+  welcomeContainer: {
+    alignItems: "center",
+    marginBottom: 30,
+  },
+  welcomeTitle: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: globalStyles.darkColor.color,
+  },
+  welcomeSubtitle: {
+    fontSize: 16,
+    color: globalStyles.darkColor.color,
+  },
   input: {
     fontWeight: "bold",
     backgroundColor: "#eeeeee",
@@ -35,8 +48,9 @@ const loginScreenStyles = StyleSheet.create({
   buttonActive: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 10,
+    marginHorizontal: 20,
     marginTop: 30,
     marginBottom: 15,
     borderRadius: 15,
@@ -46,8 +60,9 @@ const loginScreenStyles = StyleSheet.create({
   buttonDisabled: {
     alignItems: "center",
     justifyContent: "center",
-    paddingVertical: 15,
+    paddingVertical: 20,
     paddingHorizontal: 10,
+    marginHorizontal: 20,
     marginTop: 30,
     marginBottom: 15,
     borderRadius: 15,
