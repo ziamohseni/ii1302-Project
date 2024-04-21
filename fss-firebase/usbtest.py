@@ -73,8 +73,14 @@ print("connected!")
 defaultState = {"door":False,
                     "flood":False,
                     "smoke":False}
+while True:
+    print("loop2")
+    try:
+        firebase = fssfirebase.FssFirebase(username,password)
+        break
+    except fssfirebase.InvalidFBLoginInfoError:
+        username,password,wifissid,wifipass = getUserAndPass()
 
-firebase = fssfirebase.FssFirebase(username,password)
 firebase.fbset(defaultState)
 
 state = firebase.fbget()

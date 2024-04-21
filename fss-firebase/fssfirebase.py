@@ -1,6 +1,10 @@
 import firebase #pip install firebase-rest-api
 import json
+from requests.exceptions import HTTPError
 
+class InvalidFBLoginInfoError(Exception):
+    "Login information incorrect"
+    pass
 
 class FssFirebase:
     def __init__(self,email,password):
@@ -16,8 +20,10 @@ class FssFirebase:
 
 
 
-
-        self.loginret = auth.sign_in_with_email_and_password(email,password)
+        try:
+            self.loginret = auth.sign_in_with_email_and_password(email,password)
+        except HTTPError:
+            raise InvalidFBLoginInfoError
 
 
         self.uid = self.loginret["localId"]
