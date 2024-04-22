@@ -1,4 +1,6 @@
 email:testuser@test.test
 password:testpass
+ssid:SSID_HERE
+wifipass:PASS_HERE
 
 Enter the details directly after the :
