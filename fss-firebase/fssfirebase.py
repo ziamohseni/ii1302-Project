@@ -32,16 +32,16 @@ class FssFirebase:
 
 
     def fbset(self,data):
-        self.db.child("devices/"+self.uid+"/"+self.devNum).set(data,self.loginret["idToken"])
+        self.db.child("centralHubs/"+self.uid+"/"+self.devNum+"/devices").set(data,self.loginret["idToken"])
 
     def fbget(self):
-        entries = self.db.child("devices/"+self.uid+"/"+self.devNum).get(self.loginret["idToken"]).each()
+        entries = self.db.child("centralHubs/"+self.uid+"/"+self.devNum+"/devices").get(self.loginret["idToken"]).each()
         dictionary = {}
         for entry in entries:
             dictionary[entry.key()] = entry.val()
         return dictionary
     def fbstream(self,streamHandler):
-        return self.db.child("devices/"+self.uid+"/"+self.devNum).stream(streamHandler,self.loginret["idToken"])
+        return self.db.child("centralHubs/"+self.uid+"/"+self.devNum+"/devices").stream(streamHandler,self.loginret["idToken"])
 
 
 
