@@ -12,6 +12,8 @@ import {
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
 import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
+import React, { useContext } from 'react';
+import UserContext from '../components/global/UserContext';
 
 // Assets
 import logo from "../../assets/fss-logo.png";
@@ -27,6 +29,8 @@ function LoginScreen() {
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const { setUser } = useContext(UserContext);
+
   // Login function
   const handleLogin = async () => {
     setIsLoading(true);
@@ -36,10 +40,23 @@ function LoginScreen() {
         email,
         password
       );
+      
       const user = userCredential.user;
       console.log("User logged in!", user);
+      setUser(user.email);
+
     } catch (error) {
-      Alert.alert("Error logging in", error.message);
+      
+      if(error.code == "auth/invalid-credential"){
+        Alert.alert("Error logging in", "Invalid user credentials :(")
+      }
+      else if(error.code == "auth/too-many-requests"){
+        Alert.alert("Error logging in", "Too many requests!")
+      }
+      else{
+        Alert.alert("Error logging in", error.code.substring(5));
+      }
+  
     }
     setIsLoading(false);
   };
