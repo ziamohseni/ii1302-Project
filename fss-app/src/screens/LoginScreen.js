@@ -54,7 +54,7 @@ function LoginScreen() {
         Alert.alert("Error logging in", "Too many requests!")
       }
       else{
-        Alert.alert("Error logging in", error.code.substring(5));
+        Alert.alert("Error logging in", error.code.substring(5).replace("-", " ")); 
       }
   
     }
