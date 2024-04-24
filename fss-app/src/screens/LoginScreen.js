@@ -13,6 +13,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
 import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
 import ResetPassword from "../components/loginscreen/ResetPassword";
+import SignUp from "../components/loginscreen/SignUp";
 
 // Assets
 import logo from "../../assets/fss-logo.png";
@@ -80,6 +81,8 @@ function LoginScreen() {
       <View style={styles.container}>
         {formType == "RESET_PASSWORD" ? (
           <ResetPassword goBackToLogin={goBack} />
+        ) : formType == "SIGN_UP" ? (
+          <SignUp goBackToLogin={goBack} />
         ) : (
           <>
             <View style={styles.logoContainer}>

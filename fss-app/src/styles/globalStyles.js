@@ -13,6 +13,17 @@ const globalStyles = StyleSheet.create({
   darkColor: {
     color: "#111111",
   },
+  containerWithPadding: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    backgroundColor: "#f9f9f9",
+  },
+  containerWithoutPadding: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#f9f9f9",
+  },
 });
 
 export default globalStyles;
