@@ -16,3 +16,62 @@ Choose version v20.12.2 (LTS)
 3. Run `npm install`.
 4. In the mean time download the "Expo Go" app from Apple Store or Google Play
 5. Then run `npx expo start`, after server has started, scan the QR code to open the app.
+
+### Database data structure for project
+
+## Users
+
+```yaml
+users:
+  user_id_1: # user_id is "user uid" from the authentication
+    first_name: "John"
+    last_name: "Doe"
+    hubs_owned: ["hub_id_1", "hub_id_2"] # admin can own multiple hubs
+    hubs_accessible: ["hub_id_1", "hub_id_2"] # admin has access to all owned hubs
+
+  user_id_2:
+    first_name: "Jane"
+    last_name: "Smith"
+    hubs_owned: "null"
+    hubs_accessible: ["hub_id_1"] # sub-user has access to specific hubs
+
+  user_id_3:
+    first_name: "Alice"
+    last_name: "Johnson"
+    hubs_owned: "null"
+    hubs_accessible: ["hub_id_1", "hub_id_2"] # sub-user has access to specific hubs
+
+raspberry_hubs:
+  hub_id_1:
+    admin: "user_id_1" # direct reference to the user who owns this hub
+    users:
+      user_id_2:
+        access_sensors: ["sensor_id_1"]
+      user_id_3:
+        access_sensors: ["sensor_id_1", "sensor_id_2"]
+    sensors:
+      sensor_id_1:
+        type: "motion"
+        status: "active"
+        triggered: "false"
+        last_active: "timestamp"
+      sensor_id_2:
+        type: "window"
+        status: "inactive"
+        triggered: "false"
+        last_active: "timestamp"
+      sensor_id_3:
+        type: "camera"
+        status: "active"
+        triggered: "false"
+        recent_snapshot:
+          url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
+          date_taken: "timestamp" # The date the snapshot was taken
+        snapshot_history:
+          - url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
+            date_taken: "timestamp"
+          - url: "url"
+            date_taken: "timestamp"
+    system_status: "armed" # or unarmed (activated / deactivated)
+    last_armed: "timestamp"
+```
