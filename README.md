@@ -2,7 +2,7 @@
 
 In this repository we will have both the mobile application and the Raspberry Pi code under respective folder.
 
-### FSS-APP
+## FSS-APP
 
 This folder is the mobile app. Do not edit unless you work with mobile app.
 
@@ -18,8 +18,6 @@ Choose version v20.12.2 (LTS)
 5. Then run `npx expo start`, after server has started, scan the QR code to open the app.
 
 ### Database data structure for project
-
-## Users
 
 ```yaml
 users:
@@ -75,3 +73,7 @@ raspberry_hubs:
     system_status: "armed" # or unarmed (activated / deactivated)
     last_armed: "timestamp"
 ```
+
+Notes:
+
+When “system_status” is “armed” we both Raspberry Pi and Mobile app listening to sensors “status”, if some status changes, we take appropriate actions in respective devices.
