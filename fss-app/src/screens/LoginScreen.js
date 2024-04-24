@@ -12,6 +12,7 @@ import {
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
 import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
+import ResetPassword from "../components/loginscreen/ResetPassword";
 
 // Assets
 import logo from "../../assets/fss-logo.png";
@@ -26,6 +27,9 @@ function LoginScreen() {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [formType, setFormType] = useState("LOGIN");
+
+  
 
   // Login function
   const handleLogin = async () => {
@@ -64,6 +68,10 @@ function LoginScreen() {
     return <ActivityIndicatorComponent />;
   }
 
+  function goBack(){
+    setFormType("LOGIN");
+  }
+
   return (
     <ScrollView
       automaticallyAdjustKeyboardInsets
@@ -72,7 +80,11 @@ function LoginScreen() {
       alwaysBounceHorizontal={false}
     >
       <View style={styles.container}>
-        <View style={styles.logoContainer}>
+        {formType == "RESET_PASSWORD" ? (
+          <ResetPassword goBackToLogin = {goBack}/>
+        ) : (
+          <>
+          <View style={styles.logoContainer}>
           <Image source={logo} style={{ width: 200, height: 200 }} />
         </View>
         <View style={styles.welcomeContainer}>
@@ -110,8 +122,10 @@ function LoginScreen() {
         <Button
           title="FORGOT YOUR PASSWORD?"
           color={globalStyles.primaryColor.color}
-          onPress={() => Alert.alert("Forgot pass button pressed")}
+          onPress={() => setFormType("RESET_PASSWORD")}
         />
+          </>
+        )}        
       </View>
     </ScrollView>
   );
