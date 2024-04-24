@@ -24,6 +24,11 @@ const globalStyles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#f9f9f9",
   },
+  errorText: {
+    color: "red",
+    marginBottom: 5,
+    marginLeft: 5,
+  },
 });
 
 export default globalStyles;

@@ -102,7 +102,7 @@ function LoginScreen() {
               onChangeText={(text) => setEmail(text)}
             />
             {email.length > 0 && !isValidEmail && (
-              <Text style={styles.errorText}>Email is not valid.</Text>
+              <Text style={globalStyles.errorText}>Email is not valid.</Text>
             )}
             <TextInput
               secureTextEntry={true}

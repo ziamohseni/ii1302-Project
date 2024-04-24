@@ -80,11 +80,6 @@ const loginScreenStyles = StyleSheet.create({
   signUpButton: {
     marginTop: 10,
   },
-  errorText: {
-    color: "red",
-    marginBottom: 5,
-    marginLeft: 5,
-  },
 });
 
 export default loginScreenStyles;
