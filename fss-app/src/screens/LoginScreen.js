@@ -27,9 +27,7 @@ function LoginScreen() {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formType, setFormType] = useState("LOGIN");
-
-  
+  const [formType, setFormType] = useState("LOG_IN"); // LOG_IN, SIGN_UP, RESET_PASSWORD
 
   // Login function
   const handleLogin = async () => {
@@ -68,8 +66,8 @@ function LoginScreen() {
     return <ActivityIndicatorComponent />;
   }
 
-  function goBack(){
-    setFormType("LOGIN");
+  function goBack() {
+    setFormType("LOG_IN");
   }
 
   return (
@@ -81,51 +79,65 @@ function LoginScreen() {
     >
       <View style={styles.container}>
         {formType == "RESET_PASSWORD" ? (
-          <ResetPassword goBackToLogin = {goBack}/>
+          <ResetPassword goBackToLogin={goBack} />
         ) : (
           <>
-          <View style={styles.logoContainer}>
-          <Image source={logo} style={{ width: 200, height: 200 }} />
-        </View>
-        <View style={styles.welcomeContainer}>
-          <Text style={styles.welcomeTitle}>Welcome!</Text>
-          <Text style={styles.welcomeSubtitle}>To Five Sense Security</Text>
-        </View>
-        <TextInput
-          style={styles.input}
-          value={email}
-          autoCapitalize="none"
-          inputMode="email"
-          returnKeyType="next"
-          placeholder="Email address"
-          onChangeText={(text) => setEmail(text)}
-        />
-        {email.length > 0 && !isValidEmail && (
-          <Text style={styles.errorText}>Email is not valid.</Text>
-        )}
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          value={password}
-          autoCapitalize="none"
-          returnKeyType="done"
-          placeholder="Password"
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TouchableOpacity
-          style={isButtonActive ? styles.buttonActive : styles.buttonDisabled}
-          onPress={handleLogin}
-          disabled={!isButtonActive}
-        >
-          <Text style={styles.text}>LOG IN</Text>
-        </TouchableOpacity>
-        <Button
-          title="FORGOT YOUR PASSWORD?"
-          color={globalStyles.primaryColor.color}
-          onPress={() => setFormType("RESET_PASSWORD")}
-        />
+            <View style={styles.logoContainer}>
+              <Image source={logo} style={{ width: 200, height: 200 }} />
+            </View>
+            <View style={styles.welcomeContainer}>
+              <Text style={styles.welcomeTitle}>Welcome!</Text>
+              <Text style={styles.welcomeSubtitle}>To Five Sense Security</Text>
+            </View>
+            <TextInput
+              style={styles.input}
+              value={email}
+              autoCapitalize="none"
+              inputMode="email"
+              returnKeyType="next"
+              placeholder="Email address"
+              onChangeText={(text) => setEmail(text)}
+            />
+            {email.length > 0 && !isValidEmail && (
+              <Text style={styles.errorText}>Email is not valid.</Text>
+            )}
+            <TextInput
+              secureTextEntry={true}
+              style={styles.input}
+              value={password}
+              autoCapitalize="none"
+              returnKeyType="done"
+              placeholder="Password"
+              onChangeText={(text) => setPassword(text)}
+            />
+            {/* Forgot pass button */}
+            <View style={styles.forgotPassButton}>
+              <Button
+                title="FORGOT YOUR PASSWORD?"
+                color={globalStyles.primaryColor.color}
+                onPress={() => setFormType("RESET_PASSWORD")}
+              />
+            </View>
+            {/* Login button */}
+            <TouchableOpacity
+              style={
+                isButtonActive ? styles.buttonActive : styles.buttonDisabled
+              }
+              onPress={handleLogin}
+              disabled={!isButtonActive}
+            >
+              <Text style={styles.text}>LOG IN</Text>
+            </TouchableOpacity>
+            {/* Sign up button */}
+            <View style={styles.signUpButton}>
+              <Button
+                title="SIGN UP"
+                color={globalStyles.primaryColor.color}
+                onPress={() => setFormType("SIGN_UP")}
+              />
+            </View>
           </>
-        )}        
+        )}
       </View>
     </ScrollView>
   );

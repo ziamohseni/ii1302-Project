@@ -51,8 +51,7 @@ const loginScreenStyles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginHorizontal: 20,
-    marginTop: 30,
-    marginBottom: 15,
+    marginVertical: 10,
     borderRadius: 15,
     elevation: 3,
     backgroundColor: globalStyles.primaryColor.color,
@@ -63,8 +62,7 @@ const loginScreenStyles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginHorizontal: 20,
-    marginTop: 30,
-    marginBottom: 15,
+    marginVertical: 10,
     borderRadius: 15,
     elevation: 3,
     backgroundColor: globalStyles.secondLightColor.color,
@@ -75,6 +73,12 @@ const loginScreenStyles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.25,
     color: "white",
+  },
+  forgotPassButton: {
+    marginTop: 10,
+  },
+  signUpButton: {
+    marginTop: 10,
   },
   errorText: {
     color: "red",
