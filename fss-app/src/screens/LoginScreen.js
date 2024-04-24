@@ -68,6 +68,10 @@ function LoginScreen() {
     return <ActivityIndicatorComponent />;
   }
 
+  function goBack(){
+    setFormType("LOGIN");
+  }
+
   return (
     <ScrollView
       automaticallyAdjustKeyboardInsets
@@ -77,7 +81,7 @@ function LoginScreen() {
     >
       <View style={styles.container}>
         {formType == "RESET_PASSWORD" ? (
-          <ResetPassword />
+          <ResetPassword goBackToLogin = {goBack}/>
         ) : (
           <>
           <View style={styles.logoContainer}>
