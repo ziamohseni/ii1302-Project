@@ -31,17 +31,21 @@ class FssFirebase:
             
 
 
-    def fbset(self,data):
-        self.db.child("centralHubs/"+self.uid+"/"+self.devNum+"/devices").set(data,self.loginret["idToken"])
+    def fbset(self,path,data):
+        self.db.child(path).set(data,self.loginret["idToken"])
 
-    def fbget(self):
-        entries = self.db.child("centralHubs/"+self.uid+"/"+self.devNum+"/devices").get(self.loginret["idToken"]).each()
+    def fbget(self,path):
+        entries = self.db.child(path).get(self.loginret["idToken"]).each()
         dictionary = {}
-        for entry in entries:
-            dictionary[entry.key()] = entry.val()
+        try:
+            for entry in entries:
+                dictionary[entry.key()] = entry.val()
+        except TypeError:
+            pass
+
         return dictionary
-    def fbstream(self,streamHandler):
-        return self.db.child("centralHubs/"+self.uid+"/"+self.devNum+"/devices").stream(streamHandler,self.loginret["idToken"])
+    def fbstream(self,path,streamHandler):
+        return self.db.child(path).stream(streamHandler,self.loginret["idToken"])
 
 
 
