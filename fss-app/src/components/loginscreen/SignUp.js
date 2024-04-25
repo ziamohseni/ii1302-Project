@@ -8,7 +8,10 @@ import {
   Image,
   Alert,
 } from "react-native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { auth } from "../../services/firebaseConfig";
 
 // Assets
@@ -26,6 +29,7 @@ const SignUp = ({ goBackToLogin }) => {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
 
   const handleSignUp = () => {
     setIsLoading(true);
@@ -34,9 +38,11 @@ const SignUp = ({ goBackToLogin }) => {
         const user = userCredential.user;
         setEmail("");
         setPassword("");
-        goBackToLogin();
         console.log("User created: ", user);
-        setIsLoading(false);
+        sendEmailVerification(user).then(() => {
+          setShowVerificationMessage(true);
+          setIsLoading(false);
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -74,60 +80,81 @@ const SignUp = ({ goBackToLogin }) => {
       <View style={loginStyles.logoContainer}>
         <Image source={logo} style={{ width: 200, height: 200 }} />
       </View>
-      <View style={signUpStyles.welcomeContainer}>
-        <Text style={signUpStyles.createAccount}>Create Account</Text>
-        <Text style={loginStyles.welcomeSubtitle}>
-          Please enter your details below to create an account with 5Sense
-          Security.
-        </Text>
-      </View>
-      {/* Email input */}
-      <TextInput
-        style={loginStyles.input}
-        value={email}
-        autoCapitalize="none"
-        inputMode="email"
-        returnKeyType="next"
-        placeholder="Email address"
-        onChangeText={(text) => setEmail(text)}
-      />
-      {/* Email invalid  message */}
-      {email.length > 0 && !isValidEmail && (
-        <Text style={globalStyles.errorText}>Email is not valid.</Text>
+      {showVerificationMessage ? (
+        <View style={signUpStyles.welcomeContainer}>
+          <Text style={signUpStyles.createAccount}>Account Created!</Text>
+          <Text style={loginStyles.welcomeSubtitle}>
+            Please check your email for a verification link to activate your
+            account. If you don't see the email, please check your spam folder.
+          </Text>
+          {/* Back to login */}
+          <View style={signUpStyles.loginButton}>
+            <Button
+              title="Go back to login"
+              onPress={() => goBackToLogin()}
+            ></Button>
+          </View>
+        </View>
+      ) : (
+        <>
+          <View style={signUpStyles.welcomeContainer}>
+            <Text style={signUpStyles.createAccount}>Create Account</Text>
+            <Text style={loginStyles.welcomeSubtitle}>
+              Please enter your details below to create an account with 5Sense
+              Security.
+            </Text>
+          </View>
+          {/* Email input */}
+          <TextInput
+            style={loginStyles.input}
+            value={email}
+            autoCapitalize="none"
+            inputMode="email"
+            returnKeyType="next"
+            placeholder="Email address"
+            onChangeText={(text) => setEmail(text)}
+          />
+          {/* Email invalid  message */}
+          {email.length > 0 && !isValidEmail && (
+            <Text style={globalStyles.errorText}>Email is not valid.</Text>
+          )}
+          {/* Password input */}
+          <TextInput
+            secureTextEntry={true}
+            style={loginStyles.input}
+            value={password}
+            autoCapitalize="none"
+            returnKeyType="done"
+            placeholder="Password"
+            onChangeText={(text) => setPassword(text)}
+          />
+          {/* Password length message */}
+          {password.length > 0 && password.length < 8 && (
+            <Text style={globalStyles.errorText}>
+              Password must be at least 8 characters long.
+            </Text>
+          )}
+          {/* Sign up button */}
+          <TouchableOpacity
+            style={
+              isButtonActive
+                ? loginStyles.buttonActive
+                : loginStyles.buttonDisabled
+            }
+            onPress={handleSignUp}
+            disabled={!isButtonActive || isLoading}
+          >
+            <Text style={loginStyles.text}>SING UP</Text>
+          </TouchableOpacity>
+          {/* Already have an account */}
+          <View style={signUpStyles.loginButton}>
+            <Button
+              title="Already have an account? Log in."
+              onPress={() => goBackToLogin()}
+            />
+          </View>
+        </>
       )}
-      {/* Password input */}
-      <TextInput
-        secureTextEntry={true}
-        style={loginStyles.input}
-        value={password}
-        autoCapitalize="none"
-        returnKeyType="done"
-        placeholder="Password"
-        onChangeText={(text) => setPassword(text)}
-      />
-      {/* Password length message */}
-      {password.length > 0 && password.length < 8 && (
-        <Text style={globalStyles.errorText}>
-          Password must be at least 8 characters long.
-        </Text>
-      )}
-      {/* Sign up button */}
-      <TouchableOpacity
-        style={
-          isButtonActive ? loginStyles.buttonActive : loginStyles.buttonDisabled
-        }
-        onPress={handleSignUp}
-        disabled={!isButtonActive || isLoading}
-      >
-        <Text style={loginStyles.text}>SING UP</Text>
-      </TouchableOpacity>
-      {/* Already have an account */}
-      <View style={signUpStyles.loginButton}>
-        <Button
-          title="Already have an account? Log in."
-          onPress={() => goBackToLogin()}
-        />
-      </View>
     </View>
   );
 };
