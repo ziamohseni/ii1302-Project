@@ -15,12 +15,14 @@ function ResetPassword(props) {
     sendPasswordResetEmail(auth, email)
       .then(() => {
         // Password reset email sent!
-        // ..
         Alert.alert("Email sent!", "Look in your email inbox");
+        backToLogin();
       })
       .catch((error) => {
         const errorCode = error.code;
-        Alert.alert("Error sending email", errorCode.substring(5).replace("-", " "));
+        //make the error message more readable
+        const errorMessage = errorCode.substring(5).replace("-", " ");
+        Alert.alert("Error sending email", errorMessage); 
       });
         
   }
@@ -29,14 +31,12 @@ function ResetPassword(props) {
     props.goBackToLogin();
   }
 
+  function clearInput(){
+    setEmail("");
+  }
+
   return (
     <>
-    
-      <View style = {styles.backButtonContainer}>
-        <TouchableOpacity onPress = {backToLogin} style = {styles.backButton}>
-          <Text style = {styles.backButtonIcon}> 🔙</Text>
-        </TouchableOpacity>
-      </View>
 
       <View>
         <Text style = {styles.title}>Forgot your password? </Text>
@@ -55,10 +55,19 @@ function ResetPassword(props) {
 
       <TouchableOpacity 
         style = {styles.button} 
-        onPress = {resetPassword}
+        onPress={() => {
+          resetPassword();
+          clearInput();
+        }}
       >
         <Text style = {styles.text} > Send email </Text>
       </TouchableOpacity>
+
+      <View style = {styles.backButtonContainer}>
+        <TouchableOpacity onPress = {backToLogin} style = {styles.backButton}>
+          <Text style = {styles.backButtonIcon}>Back to login </Text>
+        </TouchableOpacity>
+      </View>
 
     </>
   )
