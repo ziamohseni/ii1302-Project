@@ -8,6 +8,7 @@ import {
   Image,
   Alert,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
@@ -86,77 +87,81 @@ function LoginScreen() {
   }
 
   return (
-    <ScrollView
-      automaticallyAdjustKeyboardInsets
-      contentContainerStyle={styles.scrollContainer}
-      alwaysBounceVertical={false}
-      alwaysBounceHorizontal={false}
-    >
-      <View style={styles.container}>
-        {formType == "RESET_PASSWORD" ? (
-          <ResetPassword goBackToLogin={goBack} />
-        ) : formType == "SIGN_UP" ? (
-          <SignUp goBackToLogin={goBack} />
-        ) : (
-          <>
-            <View style={styles.logoContainer}>
-              <Image source={logo} style={{ width: 200, height: 200 }} />
-            </View>
-            <View style={styles.welcomeContainer}>
-              <Text style={styles.welcomeTitle}>Welcome!</Text>
-              <Text style={styles.welcomeSubtitle}>To Five Sense Security</Text>
-            </View>
-            <TextInput
-              style={styles.input}
-              value={email}
-              autoCapitalize="none"
-              inputMode="email"
-              returnKeyType="next"
-              placeholder="Email address"
-              onChangeText={(text) => setEmail(text)}
-            />
-            {email.length > 0 && !isValidEmail && (
-              <Text style={globalStyles.errorText}>Email is not valid.</Text>
-            )}
-            <TextInput
-              secureTextEntry={true}
-              style={styles.input}
-              value={password}
-              autoCapitalize="none"
-              returnKeyType="done"
-              placeholder="Password"
-              onChangeText={(text) => setPassword(text)}
-            />
-            {/* Forgot pass button */}
-            <View style={styles.forgotPassButton}>
-              <Button
-                title="FORGOT YOUR PASSWORD?"
-                color={globalStyles.primaryColor.color}
-                onPress={() => setFormType("RESET_PASSWORD")}
+    <SafeAreaView style={globalStyles.containerWithoutPadding}>
+      <ScrollView
+        automaticallyAdjustKeyboardInsets
+        contentContainerStyle={styles.scrollContainer}
+        alwaysBounceVertical={formType == "SIGN_UP" ? true : false}
+        alwaysBounceHorizontal={false}
+      >
+        <View style={styles.container}>
+          {formType == "RESET_PASSWORD" ? (
+            <ResetPassword goBackToLogin={goBack} />
+          ) : formType == "SIGN_UP" ? (
+            <SignUp goBackToLogin={goBack} />
+          ) : (
+            <>
+              <View style={styles.logoContainer}>
+                <Image source={logo} style={{ width: 200, height: 200 }} />
+              </View>
+              <View style={styles.welcomeContainer}>
+                <Text style={styles.welcomeTitle}>Welcome!</Text>
+                <Text style={styles.welcomeSubtitle}>
+                  To Five Sense Security
+                </Text>
+              </View>
+              <TextInput
+                style={styles.input}
+                value={email}
+                autoCapitalize="none"
+                inputMode="email"
+                returnKeyType="next"
+                placeholder="Email address"
+                onChangeText={(text) => setEmail(text)}
               />
-            </View>
-            {/* Login button */}
-            <TouchableOpacity
-              style={
-                isButtonActive ? styles.buttonActive : styles.buttonDisabled
-              }
-              onPress={handleLogin}
-              disabled={!isButtonActive}
-            >
-              <Text style={styles.text}>LOG IN</Text>
-            </TouchableOpacity>
-            {/* Sign up button */}
-            <View style={styles.signUpButton}>
-              <Button
-                title="SIGN UP"
-                color={globalStyles.primaryColor.color}
-                onPress={() => setFormType("SIGN_UP")}
+              {email.length > 0 && !isValidEmail && (
+                <Text style={globalStyles.errorText}>Email is not valid.</Text>
+              )}
+              <TextInput
+                secureTextEntry={true}
+                style={styles.input}
+                value={password}
+                autoCapitalize="none"
+                returnKeyType="done"
+                placeholder="Password"
+                onChangeText={(text) => setPassword(text)}
               />
-            </View>
-          </>
-        )}
-      </View>
-    </ScrollView>
+              {/* Forgot pass button */}
+              <View style={styles.forgotPassButton}>
+                <Button
+                  title="FORGOT YOUR PASSWORD?"
+                  color={globalStyles.primaryColor.color}
+                  onPress={() => setFormType("RESET_PASSWORD")}
+                />
+              </View>
+              {/* Login button */}
+              <TouchableOpacity
+                style={
+                  isButtonActive ? styles.buttonActive : styles.buttonDisabled
+                }
+                onPress={handleLogin}
+                disabled={!isButtonActive}
+              >
+                <Text style={styles.text}>LOG IN</Text>
+              </TouchableOpacity>
+              {/* Sign up button */}
+              <View style={styles.signUpButton}>
+                <Button
+                  title="SIGN UP"
+                  color={globalStyles.primaryColor.color}
+                  onPress={() => setFormType("SIGN_UP")}
+                />
+              </View>
+            </>
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

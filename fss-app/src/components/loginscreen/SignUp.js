@@ -12,7 +12,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
-import { auth } from "../../services/firebaseConfig";
+import { auth, database } from "../../services/firebaseConfig";
+import { ref, set } from "firebase/database";
 
 // Assets
 import logo from "../../../assets/fss-logo.png";
@@ -26,11 +27,33 @@ import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
 const SignUp = ({ goBackToLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(true);
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
 
+  // Function to add user to Firebase Realtime Database
+  const addUserToDatabase = (user) => {
+    const userId = user.uid;
+    const newUser = {
+      first_name: firstName,
+      last_name: lastName,
+      hubs_owned: ["null"],
+      hubs_accessible: ["null"],
+    };
+
+    // Reference to the user's data in the database
+    const userRef = ref(database, "users/" + userId);
+
+    // Set the user data at the reference
+    set(userRef, newUser)
+      .then(() => console.log("User added successfully!"))
+      .catch((error) => console.error("Failed to add user: ", error));
+  };
+
+  // Create user account
   const handleSignUp = () => {
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
@@ -39,6 +62,11 @@ const SignUp = ({ goBackToLogin }) => {
         setEmail("");
         setPassword("");
         console.log("User created: ", user);
+
+        // Add user to database
+        addUserToDatabase(user);
+
+        // Send email verification
         sendEmailVerification(user).then(() => {
           setShowVerificationMessage(true);
           setIsLoading(false);
@@ -63,12 +91,18 @@ const SignUp = ({ goBackToLogin }) => {
 
   // Check if email and password are not empty
   useEffect(() => {
-    if (email.length > 0 && password.length >= 8 && isValidEmail) {
+    if (
+      email.length > 0 &&
+      password.length >= 8 &&
+      isValidEmail &&
+      firstName.length > 0 &&
+      lastName.length > 0
+    ) {
       setIsButtonActive(true);
     } else {
       setIsButtonActive(false);
     }
-  }, [email, password]);
+  }, [email, password, isValidEmail, firstName, lastName]);
 
   // Show loading spinner while logging in
   if (isLoading) {
@@ -76,7 +110,7 @@ const SignUp = ({ goBackToLogin }) => {
   }
 
   return (
-    <View>
+    <View style={globalStyles.verticalPadding}>
       <View style={loginStyles.logoContainer}>
         <Image source={logo} style={{ width: 200, height: 200 }} />
       </View>
@@ -104,6 +138,24 @@ const SignUp = ({ goBackToLogin }) => {
               Security.
             </Text>
           </View>
+          {/* First name input */}
+          <TextInput
+            style={loginStyles.input}
+            value={firstName}
+            autoCapitalize="words"
+            returnKeyType="next"
+            placeholder="First name"
+            onChangeText={(text) => setFirstName(text)}
+          />
+          {/* Last name input */}
+          <TextInput
+            style={loginStyles.input}
+            value={lastName}
+            autoCapitalize="words"
+            returnKeyType="next"
+            placeholder="Last name"
+            onChangeText={(text) => setLastName(text)}
+          />
           {/* Email input */}
           <TextInput
             style={loginStyles.input}
