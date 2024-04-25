@@ -24,6 +24,9 @@ const globalStyles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#f9f9f9",
   },
+  verticalPadding: {
+    paddingVertical: 30,
+  },
   errorText: {
     color: "red",
     marginBottom: 5,

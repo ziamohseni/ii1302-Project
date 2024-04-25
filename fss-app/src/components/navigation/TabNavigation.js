@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../services/firebaseConfig";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -23,10 +23,11 @@ function TabNavigation() {
   // Check if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && user.emailVerified) {
         setIsLoggedIn(true);
         setIsLoading(false);
       } else {
+        signOut(auth);
         setIsLoggedIn(false);
         setIsLoading(false);
       }
