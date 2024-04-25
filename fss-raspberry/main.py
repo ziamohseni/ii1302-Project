@@ -1,7 +1,8 @@
 import socket
 
-import subprocess
+
 import fssfirebase
+import camera
 from firebaselogin import getFirebase
 
 
@@ -17,35 +18,23 @@ def main():
     sensor_objects = {}
     for sensor in sensorsdirs:
         sensor_objects[sensor] = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor)
+    print(sensor_objects)
     
-    
 
 
-    #Get ip using subprocess
-    ipstrings = str((subprocess.check_output(["ip","addr","show","wlan0"])))
-    ipstrings = ipstrings.split(" ")
-    stringindex = 0
-    for ipstring in ipstrings:
-        if "inet" in ipstring:
-            ipaddr = ipstrings[stringindex+1].split("/")[0]
-            break
-        stringindex+=1
-
-
+    camera.take_picture(firebase,sensor_objects)
     # Create a TCP/IP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # Bind the socket to the address and port
   
     port = 8888
-    server_address = (ipaddr, port)  # Change to desired host and port
+    server_address = ('', port)  # Change to desired host and port
     server_socket.bind(server_address)
 
     # Listen for incoming connections
     server_socket.listen(5)  # Maximum number of queued connections
-
-    print("TCP server is listening on {}:{}".format(*server_address))
-
+    print("TCP server is listening on port "+str(server_address[1]))
     while True:
         # Wait for a connection
         connection, client_address = server_socket.accept()
@@ -55,7 +44,8 @@ def main():
 
             # Receive data from the client
             data = connection.recv(1024)  # Adjust buffer size as needed
-            sensor_data = data.decode() .split(":")  
+            sensor_data = data.decode().split(":")  
+            print(data.decode())
             match sensor_data[0]:
                 case "door":
                     for sensor in sensor_objects:
@@ -72,7 +62,6 @@ def main():
                         if "knock" in sensor.type:
                             sensor["triggered"] = eval(sensor_data.capitalize())
                 
-
             # Send a response back to the client
             connection.sendall(b"Message received. Thank you!")
             for sensor in sensorsdirs:

@@ -12,7 +12,7 @@ class FssFirebase:
             firebaseConfig = json.load(fcfile)
            
         fireb = firebase.initialize_app(firebaseConfig) 
-
+        self.storage = fireb.storage()
         auth = fireb.auth()
         self.db = fireb.database()
         with open("deviceNumber.txt","r") as devnumfile:
@@ -49,5 +49,15 @@ class FssFirebase:
 
 
 
+#Only requires user - credentials : 
 
+    def fbput(self,path, filename):
+        self.storage.child(path).put(filename, self.loginret["idToken"])
+    def fbdownload(self,path,filename):
+        self.storage.child(path).download(filename, self.loginret["idToken"])
+    def fbstorageurl(self,path):
+        return self.storage.child(path).get_url(self.loginret["idToken"])
 
+# Delete Function :  
+    def fbstoragedelete(self,path):
+        self.storage.child(path).delete(self.loginret["idToken"])
