@@ -196,7 +196,11 @@ const SignUp = ({ goBackToLogin }) => {
             onPress={handleSignUp}
             disabled={!isButtonActive || isLoading}
           >
-            <Text style={loginStyles.text}>SING UP</Text>
+            <Text
+              style={isButtonActive ? loginStyles.text : loginStyles.textDark}
+            >
+              SING UP
+            </Text>
           </TouchableOpacity>
           {/* Already have an account */}
           <View style={signUpStyles.loginButton}>

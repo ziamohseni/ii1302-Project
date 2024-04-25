@@ -147,7 +147,9 @@ function LoginScreen() {
                 onPress={handleLogin}
                 disabled={!isButtonActive}
               >
-                <Text style={styles.text}>LOG IN</Text>
+                <Text style={isButtonActive ? styles.text : styles.textDark}>
+                  LOG IN
+                </Text>
               </TouchableOpacity>
               {/* Sign up button */}
               <View style={styles.signUpButton}>
