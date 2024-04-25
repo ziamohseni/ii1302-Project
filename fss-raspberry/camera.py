@@ -14,30 +14,43 @@ def take_picture(firebase,sensors):
     timestamp = time.time()
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
     firebase.fbput(snapshotpath,"temp.jpg")  
-    snapshoturl = firebase.fbstorageurl(snapshotpath)
 
-    for sensor in sensors.items():
-        if sensor[1]["type"]=="camera":
+
+
+    
+    for sensorname,sensorvalue in sensors.items():
+        if sensorvalue["type"]=="camera":
+            
+            recent_snap_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/recent_snapshot"
+            snap_hist_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/snapshot_history"
             print("huh")
-            if firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot"):
-                snapshothistory = {}
-                for snapshot in firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/snapshot_history"):
-                    snapshothistory[snapshot] =  firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/snapshot_history/"+snapshot)
+            if firebase.fbget(recent_snap_path):
+                snapshothistory = firebase.fbget(snap_hist_path)
                 snapshotnum = len(snapshothistory)
                 print(snapshothistory)
                 if snapshotnum > 0:
+                    removeshot = "null"
                     if snapshotnum != 9:
                         snapshothistory["snapshot"+str(snapshotnum +1)] = snapshothistory["snapshot"+str(snapshotnum)] 
-
+                    else:
+                        removeshot = snapshothistory["snapshot9"]["path"]
+                    print(snapshothistory)
                     for snapshot in snapshothistory:
-                        snapshothistory["snapshot"+str(snapshotnum)] = snapshothistory["snapshot"+str(snapshotnum-1)] 
-                
-                    snapshothistory["snapshot1"]=firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot") 
-                    firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/snapshot_history", firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot"))
+                        if snapshotnum > 1:
+                            snapshothistory["snapshot"+str(snapshotnum)] = snapshothistory["snapshot"+str(snapshotnum-1)]
+                            snapshotnum -=1
+                        else:
+                            break
+                    print(snapshothistory)
+                    snapshothistory["snapshot1"]=firebase.fbget(recent_snap_path) 
+                    firebase.fbset(snap_hist_path, snapshothistory)
+                    if removeshot != "null":
+                        firebase.fbstoragedelete(removeshot)
                 else:
-                    snapshothistory["snapshot1"]=firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot") 
-                    print(firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot"))                   
-                    firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/snapshot_history", firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot"))
+                    snapshothistory={"snapshot1":firebase.fbget(recent_snap_path)}
+                    print(firebase.fbget(recent_snap_path))                   
+                    firebase.fbset(snap_hist_path, snapshothistory)
 
                   
-            firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/" + sensor[0] + "/recent_snapshot", {"url":snapshoturl, "timestamp":timestamp})
+            firebase.fbset(recent_snap_path, {"path":snapshotpath, "timestamp":timestamp})
+            break

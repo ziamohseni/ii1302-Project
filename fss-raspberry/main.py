@@ -14,13 +14,7 @@ def main():
     admin_data = {}
     admin_data[firebase.uid] = True
     firebase.fbset("raspberry_hubs/"+firebase.devNum+"/admin",admin_data)
-    sensorsdirs = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
-    sensor_objects = {}
-    for sensor in sensorsdirs:
-        sensor_objects[sensor] = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor)
-    print(sensor_objects)
-    
-
+    sensor_objects = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
 
     camera.take_picture(firebase,sensor_objects)
     # Create a TCP/IP socket
@@ -48,24 +42,25 @@ def main():
             print(data.decode())
             match sensor_data[0]:
                 case "door":
-                    for sensor in sensor_objects:
-                        if "door" in sensor.type:
-                            sensor["triggered"] = eval(sensor_data.capitalize())
+                    for sensorname,sensorvalues in sensor_objects.items():
+                        if "door" in sensorvalues.type:
+                            sensorvalues["triggered"] = eval(sensor_data.capitalize())
                 case "flood":
-                    for sensor in sensor_objects:
-                        if "flood" in sensor.type:
-                            sensor["triggered"] = eval(sensor_data.capitalize())
+                    for sensorname,sensorvalues in sensor_objects.items():
+                        if "flood" in sensorvalues.type:
+                            sensorvalues["triggered"] = eval(sensor_data.capitalize())
                 case "knock":
                     
 
-                    for sensor in sensor_objects:
-                        if "knock" in sensor.type:
-                            sensor["triggered"] = eval(sensor_data.capitalize())
+                    for sensorname,sensorvalues in sensor_objects.items():
+                        if "knock" in sensorvalues.type:
+                            sensorvalues["triggered"] = eval(sensor_data.capitalize())
                 
             # Send a response back to the client
             connection.sendall(b"Message received. Thank you!")
-            for sensor in sensorsdirs:
-                firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor,sensor_objects["sensor"])
+
+            
+            firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors",sensor_objects)
         finally:
             # Clean up the connection
             connection.close()
