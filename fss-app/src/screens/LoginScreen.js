@@ -9,7 +9,7 @@ import {
   Alert,
   ScrollView,
 } from "react-native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../services/firebaseConfig";
 import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
 import ResetPassword from "../components/loginscreen/ResetPassword";
@@ -40,11 +40,25 @@ function LoginScreen() {
         password
       );
       const user = userCredential.user;
+      // Check if user is verified
+      if (!user.emailVerified) {
+        signOut(auth);
+        setIsLoading(false);
+        Alert.alert(
+          "Email not verified",
+          "Please verify your email address before logging in."
+        );
+      }
       console.log("User logged in!", user);
     } catch (error) {
-      Alert.alert("Error logging in", error.message);
+      setIsLoading(false);
+      Alert.alert(
+        "Error logging in",
+        error.message == "Firebase: Error (auth/user-not-found)."
+          ? "User not found. Please sign up."
+          : "Invalid email or password. Please try again."
+      );
     }
-    setIsLoading(false);
   };
 
   // Check if email is valid
