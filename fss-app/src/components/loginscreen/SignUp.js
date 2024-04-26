@@ -40,8 +40,8 @@ const SignUp = ({ goBackToLogin }) => {
     const newUser = {
       first_name: firstName,
       last_name: lastName,
-      hubs_owned: ["null"],
-      hubs_accessible: ["null"],
+      hubs_owned: [],
+      hubs_accessible: [],
     };
 
     // Reference to the user's data in the database
@@ -59,18 +59,22 @@ const SignUp = ({ goBackToLogin }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setEmail("");
-        setPassword("");
-        console.log("User created: ", user);
 
         // Add user to database
-        addUserToDatabase(user);
+        if (user) {
+          addUserToDatabase(user);
+        }
 
         // Send email verification
         sendEmailVerification(user).then(() => {
           setShowVerificationMessage(true);
           setIsLoading(false);
         });
+
+        // Reset input fields
+        setEmail("");
+        setPassword("");
+        console.log("User created: ", user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -116,7 +120,7 @@ const SignUp = ({ goBackToLogin }) => {
       </View>
       {showVerificationMessage ? (
         <View style={signUpStyles.welcomeContainer}>
-          <Text style={signUpStyles.createAccount}>Account Created!</Text>
+          <Text style={signUpStyles.createAccount}>Verify your email!</Text>
           <Text style={loginStyles.welcomeSubtitle}>
             Please check your email for a verification link to activate your
             account. If you don't see the email, please check your spam folder.
@@ -199,7 +203,7 @@ const SignUp = ({ goBackToLogin }) => {
             <Text
               style={isButtonActive ? loginStyles.text : loginStyles.textDark}
             >
-              SING UP
+              SIGN UP
             </Text>
           </TouchableOpacity>
           {/* Already have an account */}

@@ -27,7 +27,7 @@ function TabNavigation() {
         setIsLoggedIn(true);
         setIsLoading(false);
       } else {
-        signOut(auth);
+        // signOut(auth);
         setIsLoggedIn(false);
         setIsLoading(false);
       }
