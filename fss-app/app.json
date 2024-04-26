@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "fss-app",
+    "name": "5Sense Security",
     "slug": "fss-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,17 +11,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "24.04.26.0823",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.5sensesecurity.fssapp"
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.5sensesecurity.fssapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
