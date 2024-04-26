@@ -40,8 +40,8 @@ const SignUp = ({ goBackToLogin }) => {
     const newUser = {
       first_name: firstName,
       last_name: lastName,
-      hubs_owned: [],
-      hubs_accessible: [],
+      hubs_owned: ["null"],
+      hubs_accessible: ["null"],
     };
 
     // Reference to the user's data in the database
