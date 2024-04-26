@@ -6,11 +6,11 @@ const activationButtonStyles = StyleSheet.create({
         alignItems: "center",
         padding: 30,
     },
-    buttonOn:{
+    buttonOff:{
         backgroundColor: "green",
         borderRadius: 50,
     },
-    buttonOff: {
+    buttonOn: {
         backgroundColor: "red",
         borderRadius: 50,
     },

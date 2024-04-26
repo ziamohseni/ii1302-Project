@@ -5,8 +5,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import styles from "../../styles/activationButtonStyles"
 import { useState } from "react";
 
-
-
 function ActivationButton(){
     
     const [isArmed, setIsArmed] = useState(false);
@@ -27,9 +25,9 @@ function ActivationButton(){
         <View style = {styles.buttonContainer}>
 
             {isArmed ? 
-                (<Text style = {styles.alarmStatusText}>ALARM OFF</Text>)
-                : 
                 (<Text style = {styles.alarmStatusText}>ALARM ON</Text>)
+                : 
+                (<Text style = {styles.alarmStatusText}>ALARM OFF</Text>)
             }
             
             <TouchableOpacity 
