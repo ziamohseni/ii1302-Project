@@ -2,8 +2,9 @@ import { StyleSheet } from "react-native";
 
 const activationButtonStyles = StyleSheet.create({
     buttonContainer: {
-        backgroundColor: "black",
-        borderRadius: 100,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 30,
     },
     buttonOn:{
         backgroundColor: "green",
@@ -14,8 +15,15 @@ const activationButtonStyles = StyleSheet.create({
         borderRadius: 50,
     },
     alarmStatusText: {
+        textAlign: "center",
         fontSize: 30, 
         fontWeight: "bold",
+        marginVertical: 20,
+    },
+    infoText:{
+        marginTop: 30,
+        bottom: 0,
+        fontSize: 15,
     },
 });
 
