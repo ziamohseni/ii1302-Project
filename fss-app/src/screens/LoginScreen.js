@@ -111,7 +111,7 @@ function LoginScreen() {
                 </Text>
               </View>
               <TextInput
-                style={styles.input}
+                style={globalStyles.inputStyle}
                 value={email}
                 autoCapitalize="none"
                 inputMode="email"
@@ -124,7 +124,7 @@ function LoginScreen() {
               )}
               <TextInput
                 secureTextEntry={true}
-                style={styles.input}
+                style={globalStyles.inputStyle}
                 value={password}
                 autoCapitalize="none"
                 returnKeyType="done"
@@ -142,7 +142,9 @@ function LoginScreen() {
               {/* Login button */}
               <TouchableOpacity
                 style={
-                  isButtonActive ? styles.buttonActive : styles.buttonDisabled
+                  isButtonActive
+                    ? globalStyles.buttonActive
+                    : globalStyles.buttonDisabled
                 }
                 onPress={handleLogin}
                 disabled={!isButtonActive}

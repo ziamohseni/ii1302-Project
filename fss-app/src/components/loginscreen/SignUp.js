@@ -140,7 +140,7 @@ const SignUp = ({ goBackToLogin }) => {
           </View>
           {/* First name input */}
           <TextInput
-            style={loginStyles.input}
+            style={globalStyles.inputStyle}
             value={firstName}
             autoCapitalize="words"
             returnKeyType="next"
@@ -149,7 +149,7 @@ const SignUp = ({ goBackToLogin }) => {
           />
           {/* Last name input */}
           <TextInput
-            style={loginStyles.input}
+            style={globalStyles.inputStyle}
             value={lastName}
             autoCapitalize="words"
             returnKeyType="next"
@@ -158,7 +158,7 @@ const SignUp = ({ goBackToLogin }) => {
           />
           {/* Email input */}
           <TextInput
-            style={loginStyles.input}
+            style={globalStyles.inputStyle}
             value={email}
             autoCapitalize="none"
             inputMode="email"
@@ -173,7 +173,7 @@ const SignUp = ({ goBackToLogin }) => {
           {/* Password input */}
           <TextInput
             secureTextEntry={true}
-            style={loginStyles.input}
+            style={globalStyles.inputStyle}
             value={password}
             autoCapitalize="none"
             returnKeyType="done"
@@ -190,8 +190,8 @@ const SignUp = ({ goBackToLogin }) => {
           <TouchableOpacity
             style={
               isButtonActive
-                ? loginStyles.buttonActive
-                : loginStyles.buttonDisabled
+                ? globalStyles.buttonActive
+                : globalStyles.buttonDisabled
             }
             onPress={handleSignUp}
             disabled={!isButtonActive || isLoading}
