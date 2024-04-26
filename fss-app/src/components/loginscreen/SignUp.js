@@ -40,8 +40,6 @@ const SignUp = ({ goBackToLogin }) => {
     const newUser = {
       first_name: firstName,
       last_name: lastName,
-      hubs_owned: ["null"],
-      hubs_accessible: ["null"],
     };
 
     // Reference to the user's data in the database
@@ -127,10 +125,7 @@ const SignUp = ({ goBackToLogin }) => {
           </Text>
           {/* Back to login */}
           <View style={signUpStyles.loginButton}>
-            <Button
-              title="Go back to login"
-              onPress={() => goBackToLogin()}
-            />
+            <Button title="Go back to login" onPress={() => goBackToLogin()} />
           </View>
         </View>
       ) : (
@@ -212,7 +207,9 @@ const SignUp = ({ goBackToLogin }) => {
               title="Already have an account? Log in."
               onPress={() => goBackToLogin()}
             >
-              <Text style ={signUpStyles.alreadyHaveAccount}>ALREADY HAVE AN ACCOUNT? LOG IN</Text>
+              <Text style={signUpStyles.alreadyHaveAccount}>
+                ALREADY HAVE AN ACCOUNT? LOG IN
+              </Text>
             </TouchableOpacity>
           </View>
         </>
