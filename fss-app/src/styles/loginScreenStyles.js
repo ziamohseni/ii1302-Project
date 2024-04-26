@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import globalStyles from "./globalStyles";
+import signUpStyles from "./signUpStyles";
 
 const loginScreenStyles = StyleSheet.create({
   scrollContainer: {
@@ -46,8 +47,19 @@ const loginScreenStyles = StyleSheet.create({
   forgotPassButton: {
     marginTop: 10,
   },
+  forgotPassText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "right",
+    color: globalStyles.primaryColor.color,
+  },
   signUpButton: {
-    marginTop: 10,
+    fontWeight: "bold",
+    marginTop: 15,
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
+    color: globalStyles.primaryColor.color
   },
 });
 
