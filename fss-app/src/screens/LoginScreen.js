@@ -131,7 +131,16 @@ function LoginScreen() {
                 placeholder="Password"
                 onChangeText={(text) => setPassword(text)}
               />
-
+              {/* Forgot pass button */}
+              <View style={styles.forgotPassButton}>
+                <TouchableOpacity 
+                  style = {styles.forgotPassButton}
+                  title="FORGOT YOUR PASSWORD?"
+                  color={globalStyles.primaryColor.color}
+                  onPress={() => setFormType("RESET_PASSWORD")}>
+                  <Text> Forgot password? </Text>
+                </TouchableOpacity>
+              </View>
               {/* Login button */}
               <TouchableOpacity
                 style={
@@ -144,14 +153,6 @@ function LoginScreen() {
                   LOG IN
                 </Text>
               </TouchableOpacity>
-              {/* Forgot pass button */}
-              <View style={styles.forgotPassButton}>
-                <Button
-                  title="FORGOT YOUR PASSWORD?"
-                  color={globalStyles.primaryColor.color}
-                  onPress={() => setFormType("RESET_PASSWORD")}
-                />
-              </View>
               {/* Sign up button */}
               <View style={styles.signUpButton}>
                 <Button

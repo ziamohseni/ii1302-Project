@@ -55,7 +55,6 @@ const resetPasswordStyles = StyleSheet.create({
     color: "white",
   },
   backButtonContainer: {
-    alignItems: "center",
     bottom: 40,
   },
   backButtonIcon: {
@@ -67,9 +66,9 @@ const resetPasswordStyles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: globalStyles.secondLightColor.color,
-    justifyContent: "center",
+    alignItems: "center",
     paddingVertical: 20,
-    paddingHorizontal: 105,
+    marginHorizontal: 20,
     borderRadius: 5,
     elevation: 3,
     shadowColor: globalStyles.darkColor.color,

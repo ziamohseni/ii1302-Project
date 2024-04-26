@@ -77,10 +77,10 @@ const loginScreenStyles = StyleSheet.create({
     color: globalStyles.darkColor.color,
   },
   forgotPassButton: {
-    marginTop: 60,
+    marginTop: 10,
   },
   signUpButton: {
-    marginTop: 20,
+    marginTop: 10,
   },
 });
 
