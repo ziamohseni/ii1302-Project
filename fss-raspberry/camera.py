@@ -15,42 +15,45 @@ def take_picture(firebase,sensors):
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
     firebase.fbput(snapshotpath,"temp.jpg")  
 
+    if "camera" not in sensors.keys():
+        sensors["camera"] = {"type":"camera","status":"active"}
 
+    if sensors["camera"]["status"] == "active":
+        for sensorname,sensorvalue in sensors.items():
+            if sensorvalue["type"]=="camera":
+                
+                recent_snap_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/recent_snapshot"
+                snap_hist_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/snapshot_history"
 
-    
-    for sensorname,sensorvalue in sensors.items():
-        if sensorvalue["type"]=="camera":
-            
-            recent_snap_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/recent_snapshot"
-            snap_hist_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/snapshot_history"
-            print("huh")
-            if firebase.fbget(recent_snap_path):
-                snapshothistory = firebase.fbget(snap_hist_path)
-                snapshotnum = len(snapshothistory)
-                print(snapshothistory)
-                if snapshotnum > 0:
-                    removeshot = "null"
-                    if snapshotnum != 9:
-                        snapshothistory["snapshot"+str(snapshotnum +1)] = snapshothistory["snapshot"+str(snapshotnum)] 
-                    else:
-                        removeshot = snapshothistory["snapshot9"]["path"]
-                    print(snapshothistory)
-                    for snapshot in snapshothistory:
-                        if snapshotnum > 1:
-                            snapshothistory["snapshot"+str(snapshotnum)] = snapshothistory["snapshot"+str(snapshotnum-1)]
-                            snapshotnum -=1
+                if firebase.fbget(recent_snap_path):
+                    snapshothistory = firebase.fbget(snap_hist_path)
+                    snapshotnum = len(snapshothistory)
+
+                    if snapshotnum > 0:
+                        removeshot = "null"
+                        if snapshotnum != 9:
+                            snapshothistory["snapshot"+str(snapshotnum +1)] = snapshothistory["snapshot"+str(snapshotnum)] 
                         else:
-                            break
-                    print(snapshothistory)
-                    snapshothistory["snapshot1"]=firebase.fbget(recent_snap_path) 
-                    firebase.fbset(snap_hist_path, snapshothistory)
-                    if removeshot != "null":
-                        firebase.fbstoragedelete(removeshot)
-                else:
-                    snapshothistory={"snapshot1":firebase.fbget(recent_snap_path)}
-                    print(firebase.fbget(recent_snap_path))                   
-                    firebase.fbset(snap_hist_path, snapshothistory)
+                            removeshot = snapshothistory["snapshot9"]["path"]
 
-                  
-            firebase.fbset(recent_snap_path, {"path":snapshotpath, "timestamp":timestamp})
-            break
+                        for snapshot in snapshothistory:
+                            if snapshotnum > 1:
+                                snapshothistory["snapshot"+str(snapshotnum)] = snapshothistory["snapshot"+str(snapshotnum-1)]
+                                snapshotnum -=1
+                            else:
+                                break
+
+                        snapshothistory["snapshot1"]=firebase.fbget(recent_snap_path) 
+                        sensors["camera"]["snapshot_history"]= snapshothistory
+                        if removeshot != "null":
+                            firebase.fbstoragedelete(removeshot)
+                    else:
+                        snapshothistory={"snapshot1":firebase.fbget(recent_snap_path)}
+                    
+                        sensors["camera"]["snapshot_history"]= snapshothistory
+
+                    
+                sensors["camera"]["recent_snapshot"] = {"path":snapshotpath, "timestamp":timestamp}
+                break
+    picam2.close()
+    return sensors

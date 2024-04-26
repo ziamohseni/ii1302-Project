@@ -1,5 +1,5 @@
 import socket
-
+import time
 
 import fssfirebase
 import camera
@@ -13,10 +13,44 @@ def main():
     firebase = getFirebase()
     admin_data = {}
     admin_data[firebase.uid] = True
+    owned_user = firebase.fbget("users/"+firebase.uid+"/hubs_owned")
+    if owned_user == {}:
+        owned_user = [firebase.devNum]
+    else:
+        owned_user = list(owned_user.values())
+        if not firebase.devNum in owned_user:
+            owned_user.append(firebase.devNum)
+    firebase.fbset("users/"+firebase.uid+"/hubs_owned/",owned_user)
     firebase.fbset("raspberry_hubs/"+firebase.devNum+"/admin",admin_data)
-    sensor_objects = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
+    hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
+    if not "system_status" in hub_data.keys():
+        hub_data["system_status"] = "armed"
+    if not "last_armed" in hub_data.keys():
+        if hub_data["system_status"] == "armed":
+            hub_data["last_armed"] = time.time()
+    active = hub_data["system_status"]
 
-    camera.take_picture(firebase,sensor_objects)
+    firebase.fbset("raspberry_hubs/"+firebase.devNum,hub_data)
+    sensor_objects = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
+#Part written by Adalet modified by Jonathan
+###########################################################################
+    sensstream = {}
+
+    
+     # Stream callback function to monitor changes in system status
+    def system_status_callback(data_snapshot):
+        active = data_snapshot["data"]
+
+        # Process sensor status based on active state
+        print(active)
+
+
+    # Start streaming Firebase data for system status changes
+    firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_status", system_status_callback)
+###########################################################################
+
+
+
     # Create a TCP/IP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -31,33 +65,45 @@ def main():
     print("TCP server is listening on port "+str(server_address[1]))
     while True:
         # Wait for a connection
+        print("waiting for new connection")
         connection, client_address = server_socket.accept()
-
+        
         try:
             print("Connection from:", client_address)
-
+            sensor_objects = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
             # Receive data from the client
             data = connection.recv(1024)  # Adjust buffer size as needed
-            sensor_data = data.decode().split(":")  
-            print(data.decode())
-            match sensor_data[0]:
-                case "door":
-                    for sensorname,sensorvalues in sensor_objects.items():
-                        if "door" in sensorvalues.type:
-                            sensorvalues["triggered"] = eval(sensor_data.capitalize())
-                case "flood":
-                    for sensorname,sensorvalues in sensor_objects.items():
-                        if "flood" in sensorvalues.type:
-                            sensorvalues["triggered"] = eval(sensor_data.capitalize())
-                case "knock":
-                    
+            sensor_data = data.decode().strip().split(":")  
+            
+            print(sensor_data)
+            sensorfound = False
+            for sensorkey,sensorvalue in sensor_objects.items():
+                if sensorkey == sensor_data[0]:
+                    sensorfound = True
+                    if active == "armed" and sensorvalue["status"] == "active":
 
-                    for sensorname,sensorvalues in sensor_objects.items():
-                        if "knock" in sensorvalues.type:
-                            sensorvalues["triggered"] = eval(sensor_data.capitalize())
-                
+     
+                        sensorvalue["triggered"] = eval(sensor_data[2].capitalize())
+                        sensorvalue["type"] = sensor_data[1]
+                        if sensorvalue["triggered"] == True:
+                            sensorvalue["last_active"] = time.time()
+                        sensorfound = True
+                        if sensor_data[1] == "knock" and eval(sensor_data[2].capitalize()) == True and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
+                            sensor_objects = camera.take_picture(firebase,sensor_objects)
+                    break
+            if not sensorfound and active == "armed":
+                if eval(sensor_data[2].capitalize()) == True:
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","last_active":time.time()}
+                else:
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","last_active":""}                    
+
+                sensor_objects[sensor_data[0]] = sensor
+                if sensor_data[1] == "knock"and eval(sensor_data[2].capitalize()) and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
+                    sensor_objects = camera.take_picture(firebase,sensor_objects)
+                                    
+
             # Send a response back to the client
-            connection.sendall(b"Message received. Thank you!")
+            connection.sendall(b"Message received. Thank you!\n")
 
             
             firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors",sensor_objects)
