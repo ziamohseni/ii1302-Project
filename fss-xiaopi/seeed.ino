@@ -11,8 +11,6 @@
 //Included Arduino WiFi library for WLAN functionality
 #include "WiFi.h"
 
-
-
 //global vars for connection
 const char* WIFI_SSID = "Nothing";                // CHANGE TO YOUR WIFI SSID
 const char* WIFI_PASSWORD = "abc12345";           // CHANGE TO YOUR WIFI PASSWORD
