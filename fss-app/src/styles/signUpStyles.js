@@ -14,6 +14,13 @@ const signUpStyles = StyleSheet.create({
   loginButton: {
     marginTop: 10,
   },
+  alreadyHaveAccount:{
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
+    color: globalStyles.primaryColor.color
+  }
 });
 
 export default signUpStyles;
