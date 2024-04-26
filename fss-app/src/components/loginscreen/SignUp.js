@@ -130,7 +130,7 @@ const SignUp = ({ goBackToLogin }) => {
             <Button
               title="Go back to login"
               onPress={() => goBackToLogin()}
-            ></Button>
+            />
           </View>
         </View>
       ) : (
@@ -208,10 +208,12 @@ const SignUp = ({ goBackToLogin }) => {
           </TouchableOpacity>
           {/* Already have an account */}
           <View style={signUpStyles.loginButton}>
-            <Button
+            <TouchableOpacity
               title="Already have an account? Log in."
               onPress={() => goBackToLogin()}
-            />
+            >
+              <Text style ={signUpStyles.alreadyHaveAccount}>ALREADY HAVE AN ACCOUNT? LOG IN</Text>
+            </TouchableOpacity>
           </View>
         </>
       )}
