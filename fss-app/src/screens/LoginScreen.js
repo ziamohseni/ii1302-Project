@@ -107,7 +107,7 @@ function LoginScreen() {
               <View style={styles.welcomeContainer}>
                 <Text style={styles.welcomeTitle}>Welcome!</Text>
                 <Text style={styles.welcomeSubtitle}>
-                  To Five Sense Security
+                  To 5Sense Security
                 </Text>
               </View>
               <TextInput
@@ -131,14 +131,7 @@ function LoginScreen() {
                 placeholder="Password"
                 onChangeText={(text) => setPassword(text)}
               />
-              {/* Forgot pass button */}
-              <View style={styles.forgotPassButton}>
-                <Button
-                  title="FORGOT YOUR PASSWORD?"
-                  color={globalStyles.primaryColor.color}
-                  onPress={() => setFormType("RESET_PASSWORD")}
-                />
-              </View>
+
               {/* Login button */}
               <TouchableOpacity
                 style={
@@ -151,6 +144,14 @@ function LoginScreen() {
                   LOG IN
                 </Text>
               </TouchableOpacity>
+              {/* Forgot pass button */}
+              <View style={styles.forgotPassButton}>
+                <Button
+                  title="FORGOT YOUR PASSWORD?"
+                  color={globalStyles.primaryColor.color}
+                  onPress={() => setFormType("RESET_PASSWORD")}
+                />
+              </View>
               {/* Sign up button */}
               <View style={styles.signUpButton}>
                 <Button

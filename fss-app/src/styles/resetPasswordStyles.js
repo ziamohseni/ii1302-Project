@@ -3,10 +3,8 @@ import globalStyles from "./globalStyles";
 
 const resetPasswordStyles = StyleSheet.create({
   container: {
-    flex: 1, 
-    paddingHorizontal: 20, 
-    paddingTop: 40, 
-    alignContent: "center"
+    flex: 1,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 30,
@@ -27,16 +25,16 @@ const resetPasswordStyles = StyleSheet.create({
     backgroundColor: "#eeeeee",
     color: globalStyles.darkColor.color,
     height: 65,
-    borderColor: globalStyles.secondLightColor.color,
+    borderColor: globalStyles.darkColor.color,
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 3,
     marginVertical: 20,
     padding: 10,
     shadowColor: globalStyles.darkColor.color,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 3.84,
-    elevation: 25,
+    shadowOpacity: 0.01,
+    shadowRadius: 3.5,
+    elevation: 10,
   },
   button: {
     alignItems: "center",
@@ -44,9 +42,8 @@ const resetPasswordStyles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginHorizontal: 20,
-    marginTop: 30,
-    marginBottom: 15,
-    borderRadius: 15,
+    marginVertical: 10,
+    borderRadius: 5,
     elevation: 3,
     backgroundColor: globalStyles.primaryColor.color,
   },
@@ -59,7 +56,7 @@ const resetPasswordStyles = StyleSheet.create({
   },
   backButtonContainer: {
     alignItems: "center",
-    marginTop: 30,
+    bottom: 40,
   },
   backButtonIcon: {
     fontSize: 16,
@@ -69,11 +66,11 @@ const resetPasswordStyles = StyleSheet.create({
     color: globalStyles.darkColor.color,
   },
   backButton: {
-    borderRadius: 15,
     backgroundColor: globalStyles.secondLightColor.color,
     justifyContent: "center",
     paddingVertical: 20,
-    paddingHorizontal: 115,
+    paddingHorizontal: 105,
+    borderRadius: 5,
     elevation: 3,
     shadowColor: globalStyles.darkColor.color,
     shadowOffset: { width: 0, height: 2 },

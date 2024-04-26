@@ -38,11 +38,11 @@ function ResetPassword(props) {
   return (
     <>
 
-      <View>
+    <View style = {styles.container}>
+
         <Text style = {styles.title}>Forgot your password? </Text>
         <Text style = {styles.infoText}>Enter your email address and we will send you an email to reset your password </Text>
-      </View>
-
+      
       <TextInput 
           style = {styles.input}
           autoCapitalize="none"
@@ -60,14 +60,15 @@ function ResetPassword(props) {
           clearInput();
         }}
       >
-        <Text style = {styles.text} > Send email </Text>
+        <Text style = {styles.text} > SEND EMAIL </Text>
       </TouchableOpacity>
+    </View>
 
-      <View style = {styles.backButtonContainer}>
-        <TouchableOpacity onPress = {backToLogin} style = {styles.backButton}>
-          <Text style = {styles.backButtonIcon}>Back to login </Text>
-        </TouchableOpacity>
-      </View>
+    <View style = {styles.backButtonContainer}>
+      <TouchableOpacity onPress = {backToLogin} style = {styles.backButton}>
+        <Text style = {styles.backButtonIcon}>BACK TO LOGIN </Text>
+      </TouchableOpacity>
+    </View>
 
     </>
   )
