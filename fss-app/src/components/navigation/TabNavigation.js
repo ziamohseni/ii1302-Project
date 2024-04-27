@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../../services/firebaseConfig";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Platform } from "react-native";
 import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
+// Context
+import { useUser } from "../../contexts/UserContext";
 // Styles
 import globalStyles from "../../styles/globalStyles";
-
 // Screens
 import LoginScreen from "../../screens/LoginScreen";
 import HomeScreen from "../../screens/HomeScreen";
@@ -17,24 +15,7 @@ import ProfileScreen from "../../screens/ProfileScreen";
 const Tab = createBottomTabNavigator();
 
 function TabNavigation() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Check if user is logged in
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
-        setIsLoggedIn(true);
-        setIsLoading(false);
-      } else {
-        // signOut(auth);
-        setIsLoggedIn(false);
-        setIsLoading(false);
-      }
-    });
-
-    return unsubscribe;
-  }, []);
+  const { isLoading, isUserLoggedInAndVerified } = useUser();
 
   // Show loading spinner while checking if user is logged in
   if (isLoading) {
@@ -59,7 +40,7 @@ function TabNavigation() {
           },
         }}
       >
-        {isLoggedIn ? (
+        {isUserLoggedInAndVerified ? (
           <>
             <Tab.Screen
               name="Home"

@@ -25,7 +25,7 @@ function ProfileScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Welcome!</Text>
-      <Text>User ID: {user.uid}</Text>
+      <Text>User ID: {user?.uid}</Text>
       <Text>First Name: {profile?.first_name}</Text>
       <Text>Last Name: {profile?.last_name}</Text>
       <Button title="Sign Out" onPress={handleSignOut} />

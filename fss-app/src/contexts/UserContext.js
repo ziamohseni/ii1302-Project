@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, database } from "../services/firebaseConfig";
-import { ref, get } from "firebase/database";
+import { ref, get, set } from "firebase/database";
 
 // Create User Context
 const UserContext = createContext();
@@ -10,7 +10,11 @@ const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUserLoggedInAndVerified, setIsUserLoggedInAndVerified] =
+    useState(false);
+
+  console.log("logged in and verified: ", isUserLoggedInAndVerified);
 
   useEffect(() => {
     // Listen for authentication state changes
@@ -18,6 +22,7 @@ export const UserProvider = ({ children }) => {
       if (user) {
         // User is signed in
         setUser(user);
+        setIsUserLoggedInAndVerified(user && user.emailVerified);
         // Fetch user profile from Realtime Database
         const userProfileRef = ref(database, "users/" + user.uid);
         get(userProfileRef)
@@ -34,10 +39,11 @@ export const UserProvider = ({ children }) => {
           });
       } else {
         // User is signed out
+        setIsUserLoggedInAndVerified(false);
         setUser(null);
         setProfile(null);
       }
-      setLoading(false);
+      setIsLoading(false);
     });
 
     // Cleanup subscription on unmount
@@ -45,7 +51,9 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, profile, loading }}>
+    <UserContext.Provider
+      value={{ user, profile, isLoading, isUserLoggedInAndVerified }}
+    >
       {children}
     </UserContext.Provider>
   );
