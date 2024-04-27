@@ -24,7 +24,7 @@ users:
   user_id_1: # user_id is "user uid" from the authentication
     first_name: "John"
     last_name: "Doe"
-    hubs_owned: ["hub_id_1", "hub_id_2"] # admin can own multiple hubs
+    hubs_owned: ["hub_id_1", "hub_id_2"] # admin can own multiple hubs. * Empty intially. we don't use "null".
     hubs_accessible: ["hub_id_1", "hub_id_2"] # admin has access to all owned hubs
 
   user_id_2:
@@ -42,11 +42,11 @@ users:
 raspberry_hubs:
   hub_id_1:
     admin: "user_id_1" # direct reference to the user who owns this hub
-    users:
-      user_id_2:
-        access_sensors: ["sensor_id_1"]
-      user_id_3:
-        access_sensors: ["sensor_id_1", "sensor_id_2"]
+    # users: # we don't use this for now, it is too complicated on app development.
+    #   user_id_2:
+    #     access_sensors: ["sensor_id_1"]
+    #   user_id_3:
+    #     access_sensors: ["sensor_id_1", "sensor_id_2"]
     sensors:
       sensor_id_1:
         type: "motion"

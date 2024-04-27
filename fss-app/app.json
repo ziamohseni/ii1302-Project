@@ -13,7 +13,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "24.04.26.0823",
+      "buildNumber": "24.04.27.0919",
       "supportsTablet": true,
       "bundleIdentifier": "com.5sensesecurity.fssapp"
     },
