@@ -13,11 +13,7 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [selectedHub, setSelectedHub] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  console.log("User id: ", user?.uid);
-  console.log("Profile: ", profile);
-  console.log("Hubs: ", hubs);
-  console.log("Selected Hub: ", selectedHub);
-
+  // Fetch hubs from database
   useEffect(() => {
     const fetchHubs = async () => {
       let hubIds = profile?.hubs_owned || profile?.hubs_accessible;
@@ -48,6 +44,7 @@ export const RaspberryHubsProvider = ({ children }) => {
     }
   }, [user, profile]);
 
+  // Function to select a hub
   const selectHub = (hubId) => {
     const hub = hubs.find((h) => h.id === hubId);
     setSelectedHub(hub);
