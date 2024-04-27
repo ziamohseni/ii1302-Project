@@ -1,6 +1,8 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
+// Contexts
 import { UserProvider } from "./src/contexts/UserContext";
+import { RaspberryHubsProvider } from "./src/contexts/RaspberryHubsContext";
 
 // Navigation
 import TabNavigation from "./src/components/navigation/TabNavigation";
@@ -8,10 +10,12 @@ import TabNavigation from "./src/components/navigation/TabNavigation";
 export default function App() {
   return (
     <UserProvider>
-      <NavigationContainer>
-        <TabNavigation />
-        <StatusBar style="dark" />
-      </NavigationContainer>
+      <RaspberryHubsProvider>
+        <NavigationContainer>
+          <TabNavigation />
+          <StatusBar style="dark" />
+        </NavigationContainer>
+      </RaspberryHubsProvider>
     </UserProvider>
   );
 }
