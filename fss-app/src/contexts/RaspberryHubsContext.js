@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { ref, get } from "firebase/database";
+import { ref, get, update, serverTimestamp } from "firebase/database";
 import { database } from "../services/firebaseConfig";
 import { useUser } from "./UserContext";
 
@@ -11,6 +11,8 @@ export const RaspberryHubsProvider = ({ children }) => {
   const { user, profile } = useUser();
   const [hubs, setHubs] = useState([]);
   const [selectedHub, setSelectedHub] = useState(null);
+  const [systemStatus, setSystemStatus] = useState("unarmed");
+  const [isSystemArmed, setIsSystemArmed] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Fetch hubs from database
@@ -32,6 +34,8 @@ export const RaspberryHubsProvider = ({ children }) => {
         }));
         setHubs(loadedHubs);
         setSelectedHub(loadedHubs[0]);
+        setSystemStatus(loadedHubs[0].system_status);
+        setIsSystemArmed(loadedHubs[0].system_status === "armed");
         setLoading(false);
       } else {
         setHubs([]);
@@ -50,9 +54,39 @@ export const RaspberryHubsProvider = ({ children }) => {
     setSelectedHub(hub);
   };
 
+  // Toggle system status of the selected hub
+  const toggleSystemStatus = async () => {
+    if (selectedHub) {
+      const newStatus =
+        selectedHub.system_status === "armed" ? "unarmed" : "armed";
+      const updates = {
+        system_status: newStatus,
+        last_armed: serverTimestamp(),
+      };
+      await update(ref(database, `raspberry_hubs/${selectedHub.id}`), updates);
+      // Update the local state to reflect the change
+      setSystemStatus(newStatus);
+      setIsSystemArmed(newStatus === "armed");
+      setSelectedHub({ ...selectedHub, ...updates });
+      setHubs(
+        hubs.map((hub) =>
+          hub.id === selectedHub.id ? { ...hub, ...updates } : hub
+        )
+      );
+    }
+  };
+
   return (
     <RaspberryHubsContext.Provider
-      value={{ hubs, selectedHub, selectHub, loading }}
+      value={{
+        hubs,
+        selectedHub,
+        selectHub,
+        loading,
+        systemStatus,
+        isSystemArmed,
+        toggleSystemStatus,
+      }}
     >
       {children}
     </RaspberryHubsContext.Provider>
