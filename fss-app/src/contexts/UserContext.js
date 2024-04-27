@@ -14,8 +14,6 @@ export const UserProvider = ({ children }) => {
   const [isUserLoggedInAndVerified, setIsUserLoggedInAndVerified] =
     useState(false);
 
-  console.log("logged in and verified: ", isUserLoggedInAndVerified);
-
   useEffect(() => {
     // Listen for authentication state changes
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
