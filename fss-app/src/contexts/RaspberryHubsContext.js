@@ -90,6 +90,9 @@ export const RaspberryHubsProvider = ({ children }) => {
         last_armed: serverTimestamp(),
       };
       await update(ref(database, `raspberry_hubs/${selectedHub.id}`), updates);
+      // Locally update the states to reflect the change immediately
+      setSystemStatus(newStatus);
+      setIsSystemArmed(newStatus === "armed");
     }
   };
 
