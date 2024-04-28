@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { ref, get, update, serverTimestamp } from "firebase/database";
+import { ref, update, serverTimestamp, onValue, off } from "firebase/database";
 import { database } from "../services/firebaseConfig";
 import { useUser } from "./UserContext";
 
@@ -17,25 +17,42 @@ export const RaspberryHubsProvider = ({ children }) => {
 
   // Fetch hubs from database
   useEffect(() => {
+    const hubRefs = [];
     const fetchHubs = async () => {
       let hubIds = profile?.hubs_owned || profile?.hubs_accessible;
       let isAdmin = !!profile?.hubs_owned;
 
       if (hubIds && hubIds.length > 0) {
         setLoading(true);
-        const hubPromises = hubIds.map((hubId) =>
-          get(ref(database, "raspberry_hubs/" + hubId))
-        );
-        const hubSnapshots = await Promise.all(hubPromises);
-        const loadedHubs = hubSnapshots.map((snapshot, index) => ({
-          id: hubIds[index],
-          ...snapshot.val(),
-          role: isAdmin ? "admin" : "sub-user",
-        }));
-        setHubs(loadedHubs);
-        setSelectedHub(loadedHubs[0]);
-        setSystemStatus(loadedHubs[0].system_status);
-        setIsSystemArmed(loadedHubs[0].system_status === "armed");
+        hubIds.forEach((hubId) => {
+          const hubRef = ref(database, "raspberry_hubs/" + hubId);
+          hubRefs.push(hubRef);
+          onValue(hubRef, (snapshot) => {
+            const hubData = snapshot.val();
+            if (hubData) {
+              const updatedHub = {
+                id: hubId,
+                ...hubData,
+                role: isAdmin ? "admin" : "sub-user",
+              };
+              setHubs((prevHubs) => {
+                const index = prevHubs.findIndex((h) => h.id === hubId);
+                if (index > -1) {
+                  const newHubs = [...prevHubs];
+                  newHubs[index] = updatedHub;
+                  return newHubs;
+                } else {
+                  return [...prevHubs, updatedHub];
+                }
+              });
+              if (!selectedHub || selectedHub.id === hubId) {
+                setSelectedHub(updatedHub);
+                setSystemStatus(updatedHub.system_status);
+                setIsSystemArmed(updatedHub.system_status === "armed");
+              }
+            }
+          });
+        });
         setLoading(false);
       } else {
         setHubs([]);
@@ -46,12 +63,21 @@ export const RaspberryHubsProvider = ({ children }) => {
     if (user) {
       fetchHubs();
     }
+
+    // Clean up listeners when the component unmounts or user changes
+    return () => {
+      hubRefs.forEach((hubRef) => {
+        off(hubRef);
+      });
+    };
   }, [user, profile]);
 
   // Function to select a hub
   const selectHub = (hubId) => {
     const hub = hubs.find((h) => h.id === hubId);
     setSelectedHub(hub);
+    setSystemStatus(hub.system_status);
+    setIsSystemArmed(hub.system_status === "armed");
   };
 
   // Toggle system status of the selected hub
@@ -64,15 +90,6 @@ export const RaspberryHubsProvider = ({ children }) => {
         last_armed: serverTimestamp(),
       };
       await update(ref(database, `raspberry_hubs/${selectedHub.id}`), updates);
-      // Update the local state to reflect the change
-      setSystemStatus(newStatus);
-      setIsSystemArmed(newStatus === "armed");
-      setSelectedHub({ ...selectedHub, ...updates });
-      setHubs(
-        hubs.map((hub) =>
-          hub.id === selectedHub.id ? { ...hub, ...updates } : hub
-        )
-      );
     }
   };
 
