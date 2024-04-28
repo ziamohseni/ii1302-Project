@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
 // Context
 import { useUser } from "../../contexts/UserContext";
@@ -27,7 +27,7 @@ function TabNavigation() {
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={{
-          tabBarActiveTintColor: globalStyles.primaryColor.color,
+          tabBarActiveTintColor: globalStyles.darkColor.color,
           tabBarInactiveTintColor: globalStyles.darkColor.color,
           tabBarStyle: {
             backgroundColor: globalStyles.lightColor.color,
@@ -37,6 +37,9 @@ function TabNavigation() {
           },
           tabBarLabelStyle: {
             paddingBottom: 5,
+          },
+          headerStyle: {
+            backgroundColor: globalStyles.lightColor.color,
           },
         }}
       >

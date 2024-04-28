@@ -22,14 +22,15 @@ const globalStyles = StyleSheet.create({
   },
   containerWithPadding: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     paddingHorizontal: 20,
-    backgroundColor: "#f9f9f9",
+    paddingVertical: 20,
+    backgroundColor: lightColor,
   },
   containerWithoutPadding: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#f9f9f9",
+    backgroundColor: lightColor,
   },
   verticalPadding: {
     paddingVertical: 30,

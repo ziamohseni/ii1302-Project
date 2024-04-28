@@ -1,12 +1,17 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import ActivationButton from "../components/activationButton/ActivationButton";
+import SelectHub from "../components/global/SelectHub";
+// Styles
+import globalStyles from "../styles/globalStyles";
 
 function HomeScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-     
-      <ActivationButton />
-    </View>
+    <ScrollView contentContainerStyle={globalStyles.containerWithPadding}>
+      <View>
+        <SelectHub />
+        <ActivationButton />
+      </View>
+    </ScrollView>
   );
 }
 
