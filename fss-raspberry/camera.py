@@ -1,9 +1,12 @@
 from picamera2 import Picamera2, Preview
 import libcamera
 import time
-import fssfirebase 
 
-def take_picture(firebase,sensors):
+def take_picture(firebase,prevthread):
+    if prevthread != None:
+        while prevthread.is_alive():
+            pass
+    print("capturing image")
     picam2 = Picamera2()
     camera_config = picam2.create_preview_configuration()
     camera_config["transform"] = libcamera.Transform(hflip=1, vflip=1)
@@ -11,49 +14,61 @@ def take_picture(firebase,sensors):
     picam2.start()
     time.sleep(2)
     picam2.capture_file("temp.jpg")
+    picam2.close()
+    print("saving image")
     timestamp = time.time()
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
     firebase.fbput(snapshotpath,"temp.jpg")  
 
-    if "camera" not in sensors.keys():
-        sensors["camera"] = {"type":"camera","status":"active"}
 
-    if sensors["camera"]["status"] == "active":
-        for sensorname,sensorvalue in sensors.items():
-            if sensorvalue["type"]=="camera":
-                
-                recent_snap_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/recent_snapshot"
-                snap_hist_path = "raspberry_hubs/"+firebase.devNum+"/sensors/" + sensorname + "/snapshot_history"
 
-                if firebase.fbget(recent_snap_path):
-                    snapshothistory = firebase.fbget(snap_hist_path)
-                    snapshotnum = len(snapshothistory)
+    fbcamera = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/camera")
+    if fbcamera == {}:
+        fbcamera = {"type":"camera","status":"active","id":"camera"}
+    firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
+    if fbcamera["status"] == "active":
 
-                    if snapshotnum > 0:
-                        removeshot = "null"
-                        if snapshotnum != 9:
-                            snapshothistory["snapshot"+str(snapshotnum +1)] = snapshothistory["snapshot"+str(snapshotnum)] 
-                        else:
-                            removeshot = snapshothistory["snapshot9"]["path"]
+        try:
+            fbrecent_snapshot = fbcamera["recent_snapshot"]
+        except KeyError:
+            fbrecent_snapshot = {}
+        
 
-                        for snapshot in snapshothistory:
-                            if snapshotnum > 1:
-                                snapshothistory["snapshot"+str(snapshotnum)] = snapshothistory["snapshot"+str(snapshotnum-1)]
-                                snapshotnum -=1
-                            else:
-                                break
+        if fbrecent_snapshot:
+            try:
+                snapshothistory = fbcamera["snapshot_history"]
+            except KeyError:
+                snapshothistory = {}
 
-                        snapshothistory["snapshot1"]=firebase.fbget(recent_snap_path) 
-                        sensors["camera"]["snapshot_history"]= snapshothistory
-                        if removeshot != "null":
-                            firebase.fbstoragedelete(removeshot)
+            snapshotnum = len(snapshothistory)
+            
+            if snapshotnum > 0:
+                removeshot = None
+                if snapshotnum != 9:
+                    snapshothistory["snapshot"+str(snapshotnum +1)] = snapshothistory["snapshot"+str(snapshotnum)] 
+                else:
+                    removeshot = snapshothistory["snapshot9"]["path"]
+
+                for snapshot in snapshothistory:
+                    if snapshotnum > 1:
+                        snapshothistory["snapshot"+str(snapshotnum)] = snapshothistory["snapshot"+str(snapshotnum-1)]
+                        snapshotnum -=1
                     else:
-                        snapshothistory={"snapshot1":firebase.fbget(recent_snap_path)}
-                    
-                        sensors["camera"]["snapshot_history"]= snapshothistory
+                        break
 
-                    
-                sensors["camera"]["recent_snapshot"] = {"path":snapshotpath, "timestamp":timestamp}
-                break
-    picam2.close()
-    return sensors
+                snapshothistory["snapshot1"]=fbrecent_snapshot 
+                fbcamera["snapshot_history"]= snapshothistory
+                if removeshot != None:
+                    firebase.fbstoragedelete(removeshot)
+            else:
+                snapshothistory={"snapshot1":fbrecent_snapshot}
+            
+                fbcamera["snapshot_history"]= snapshothistory
+
+            
+        fbcamera["recent_snapshot"] = {"path":snapshotpath, "timestamp":timestamp}
+            
+    
+    firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
+    print("camera done")
+

@@ -1,8 +1,7 @@
 import socket
 import time
-
-import fssfirebase
 import camera
+import threading
 from firebaselogin import getFirebase
 
 
@@ -16,25 +15,29 @@ def main():
     owned_user = firebase.fbget("users/"+firebase.uid+"/hubs_owned")
     if owned_user == {}:
         owned_user = [firebase.devNum]
+        firebase.fbset("users/"+firebase.uid+"/hubs_owned/",owned_user)
     else:
         owned_user = list(owned_user.values())
         if not firebase.devNum in owned_user:
             owned_user.append(firebase.devNum)
-    firebase.fbset("users/"+firebase.uid+"/hubs_owned/",owned_user)
+            firebase.fbset("users/"+firebase.uid+"/hubs_owned/",owned_user)
+
     firebase.fbset("raspberry_hubs/"+firebase.devNum+"/admin",admin_data)
     hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
+    hub_data_changed = False
     if not "system_status" in hub_data.keys():
         hub_data["system_status"] = "armed"
+        hub_data_changed = True
     if not "last_armed" in hub_data.keys():
         if hub_data["system_status"] == "armed":
             hub_data["last_armed"] = time.time()
+            hub_data_changed = True
     active = hub_data["system_status"]
-
-    firebase.fbset("raspberry_hubs/"+firebase.devNum,hub_data)
-    sensor_objects = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
+    if hub_data_changed:
+        firebase.fbset("raspberry_hubs/"+firebase.devNum,hub_data)
 #Part written by Adalet modified by Jonathan
 ###########################################################################
-    sensstream = {}
+    
 
     
      # Stream callback function to monitor changes in system status
@@ -63,6 +66,7 @@ def main():
     # Listen for incoming connections
     server_socket.listen(5)  # Maximum number of queued connections
     print("TCP server is listening on port "+str(server_address[1]))
+    camthread = None
     while True:
         # Wait for a connection
         print("waiting for new connection")
@@ -89,24 +93,31 @@ def main():
                             sensorvalue["last_active"] = time.time()
                         sensorfound = True
                         if sensor_data[1] == "knock" and eval(sensor_data[2].capitalize()) == True and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
-                            sensor_objects = camera.take_picture(firebase,sensor_objects)
+                            camthread = threading.Thread(target = camera.take_picture, args = (firebase,camthread))
+                            camthread.start()
+                    firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
                     break
+                   
             if not sensorfound and active == "armed":
+                
                 if eval(sensor_data[2].capitalize()) == True:
-                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","last_active":time.time()}
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time()}
                 else:
-                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","last_active":""}                    
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":""}                    
 
                 sensor_objects[sensor_data[0]] = sensor
+                firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor_data[0],sensor)
+                print(sensor)
                 if sensor_data[1] == "knock"and eval(sensor_data[2].capitalize()) and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
-                    sensor_objects = camera.take_picture(firebase,sensor_objects)
-                                    
+                    camthread = threading.Thread(target = camera.take_picture, args = (firebase,camthread))
+                    camthread.start()
+                
 
             # Send a response back to the client
             connection.sendall(b"Message received. Thank you!\n")
 
             
-            firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors",sensor_objects)
+            
         finally:
             # Clean up the connection
             connection.close()

@@ -44,6 +44,9 @@ class FssFirebase:
             pass
 
         return dictionary
+    def fbupdate(self,path,data):
+        self.db.child(path).update(data,self.loginret["idToken"])
+
     def fbstream(self,path,streamHandler):
         return self.db.child(path).stream(streamHandler,self.loginret["idToken"])
 
