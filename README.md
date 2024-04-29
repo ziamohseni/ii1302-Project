@@ -19,9 +19,10 @@ Choose version v20.12.2 (LTS)
 
 ### Technologies used in developing the mobile app
 
-1. React Native Expo (https://docs.expo.dev/)
-2. Firebase Realtime Database, Authentication, Cloud Messaging
-3. JavaScript language
+1. React Native (https://reactnative.dev/docs/getting-started)
+2. React Native Expo (https://docs.expo.dev/)
+3. Firebase Realtime Database, Authentication, Cloud Messaging
+4. JavaScript language
 
 ### Database data structure for project
 
