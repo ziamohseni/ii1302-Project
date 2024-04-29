@@ -17,6 +17,12 @@ Choose version v20.12.2 (LTS)
 4. In the mean time download the "Expo Go" app from Apple Store or Google Play
 5. Then run `npx expo start`, after server has started, scan the QR code to open the app.
 
+### Technologies used in developing the mobile app
+
+1. React Native Expo (https://docs.expo.dev/)
+2. Firebase Realtime Database, Authentication, Cloud Messaging
+3. JavaScript language
+
 ### Database data structure for project
 
 ```yaml
@@ -49,16 +55,19 @@ raspberry_hubs:
         access_sensors: ["sensor_id_1", "sensor_id_2"]
     sensors:
       sensor_id_1:
+        id: "sensor_id_1"
         type: "motion"
         status: "active"
         triggered: "false"
         last_active: "timestamp"
       sensor_id_2:
+        id: "sensor_id_2"
         type: "window"
         status: "inactive"
         triggered: "false"
         last_active: "timestamp"
       sensor_id_3:
+        id: "sensor_id_3"
         type: "camera"
         status: "active"
         triggered: "false"
