@@ -18,6 +18,11 @@ const noHubsFoundStyles = StyleSheet.create({
     backgroundColor: globalStyles.lightColor.color,
     padding: 20,
   },
+  titleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
