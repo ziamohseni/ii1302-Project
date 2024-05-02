@@ -17,6 +17,9 @@ def take_picture(firebase,prevthread):
     picam2.close()
     print("saving image")
     timestamp = time.time()
+    
+    #The face recognition implementation logic starts from here:
+    
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
     firebase.fbput(snapshotpath,"temp.jpg")  
 
