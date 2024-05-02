@@ -14,7 +14,7 @@ function DevicesScreen() {
 
   return (
     <ScrollView contentContainerStyle={globalStyles.containerWithPadding}>
-      <View style={globalStyles.containerWithPadding}>
+      <View>
         <View style={styles.container}>
           <SelectHub />
           <DevicesList />
