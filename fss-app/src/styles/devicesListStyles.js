@@ -15,6 +15,12 @@ const devicesScreenStyles = StyleSheet.create({
     borderRadius: 10,
   },
 
+  deviceContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    paddingHorizontal: 20,
+  },
+
   deviceText: {
     fontSize: 16,
     fontWeight: "bold",
@@ -25,7 +31,6 @@ const devicesScreenStyles = StyleSheet.create({
   logo: {
     width: 31,
     height: 25,
- 
   },
 
 });
