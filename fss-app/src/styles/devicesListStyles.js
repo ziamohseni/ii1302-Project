@@ -9,17 +9,23 @@ const devicesScreenStyles = StyleSheet.create({
   },
 
   devices: {
-    backgroundColor: globalStyles.primaryColor.color,
+    backgroundColor: globalStyles.lightColor.color,
     marginHorizontal: 10,
-    paddingVertical: 20,
+    padding: 20,
     borderRadius: 10,
   },
 
   deviceText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#ffff",
+    color: globalStyles.darkColor.color,
     textAlign: "center",
+  },
+
+  logo: {
+    width: 31,
+    height: 25,
+ 
   },
 
 });
