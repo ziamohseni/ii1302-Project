@@ -75,11 +75,14 @@ raspberry_hubs:
         recent_snapshot:
           url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
           date_taken: "timestamp" # The date the snapshot was taken
+          name: "person_name" # Used for face recognition
         snapshot_history:
           - url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
             date_taken: "timestamp"
+            name: "person_name"
           - url: "url"
             date_taken: "timestamp"
+            name: "person_name"
     system_status: "armed" # or unarmed (activated / deactivated)
     last_armed: "timestamp"
 ```
