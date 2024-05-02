@@ -159,7 +159,9 @@ function LoginScreen() {
                 <Ionicons
                   name="log-in-outline"
                   size={26}
-                  color={globalStyles.darkColor.color}
+                  color={
+                    isButtonActive ? styles.text.color : styles.textDark.color
+                  }
                 />
               </TouchableOpacity>
 
