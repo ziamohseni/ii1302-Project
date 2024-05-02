@@ -87,3 +87,8 @@ raspberry_hubs:
 Notes:
 
 When “system_status” is “armed” we both Raspberry Pi and Mobile app listening to sensors “status”, if some status changes, we take appropriate actions in respective devices.
+
+\*\*\* Realtime Database Rule:
+
+This Device rule in Realtime Database was removed. We can add it back if needed and followed.
+`&& (data.child('users').hasChild(auth.uid)||data.child('admin').hasChild(auth.uid)||!data.hasChild('admin'))`
