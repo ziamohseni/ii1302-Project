@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 // Contexts
 import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 // Styles
@@ -9,14 +9,30 @@ function DevicesList() {
   const { selectedHub } = useRaspberryHubs();
   const sensorsArray = Object.values(selectedHub.sensors);
 
-  // console.log(sensorsArray);
+  function formatDate(timestamp){
+    let date = new Date(timestamp * 1000);
+    return date.toLocaleString();
+  }
+
+  console.log(sensorsArray)
+
+  let renderSensors = sensorsArray.map(item =>
+    <TouchableOpacity key={item.id} style = {styles.devices}>
+      <Text style = {styles.deviceText}>Type: {item.type}, Status: {item.status} </Text>
+    </TouchableOpacity>
+  );
 
   return (
     <View>
       <Text style={globalStyles.text}>
         List of devices in hub # {selectedHub.id}
       </Text>
-      <Text>Sensors are NOT array. Fixing sensor list later.</Text>
+
+      <View style = {styles.container}>
+        {renderSensors}
+      </View>
+
+      <Text>{/*formatDate(sensorsArray[0].last_active)*/}</Text>
     </View>
   );
 }
