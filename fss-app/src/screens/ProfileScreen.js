@@ -7,20 +7,9 @@ import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 
 function ProfileScreen() {
   // Get user data from context
-  const { user, profile } = useUser();
+  const { user, profile, handleSignOut } = useUser();
   // Get Raspberry Hubs data from context
   const { hubs, selectHub } = useRaspberryHubs();
-
-  // Function to handle sign out
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Sign out successful");
-      })
-      .catch((error) => {
-        console.log("Sign out failed");
-      });
-  };
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

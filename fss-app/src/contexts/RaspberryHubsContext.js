@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { ref, update, serverTimestamp, onValue, off } from "firebase/database";
-import { database } from "../services/firebaseConfig";
+import {
+  ref,
+  update,
+  serverTimestamp,
+  onValue,
+  off,
+  set,
+} from "firebase/database";
+import { signOut } from "firebase/auth";
+import { database, auth } from "../services/firebaseConfig";
 import { useUser } from "./UserContext";
 
 // Create Raspberry Hubs Context
@@ -72,6 +80,12 @@ export const RaspberryHubsProvider = ({ children }) => {
       hubRefs.forEach((hubRef) => {
         off(hubRef);
       });
+      setHubs([]);
+      setSelectedHub(null);
+      setSystemStatus("unarmed");
+      setIsSystemArmed(false);
+      setLoading(true);
+      setNoHubsFound(false);
     };
   }, [user, profile]);
 
