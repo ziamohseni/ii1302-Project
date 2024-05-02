@@ -2,14 +2,25 @@ import socket
 import time
 import camera
 import threading
-from firebaselogin import getFirebase
+from usbfirebaselogin import getFirebase
+import os
+import face_recognition
 
+def getFaceEncodings(usb_path):
+    print("Encoding faces")
+    facefiles = os.listdir(usb_path+"/faces")
+    faceencodings = {}
 
-def main():
-    
-    
-    
-    firebase = getFirebase()
+    for facefile in facefiles:
+        face = face_recognition.load_image_file(usb_path+"/faces/"+facefile)
+        facename = facefile.split("_")[0]
+        if facename not in faceencodings:
+            faceencodings[facename] = []
+        faceencodings[facename].append(face_recognition.face_encodings(face))
+    return faceencodings
+
+def setupHubForFB(firebase):
+    print("Initializing hub")
     admin_data = {}
     admin_data[firebase.uid] = True
     owned_user = firebase.fbget("users/"+firebase.uid+"/hubs_owned")
@@ -35,6 +46,16 @@ def main():
     active = hub_data["system_status"]
     if hub_data_changed:
         firebase.fbset("raspberry_hubs/"+firebase.devNum,hub_data)
+    return active
+
+def main():
+    
+    
+    
+    firebase,usb_path = getFirebase()
+    active = setupHubForFB(firebase)
+    faceEncodings = getFaceEncodings(usb_path)
+    
 #Part written by Adalet modified by Jonathan
 ###########################################################################
     
@@ -53,6 +74,7 @@ def main():
 ###########################################################################
 
 
+    print("Starting TCP server")
 
     # Create a TCP/IP socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -93,7 +115,8 @@ def main():
                             sensorvalue["last_active"] = time.time()
                         sensorfound = True
                         if sensor_data[1] == "knock" and eval(sensor_data[2].capitalize()) == True and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
-                            camthread = threading.Thread(target = camera.take_picture, args = (firebase,camthread))
+                            print("whytf")
+                            camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                             camthread.start()
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
                     break
@@ -109,7 +132,7 @@ def main():
                 firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor_data[0],sensor)
                 print(sensor)
                 if sensor_data[1] == "knock"and eval(sensor_data[2].capitalize()) and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
-                    camthread = threading.Thread(target = camera.take_picture, args = (firebase,camthread))
+                    camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                     camthread.start()
                 
 

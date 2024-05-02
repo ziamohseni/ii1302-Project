@@ -2,7 +2,7 @@ from picamera2 import Picamera2, Preview
 import libcamera
 import time
 
-def take_picture(firebase,prevthread):
+def take_picture(firebase,faceEncodings,prevthread):
     if prevthread != None:
         while prevthread.is_alive():
             pass

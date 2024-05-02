@@ -1,12 +1,12 @@
 import psutil
 import os
 import fssfirebase
-import time
-import wifi
-import subprocess
+import wifilogin
+
 
 
 def getUserAndPass():
+    print("Getting usb data")
     localuser = os.getlogin()
     while True:
         try:
@@ -28,49 +28,26 @@ def getUserAndPass():
                 wifissid = userfile.readline().split(":")[1].split("\n")[0]
                 wifipass = userfile.readline().split(":")[1].split("\n")[0]
                 
-            return username,password,wifissid,wifipass
+            return username,password,wifissid,wifipass,userDataUsbPath
         except FileNotFoundError:
             while psutil.disk_partitions == partitions:
                 pass
 
-def connectWifiGetAuth():
-    username,password,wifissid,wifipass = getUserAndPass()
-    wificonnected = "no"
-    try:
-        wificonnected = subprocess.check_output(["nmcli","-f","GENERAL.STATE","con","show",wifissid])
-    except subprocess.CalledProcessError:
-        pass
 
-
-
-    while "activated" not in str(wificonnected):
-        try:
-            wifi_networks = wifi.Cell.all('wlan0')
-            for wifi_net in wifi_networks:
-                
-                if wifi_net.ssid == wifissid:
-                    try:
-                        subprocess.check_output(["nmcli", "dev", "wifi", "connect", wifissid, "password", wifipass])
-
-                        wificonnected = subprocess.check_output(["nmcli","-f","GENERAL.STATE","con","show",wifissid])
-                    except subprocess.CalledProcessError:
-                        username,password,wifissid,wifipass = getUserAndPass()
-        
-                else:
-                    username,password,wifissid,wifipass = getUserAndPass()
-        except wifi.exceptions.InterfaceError:
-            pass
-    return username,password
-        
 
             
 def getFirebase():
-    username,password = connectWifiGetAuth
+    
+    wifi_status = False
+    while not wifi_status:
+        username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
+        #wifi_status = wifilogin.connectWifi(wifissid,wifipass)
+        wifi_status = True
     while True:
-
+        print("Logging in to firebase")
         try:
             firebase = fssfirebase.FssFirebase(username,password)
             break
         except fssfirebase.InvalidFBLoginInfoError:
-            username,password,wifissid,wifipass = getUserAndPass()
-    return firebase
+            username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
+    return firebase,userDataUsbPath
