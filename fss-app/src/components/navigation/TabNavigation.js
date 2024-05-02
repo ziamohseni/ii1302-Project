@@ -4,6 +4,7 @@ import { Platform, View } from "react-native";
 import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
 // Context
 import { useUser } from "../../contexts/UserContext";
+import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 // Screens
@@ -11,11 +12,18 @@ import LoginScreen from "../../screens/LoginScreen";
 import HomeScreen from "../../screens/HomeScreen";
 import DevicesScreen from "../../screens/DevicesScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
+import NoRegisteredHub from "../global/NoRegisteredHub";
 
 const Tab = createBottomTabNavigator();
 
 function TabNavigation() {
   const { isLoading, isUserLoggedInAndVerified } = useUser();
+  const { noHubsFound } = useRaspberryHubs();
+
+  // Show no hubs found modal
+  if (noHubsFound) {
+    return <NoRegisteredHub noHubsFound={noHubsFound} />;
+  }
 
   // Show loading spinner while checking if user is logged in
   if (isLoading) {

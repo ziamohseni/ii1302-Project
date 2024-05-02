@@ -14,6 +14,7 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [systemStatus, setSystemStatus] = useState("unarmed");
   const [isSystemArmed, setIsSystemArmed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [noHubsFound, setNoHubsFound] = useState(false);
 
   // Fetch hubs from database
   useEffect(() => {
@@ -50,6 +51,8 @@ export const RaspberryHubsProvider = ({ children }) => {
                 setSystemStatus(updatedHub.system_status);
                 setIsSystemArmed(updatedHub.system_status === "armed");
               }
+            } else {
+              setNoHubsFound(true);
             }
           });
         });
@@ -106,6 +109,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         systemStatus,
         isSystemArmed,
         toggleSystemStatus,
+        noHubsFound,
       }}
     >
       {children}
