@@ -52,6 +52,7 @@ const globalStyles = StyleSheet.create({
     padding: 10,
   },
   buttonActive: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 20,
@@ -63,6 +64,7 @@ const globalStyles = StyleSheet.create({
     backgroundColor: primaryColor,
   },
   buttonDisabled: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 20,
