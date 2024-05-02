@@ -22,6 +22,7 @@ const globalStyles = StyleSheet.create({
   },
   containerWithPadding: {
     flex: 1,
+    position: "relative",
     justifyContent: "flex-start",
     paddingHorizontal: 20,
     paddingVertical: 20,

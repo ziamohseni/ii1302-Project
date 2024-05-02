@@ -7,14 +7,14 @@ import styles from "../../styles/devicesListStyles";
 
 function DevicesList() {
   const { selectedHub } = useRaspberryHubs();
-  const sensorsArray = Object.values(selectedHub.sensors);
+  const sensorsArray = selectedHub && Object.values(selectedHub.sensors);
 
   // console.log(sensorsArray);
 
   return (
     <View>
       <Text style={globalStyles.text}>
-        List of devices in hub # {selectedHub.id}
+        List of devices in hub # {selectedHub && selectedHub.id}
       </Text>
       <Text>Sensors are NOT array. Fixing sensor list later.</Text>
     </View>
