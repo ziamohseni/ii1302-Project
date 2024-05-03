@@ -15,6 +15,7 @@ import { auth } from "../services/firebaseConfig";
 import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
 import ResetPassword from "../components/loginscreen/ResetPassword";
 import SignUp from "../components/loginscreen/SignUp";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 // Assets
 import logo from "../../assets/fss-logo.png";
@@ -134,13 +135,12 @@ function LoginScreen() {
               {/* Forgot pass button */}
               <View>
                 <TouchableOpacity
-                  style = {styles.forgotPassButton}
+                  style={styles.forgotPassButton}
                   title="FORGOT YOUR PASSWORD?"
                   color={globalStyles.primaryColor.color}
-                  onPress={() => setFormType("RESET_PASSWORD")} >
-                  <Text style = {styles.forgotPassText}>
-                    FORGOT PASSWORD?    
-                  </Text>
+                  onPress={() => setFormType("RESET_PASSWORD")}
+                >
+                  <Text style={styles.forgotPassText}>FORGOT PASSWORD?</Text>
                 </TouchableOpacity>
               </View>
               {/* Login button */}
@@ -156,6 +156,13 @@ function LoginScreen() {
                 <Text style={isButtonActive ? styles.text : styles.textDark}>
                   LOG IN
                 </Text>
+                <Ionicons
+                  name="log-in-outline"
+                  size={26}
+                  color={
+                    isButtonActive ? styles.text.color : styles.textDark.color
+                  }
+                />
               </TouchableOpacity>
 
               {/* Sign up button */}
@@ -164,10 +171,9 @@ function LoginScreen() {
                   title="SIGN UP"
                   color={globalStyles.primaryColor.color}
                   onPress={() => setFormType("SIGN_UP")}
-                  style = {styles.forgotPassButton}>
-                  <Text style = {styles.signUpButton}>
-                    SIGN UP     
-                  </Text>
+                  style={styles.forgotPassButton}
+                >
+                  <Text style={styles.signUpButton}>SIGN UP</Text>
                 </TouchableOpacity>
               </View>
             </>

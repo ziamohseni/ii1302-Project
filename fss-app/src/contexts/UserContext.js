@@ -48,9 +48,27 @@ export const UserProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  // Handle user sign out
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      setProfile(null);
+      setIsUserLoggedInAndVerified(false);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ user, profile, isLoading, isUserLoggedInAndVerified }}
+      value={{
+        user,
+        profile,
+        isLoading,
+        isUserLoggedInAndVerified,
+        handleSignOut,
+      }}
     >
       {children}
     </UserContext.Provider>

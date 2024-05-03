@@ -15,7 +15,7 @@ import knockLogo from "../../../assets/hand.png";
 
 function DevicesList() {
   const { selectedHub } = useRaspberryHubs();
-  const sensorsArray = Object.values(selectedHub.sensors);
+  const sensorsArray = selectedHub && Object.values(selectedHub.sensors);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -63,7 +63,7 @@ function DevicesList() {
   return (
     <View>
       <Text style={styles.deviceText}>
-        List of devices in hub # {selectedHub.id}
+        List of devices in hub # {selectedHub && selectedHub.id}
       </Text>
 
       <View style = {styles.container}>

@@ -75,11 +75,14 @@ raspberry_hubs:
         recent_snapshot:
           url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
           date_taken: "timestamp" # The date the snapshot was taken
+          name: "person_name" # Used for face recognition
         snapshot_history:
           - url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
             date_taken: "timestamp"
+            name: "person_name"
           - url: "url"
             date_taken: "timestamp"
+            name: "person_name"
     system_status: "armed" # or unarmed (activated / deactivated)
     last_armed: "timestamp"
 ```
@@ -87,3 +90,8 @@ raspberry_hubs:
 Notes:
 
 When “system_status” is “armed” we both Raspberry Pi and Mobile app listening to sensors “status”, if some status changes, we take appropriate actions in respective devices.
+
+\*\*\* Realtime Database Rule:
+
+This Device rule in Realtime Database was removed. We can add it back if needed and followed.
+`&& (data.child('users').hasChild(auth.uid)||data.child('admin').hasChild(auth.uid)||!data.hasChild('admin'))`

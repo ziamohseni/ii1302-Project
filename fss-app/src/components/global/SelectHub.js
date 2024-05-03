@@ -16,7 +16,9 @@ function SelectHub() {
         style={selectHubStyles.selectHubContainer}
         onPress={() => setModalVisible(true)}
       >
-        <Text>SELECTED HUB: {selectedHub?.id}</Text>
+        <Text>
+          SELECTED HUB: {selectedHub?.id} - ({selectedHub?.role})
+        </Text>
         <Text>
           <Ionicons
             name="arrow-forward-outline"

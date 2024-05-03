@@ -5,6 +5,7 @@ const primaryColor = "#1E90FF";
 const lightColor = "#f9f9f9";
 const secondLightColor = "#dddddd";
 const darkColor = "#111111";
+const errorColor = "red";
 
 // Global styles
 const globalStyles = StyleSheet.create({
@@ -20,8 +21,12 @@ const globalStyles = StyleSheet.create({
   darkColor: {
     color: darkColor,
   },
+  errorColor: {
+    color: errorColor,
+  },
   containerWithPadding: {
     flex: 1,
+    position: "relative",
     justifyContent: "flex-start",
     paddingHorizontal: 20,
     paddingVertical: 20,
@@ -47,6 +52,7 @@ const globalStyles = StyleSheet.create({
     padding: 10,
   },
   buttonActive: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 20,
@@ -58,6 +64,7 @@ const globalStyles = StyleSheet.create({
     backgroundColor: primaryColor,
   },
   buttonDisabled: {
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 20,

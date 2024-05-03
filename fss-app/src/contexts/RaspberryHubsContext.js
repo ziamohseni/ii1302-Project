@@ -1,6 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { ref, update, serverTimestamp, onValue, off } from "firebase/database";
-import { database } from "../services/firebaseConfig";
+import {
+  ref,
+  update,
+  serverTimestamp,
+  onValue,
+  off,
+  set,
+} from "firebase/database";
+import { signOut } from "firebase/auth";
+import { database, auth } from "../services/firebaseConfig";
 import { useUser } from "./UserContext";
 
 // Create Raspberry Hubs Context
@@ -14,6 +22,7 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [systemStatus, setSystemStatus] = useState("unarmed");
   const [isSystemArmed, setIsSystemArmed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [noHubsFound, setNoHubsFound] = useState(false);
 
   // Fetch hubs from database
   useEffect(() => {
@@ -50,6 +59,8 @@ export const RaspberryHubsProvider = ({ children }) => {
                 setSystemStatus(updatedHub.system_status);
                 setIsSystemArmed(updatedHub.system_status === "armed");
               }
+            } else {
+              setNoHubsFound(true);
             }
           });
         });
@@ -69,6 +80,12 @@ export const RaspberryHubsProvider = ({ children }) => {
       hubRefs.forEach((hubRef) => {
         off(hubRef);
       });
+      setHubs([]);
+      setSelectedHub(null);
+      setSystemStatus("unarmed");
+      setIsSystemArmed(false);
+      setLoading(true);
+      setNoHubsFound(false);
     };
   }, [user, profile]);
 
@@ -106,6 +123,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         systemStatus,
         isSystemArmed,
         toggleSystemStatus,
+        noHubsFound,
       }}
     >
       {children}

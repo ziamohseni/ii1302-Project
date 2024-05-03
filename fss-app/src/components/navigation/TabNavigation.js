@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
 // Context
 import { useUser } from "../../contexts/UserContext";

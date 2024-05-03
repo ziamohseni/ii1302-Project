@@ -2,7 +2,7 @@ from picamera2 import Picamera2, Preview
 import libcamera
 import time
 
-def take_picture(firebase,prevthread):
+def take_picture(firebase,faceEncodings,prevthread):
     if prevthread != None:
         while prevthread.is_alive():
             pass
@@ -17,6 +17,9 @@ def take_picture(firebase,prevthread):
     picam2.close()
     print("saving image")
     timestamp = time.time()
+    
+    #The face recognition implementation logic starts from here:
+    
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
     firebase.fbput(snapshotpath,"temp.jpg")  
 
