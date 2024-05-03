@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, TouchableOpacity, View, Modal, Image} from "react-native";
+import { Text, TouchableOpacity, View, Modal, Image } from "react-native";
 import DeviceInfoModal from "./DevideInfoModal";
 // Contexts
 import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
@@ -12,15 +12,14 @@ import doorLogo from "../../../assets/door.png";
 import smokeLogo from "../../../assets/smoke.png";
 import knockLogo from "../../../assets/hand.png";
 
-
 function DevicesList() {
   const { selectedHub } = useRaspberryHubs();
   const sensorsArray = selectedHub && Object.values(selectedHub.sensors);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  function getLogo(type){
-    switch(type){
+  function getLogo(type) {
+    switch (type) {
       case "camera":
         return <Image source={cameraLogo} style={styles.logo} />;
       case "door":
@@ -32,33 +31,29 @@ function DevicesList() {
     }
   }
 
-  function handleSensorPress(item){
+  function handleSensorPress(item) {
     setModalVisible(true);
     setSelectedItem(item);
-
   }
 
-  function supressDeviceInfo(){
+  function supressDeviceInfo() {
     setModalVisible(false);
   }
 
-  let renderSensors = sensorsArray.map(item =>
-    <TouchableOpacity 
-      key={item.id} 
-      style = {[styles.devices, globalStyles.shadow]}
-      onPress = {() => handleSensorPress(item)}>
-      
+  let renderSensors = sensorsArray?.map((item) => (
+    <TouchableOpacity
+      key={item.id}
+      style={[styles.devices, globalStyles.shadow]}
+      onPress={() => handleSensorPress(item)}
+    >
       <View style={styles.deviceContainer}>
-      
         {getLogo(item.type)}
         <Text style={styles.deviceText}>
           Sensor: {item.type}, Status: {item.status}
         </Text>
-
       </View>
-      
     </TouchableOpacity>
-  );
+  ));
 
   return (
     <View>
@@ -66,12 +61,15 @@ function DevicesList() {
         List of devices in hub # {selectedHub && selectedHub.id}
       </Text>
 
-      <View style = {styles.container}>
-        {renderSensors}
-      </View>
+      <View style={styles.container}>{renderSensors}</View>
 
-      {modalVisible && <DeviceInfoModal item = {selectedItem} isModalVisable = {modalVisible} closeModal = {supressDeviceInfo}/> }
-
+      {modalVisible && (
+        <DeviceInfoModal
+          item={selectedItem}
+          isModalVisable={modalVisible}
+          closeModal={supressDeviceInfo}
+        />
+      )}
     </View>
   );
 }
