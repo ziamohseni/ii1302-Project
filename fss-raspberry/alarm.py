@@ -19,7 +19,7 @@ class Alarm:
 
 def main(): # Example of how we can use the alarm sound in the main function
 
-    alarm_sound_file = "alarm.mp3" # This is an example of a name to the alarm sound file.
+    alarm_sound_file = "alarm.mp3" # Sound file can be found in the fss-raspberry map. This is the path to the alarm sound file
     alarm = Alarm(alarm_sound_file)
     
     print("Starting alarm...")
