@@ -6,6 +6,10 @@ from usbfirebaselogin import getFirebase
 import os
 import face_recognition
 
+################
+from alarm import Alarm
+###############
+
 def getFaceEncodings(usb_path):
     print("Encoding faces")
     facefiles = os.listdir(usb_path+"/faces")
@@ -89,6 +93,11 @@ def main():
     server_socket.listen(5)  # Maximum number of queued connections
     print("TCP server is listening on port "+str(server_address[1]))
     camthread = None
+    
+    ####################
+    alarm_instance = Alarm("alarm.mp3")
+    #####################
+
     while True:
         # Wait for a connection
         print("waiting for new connection")
@@ -118,11 +127,18 @@ def main():
                             print("whytf")
                             camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                             camthread.start()
+                            
+##################################################################################################
+                        elif sensor_data[1] == "door" and eval(sensor_data[2].capitalize()) == True:
+                            # Calling the alarm function from the Alarm class instance
+                            alarm_instance.start()
+##################################################################################################
+
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
                     break
                    
             if not sensorfound and active == "armed":
-                
+
                 if eval(sensor_data[2].capitalize()) == True:
                     sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time()}
                 else:
@@ -146,4 +162,12 @@ def main():
             connection.close()
 
 if __name__ == "__main__":
-    main()
+###############################################
+    alarm = Alarm("alarm.mp3")
+    alarm.start()
+    time.sleep(5)  # 5 seconds delay for example
+    # Do something else while the alarm is playing...
+    input("Press Enter to stop the alarm")
+    alarm.stop()
+    # main()
+###############################################
