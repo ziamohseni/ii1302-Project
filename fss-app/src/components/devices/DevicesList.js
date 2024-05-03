@@ -32,11 +32,6 @@ function DevicesList() {
     }
   }
 
-  function showDeviceInfo(item){
-    setModalVisible(true);
-    setInfoDevice(item);
-  }
-
   function handleSensorPress(item){
     setModalVisible(true);
     setSelectedItem(item);
