@@ -5,18 +5,33 @@ import threading
 from usbfirebaselogin import getFirebase
 import os
 import face_recognition
+import pickle
 
 def getFaceEncodings(usb_path):
     print("Encoding faces")
     facefiles = os.listdir(usb_path+"/faces")
-    faceencodings = {}
-
-    for facefile in facefiles:
-        face = face_recognition.load_image_file(usb_path+"/faces/"+facefile)
-        facename = facefile.split("_")[0]
-        if facename not in faceencodings:
-            faceencodings[facename] = []
-        faceencodings[facename].append(face_recognition.face_encodings(face))
+    try:
+        with open ("facepathsfile","r") as facepathsfile:
+            loadedfacefiles = facepathsfile.read().splitlines()
+        
+    except FileNotFoundError:
+        loadedfacefiles  =[]
+    if not loadedfacefiles == facefiles:
+        with open ("facepathsfile","w") as facepathsfile:
+            for facefileline in facefiles:
+                facepathsfile.write(facefileline+"\n")
+        faceencodings = {}
+        for facefile in facefiles:
+            face = face_recognition.load_image_file(usb_path+"/faces/"+facefile)
+            facename = facefile.split("_")[0]
+            if facename not in faceencodings:
+                faceencodings[facename] = []
+            faceencodings[facename].append(face_recognition.face_encodings(face)[0])
+        with open("faceencodingsfile", "wb") as faceencfile:
+            pickle.dump(faceencodings, faceencfile)
+    else:
+        with open("faceencodingsfile", "rb") as faceencfile:
+            faceencodings = pickle.load( faceencfile)
     return faceencodings
 
 def setupHubForFB(firebase):
@@ -71,6 +86,7 @@ def main():
 
     # Start streaming Firebase data for system status changes
     firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_status", system_status_callback)
+    
 ###########################################################################
 
 
@@ -96,7 +112,9 @@ def main():
         
         try:
             print("Connection from:", client_address)
-            sensor_objects = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors")
+            new_hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
+            active = new_hub_data["system_status"]
+            sensor_objects = new_hub_data["sensors"]
             # Receive data from the client
             data = connection.recv(1024)  # Adjust buffer size as needed
             sensor_data = data.decode().strip().split(":")  
@@ -115,7 +133,6 @@ def main():
                             sensorvalue["last_active"] = time.time()
                         sensorfound = True
                         if sensor_data[1] == "knock" and eval(sensor_data[2].capitalize()) == True and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
-                            print("whytf")
                             camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                             camthread.start()
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)

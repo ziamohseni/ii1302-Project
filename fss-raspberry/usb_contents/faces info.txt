@@ -1,0 +1,16 @@
+Put the image files of known faces in the faces folder
+
+FORMAT OF THE IMAGE NAME SHOULD BE 
+
+name_1
+name_2
+
+for example
+
+Göran_1.png
+Göran_2.jpg
+Anders_1.png
+Anders_2.png
+Klara Andersson_1.jpg
+Klara Andersson_2.jpg
+Klara Andersson_3.png

@@ -1,6 +1,41 @@
 from picamera2 import Picamera2, Preview
 import libcamera
 import time
+import face_recognition
+import numpy
+
+def do_face_recog(faceEncodings):
+    facename = "unknown"
+    matchnumber = -1
+
+    # Load the captured image and extract face encodings
+    face_image = face_recognition.load_image_file("temp.jpg")
+
+    try:
+        new_face_encoding = face_recognition.face_encodings(face_image)[0]
+
+        # Compare new face encodings with known face encodings
+        resdict = {}
+        for name, known_encodings in faceEncodings.items():
+
+            
+            face_distances = face_recognition.face_distance(known_encodings,new_face_encoding)
+
+            resdict[name] = min(face_distances)
+
+
+
+        minresultlist = None
+        for name,result in resdict.items():
+
+            if minresultlist == None or minresultlist[1] > result:
+                minresultlist = [name,result]
+        if minresultlist[1] < 0.6:
+            facename = minresultlist[0]
+            matchnumber = minresultlist[1]
+    except IndexError:
+        pass
+    return facename,matchnumber
 
 def take_picture(firebase,faceEncodings,prevthread):
     if prevthread != None:
@@ -19,25 +54,8 @@ def take_picture(firebase,faceEncodings,prevthread):
     timestamp = time.time()
     
 ############################################################################################
-    facename = "unknown"
-
-    # Load the captured image and extract face encodings
-    face_image = face_recognition.load_image_file("temp.jpg")
-    new_face_encodings = face_recognition.face_encodings(face_image)
-    
-    # Compare new face encodings with known face encodings
-    for name, known_encodings in faceEncodings.items():
-        for known_encoding in known_encodings:
-            matches = face_recognition.compare_faces(known_encoding, new_face_encodings)
-            if any(matches):
-                print(f"Detected face matches {name}")
-                facename = name  
-
-                # Perform actions based on the detected face matching a known face
-                # For example, you can trigger events, update database, etc.
-                break
-                break
-    firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/camera/facename",facename)
+    facename,matchnumber = do_face_recog(faceEncodings)
+    print("Detected face matches "+str(facename)+" with precicion of "+str(matchnumber))
 ############################################################################################
 
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
@@ -48,6 +66,7 @@ def take_picture(firebase,faceEncodings,prevthread):
     fbcamera = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/camera")
     if fbcamera == {}:
         fbcamera = {"type":"camera","status":"active","id":"camera"}
+    fbcamera["facename"] = facename
     firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
     if fbcamera["status"] == "active":
 

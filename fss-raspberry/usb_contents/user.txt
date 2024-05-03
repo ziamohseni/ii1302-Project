@@ -1,0 +1,6 @@
+email:jonathank200902@gmail.com
+password:1234567890
+ssid:SSID_HERE
+wifipass:PASS_HERE
+
+Enter the details directly after the :
