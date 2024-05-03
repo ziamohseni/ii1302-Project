@@ -12,7 +12,7 @@ class Alarm:
 
     def start(self):
         # Start the alarm sound in a separate process
-        self.process = multiprocessing.Process(target=self._play_sound)
+        self.process = multiprocessing.Process(target=self.run_alarm)
         self.process.start()
 
     def stop(self):
@@ -20,7 +20,7 @@ class Alarm:
             # Terminate the process responsible for playing the sound
             self.process.terminate()
 
-    def _play_sound(self):
+    def run_alarm(self):
         playsound(self.sound_file)
 '''
 def main(): # Example of how we can use the alarm sound in the main function
@@ -36,7 +36,4 @@ def main(): # Example of how we can use the alarm sound in the main function
 
     print("Stopping alarm...")
     alarm.stop()
-
-if __name__ == "__main__":
-    main()
 '''
