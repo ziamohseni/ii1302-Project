@@ -16,12 +16,26 @@ const activationButtonStyles = StyleSheet.create({
   buttonOff: {
     backgroundColor: "green",
     borderRadius: 50,
-    marginVertical: 30,
   },
   buttonOn: {
     backgroundColor: "red",
     borderRadius: 50,
+  },
+  buttonOffBorder: {
+    borderWidth: 2,
+    borderColor: "green",
+    borderRadius: 50,
     marginVertical: 30,
+    padding: 15,
+    backgroundColor: globalStyles.lightColor.color,
+  },
+  buttonOnBorder: {
+    borderWidth: 2,
+    borderColor: "red",
+    borderRadius: 50,
+    marginVertical: 30,
+    padding: 15,
+    backgroundColor: globalStyles.lightColor.color,
   },
   alarmStatusText: {
     textAlign: "center",

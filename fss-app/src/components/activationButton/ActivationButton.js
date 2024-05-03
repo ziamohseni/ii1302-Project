@@ -6,6 +6,7 @@ import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 
 //styles
 import styles from "../../styles/activationButtonStyles";
+import globalStyles from "../../styles/globalStyles";
 
 function ActivationButton() {
   const { systemStatus, isSystemArmed, toggleSystemStatus } =
@@ -17,13 +18,20 @@ function ActivationButton() {
         ALARM {isSystemArmed ? "ON" : "OFF"}
       </Text>
 
-      <TouchableOpacity
-        style={isSystemArmed ? styles.buttonOn : styles.buttonOff}
-        onLongPress={() => toggleSystemStatus()}
-        delayLongPress={3000}
+      <View
+        style={isSystemArmed ? styles.buttonOnBorder : styles.buttonOffBorder}
       >
-        <Ionicons name="power" size={200} color={"white"} />
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            isSystemArmed ? styles.buttonOn : styles.buttonOff,
+            globalStyles.shadow,
+          ]}
+          onLongPress={() => toggleSystemStatus()}
+          delayLongPress={3000}
+        >
+          <Ionicons name="power" size={200} color={"white"} />
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.infoText}>
         HOLD DOWN BUTTON FOR 3 SECONDS TO TURN {isSystemArmed ? "OFF" : "ON"}{" "}
