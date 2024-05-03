@@ -13,11 +13,9 @@ function ActivationButton() {
 
   return (
     <View style={styles.buttonContainer}>
-      {isSystemArmed ? (
-        <Text style={styles.alarmStatusText}>ALARM ON</Text>
-      ) : (
-        <Text style={styles.alarmStatusText}>ALARM OFF</Text>
-      )}
+      <Text style={styles.alarmStatusText}>
+        ALARM {isSystemArmed ? "ON" : "OFF"}
+      </Text>
 
       <TouchableOpacity
         style={isSystemArmed ? styles.buttonOn : styles.buttonOff}
@@ -27,12 +25,10 @@ function ActivationButton() {
         <Ionicons name="power" size={200} color={"white"} />
       </TouchableOpacity>
 
-      <Text style={styles.infoText}>HOLD DOWN BUTTON FOR 3 SECONDS</Text>
-      {isSystemArmed ? (
-        <Text> TO TURN OFF ALARM </Text>
-      ) : (
-        <Text> TO TURN ON ALARM </Text>
-      )}
+      <Text style={styles.infoText}>
+        HOLD DOWN BUTTON FOR 3 SECONDS TO TURN {isSystemArmed ? "OFF" : "ON"}{" "}
+        ALARM
+      </Text>
     </View>
   );
 }
