@@ -18,8 +18,28 @@ def take_picture(firebase,faceEncodings,prevthread):
     print("saving image")
     timestamp = time.time()
     
-    #The face recognition implementation logic starts from here:
+############################################################################################
+    facename = "unknown"
+
+    # Load the captured image and extract face encodings
+    face_image = face_recognition.load_image_file("temp.jpg")
+    new_face_encodings = face_recognition.face_encodings(face_image)
     
+    # Compare new face encodings with known face encodings
+    for name, known_encodings in faceEncodings.items():
+        for known_encoding in known_encodings:
+            matches = face_recognition.compare_faces(known_encoding, new_face_encodings)
+            if any(matches):
+                print(f"Detected face matches {name}")
+                facename = name  
+
+                # Perform actions based on the detected face matching a known face
+                # For example, you can trigger events, update database, etc.
+                break
+                break
+    firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/camera/facename",facename)
+############################################################################################
+
     snapshotpath = "snapshots/"+firebase.uid+"/snapshot"+str(timestamp)+".jpg"
     firebase.fbput(snapshotpath,"temp.jpg")  
 
