@@ -2,16 +2,22 @@ import { useState } from "react";
 import { TouchableOpacity, View, Text, Vibration} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+// Contexts
+import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
+
+//styles
 import styles from "../../styles/deviceInfoModalStyles"
 import globalStyles from "../../styles/globalStyles";
 
 function DeviceActivationButton(props){
     const [isDeviceOn, setIsDeviceOn] = useState(props.item.status === "active"); //temporary
     const [buttonPressTimer, setButtonPressTimer] = useState(null);
+    const { toggleDeviceStatus } = useRaspberryHubs();
     
     function handlePressIn(){
         const timer = setTimeout(() => {
             setIsDeviceOn(!isDeviceOn);
+            toggleDeviceStatus(props.item.id);
             Vibration.vibrate(100);
           }, 3000);
           setButtonPressTimer(timer);

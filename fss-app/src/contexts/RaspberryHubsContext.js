@@ -113,6 +113,20 @@ export const RaspberryHubsProvider = ({ children }) => {
     }
   };
 
+  const toggleDeviceStatus = async(deviceId) =>{
+    if (selectedHub && selectedHub.sensors && selectedHub.sensors[deviceId]) {
+      const sensor = selectedHub.sensors[deviceId];
+      const newStatus = sensor.status === "active" ? "inactive" : "active";
+      const updates = {
+        status: newStatus,
+      };
+      await update(ref(database, `raspberry_hubs/${selectedHub.id}/sensors/${deviceId}`), updates);
+    }
+    else{
+      console.log("cannot find sensor!");
+    }
+  };
+
   return (
     <RaspberryHubsContext.Provider
       value={{
@@ -124,6 +138,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         isSystemArmed,
         toggleSystemStatus,
         noHubsFound,
+        toggleDeviceStatus,
       }}
     >
       {children}

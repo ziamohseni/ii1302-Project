@@ -16,7 +16,7 @@ import smokeLogo from "../../../assets/smoke.png";
 import knockLogo from "../../../assets/hand.png";
 
 function DeviceInfoModal(props){
-  console.log(props.item)
+  
   function formatDate(timestamp){
     let date = new Date(timestamp * 1000);
     return date.toLocaleString();
@@ -38,6 +38,7 @@ function DeviceInfoModal(props){
   function displayInfo(item){
     return(
       <Text style = {styles.text}>
+        <Text style = {styles.bold}>ID: </Text> {props.item.id + "\n"}
         <Text style = {styles.bold}>Status:</Text> {formatText(props.item.status)+ "\n"} 
         <Text style = {styles.bold}>Triggered:</Text> {formatText(props.item.triggered)+ "\n"}
         {item.type === "camera"? 
