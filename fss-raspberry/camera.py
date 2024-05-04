@@ -66,7 +66,6 @@ def take_picture(firebase,faceEncodings,prevthread):
     fbcamera = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/sensors/camera")
     if fbcamera == {}:
         fbcamera = {"type":"camera","status":"active","id":"camera"}
-    fbcamera["facename"] = facename
     firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
     if fbcamera["status"] == "active":
 
@@ -108,7 +107,7 @@ def take_picture(firebase,faceEncodings,prevthread):
                 fbcamera["snapshot_history"]= snapshothistory
 
             
-        fbcamera["recent_snapshot"] = {"path":snapshotpath, "timestamp":timestamp}
+        fbcamera["recent_snapshot"] = {"path":snapshotpath, "timestamp":timestamp,"name":facename}
             
     
     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
