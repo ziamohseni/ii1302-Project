@@ -183,6 +183,8 @@ def main():
             connection.close()
 
 if __name__ == "__main__":
+    main()
+
 ###############################################
 '''
     alarm = Alarm("alarm.mp3")
@@ -191,6 +193,5 @@ if __name__ == "__main__":
     # Do something else while the alarm is playing...
     input("Press Enter to stop the alarm")
     alarm.stop()
-    # main()
 '''
 ###############################################
