@@ -1,0 +1,53 @@
+import { useState } from "react";
+import { TouchableOpacity, View, Text, Vibration} from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+
+import styles from "../../styles/deviceInfoModalStyles"
+import globalStyles from "../../styles/globalStyles";
+
+function DeviceActivationButton(props){
+    const [isDeviceOn, setIsDeviceOn] = useState(props.item.status === "active"); //temporary
+    const [buttonPressTimer, setButtonPressTimer] = useState(null);
+    
+    function handlePressIn(){
+        const timer = setTimeout(() => {
+            setIsDeviceOn(!isDeviceOn);
+            Vibration.vibrate(100);
+          }, 3000);
+          setButtonPressTimer(timer);
+    };
+
+    function handlePressOut(){
+        if (buttonPressTimer) {
+            clearTimeout(buttonPressTimer);
+            setButtonPressTimer(null);
+        }
+    };
+
+    return(
+
+        <View  style={styles.buttonContainer}>
+            {isDeviceOn?
+            <Text>Device is active</Text>
+            :
+            <Text>Device is inactive</Text>
+            }
+            
+            <TouchableOpacity
+                style={[
+                    isDeviceOn ? styles.buttonOn : styles.buttonOff,
+                    globalStyles.shadow,
+                ]}
+                onPressIn={handlePressIn}
+                onPressOut={handlePressOut}
+                delayLongPress={3000}
+                >
+                <Ionicons name="power" size={60} color={"white"} />
+            </TouchableOpacity>
+
+            <Text>Hold down button for 3 seconds to turn {isDeviceOn? "off" : "on"} device</Text>
+        </View>  
+    );
+}
+
+export default DeviceActivationButton

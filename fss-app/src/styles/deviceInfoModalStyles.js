@@ -30,6 +30,26 @@ const deviceInfoModalStyles = StyleSheet.create({
     fontWeight: "bold",
   },
 
+  buttonOff: {
+    backgroundColor: "green",
+    borderRadius: 20,
+  },
+  buttonOn: {
+    backgroundColor: "red",
+    borderRadius: 20,
+  },
+  buttonContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10,
+    padding: 10,
+    marginTop: 30,
+    backgroundColor: globalStyles.lightColor.color,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: globalStyles.secondLightColor.color,
+  },
+
 });
 
 export default deviceInfoModalStyles;

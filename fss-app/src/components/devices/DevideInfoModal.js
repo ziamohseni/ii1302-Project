@@ -1,6 +1,9 @@
 import { Modal, Text, TouchableOpacity, View, Pressable, Image} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+//Device activation button
+import DeviceActivationButton from "./DeviceActivationButton";
+
 //styles
 import styles from "../../styles/deviceInfoModalStyles";
 import selectHubStyles from "../../styles/selectHubStyles";
@@ -79,9 +82,7 @@ function DeviceInfoModal(props){
 
           {displayInfo(props.item)}
           
-          <TouchableOpacity >
-            <Text>Activate</Text>
-          </TouchableOpacity>
+          <DeviceActivationButton item = {props.item}/>
 
         </View>
 
