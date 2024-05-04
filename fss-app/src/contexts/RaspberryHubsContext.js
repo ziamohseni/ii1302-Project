@@ -117,9 +117,19 @@ export const RaspberryHubsProvider = ({ children }) => {
     if (selectedHub && selectedHub.sensors && selectedHub.sensors[deviceId]) {
       const sensor = selectedHub.sensors[deviceId];
       const newStatus = sensor.status === "active" ? "inactive" : "active";
-      const updates = {
-        status: newStatus,
-      };
+      let updates;
+      if(newStatus === "inactive"){
+        updates = {
+          status: newStatus,
+          last_active: serverTimestamp(),
+        };
+      }
+      else{
+        updates = {
+          status: newStatus,
+        };
+      }
+      
       await update(ref(database, `raspberry_hubs/${selectedHub.id}/sensors/${deviceId}`), updates);
     }
     else{

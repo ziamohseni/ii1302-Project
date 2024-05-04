@@ -49,6 +49,16 @@ const deviceInfoModalStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: globalStyles.secondLightColor.color,
   },
+  activationText:{
+    fontSize:20,
+    paddingBottom: 10,
+    fontWeight: "bold",
+  },
+  infoText:{
+    paddingTop: 10,
+    fontSize: 16,
+    textAlign: "center",
+  },
 
 });
 

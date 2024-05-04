@@ -33,10 +33,11 @@ function DeviceActivationButton(props){
     return(
 
         <View  style={styles.buttonContainer}>
+
             {isDeviceOn?
-            <Text>Device is active</Text>
+            <Text style = {styles.activationText}>Device is active</Text>
             :
-            <Text>Device is inactive</Text>
+            <Text style = {styles.activationText}>Device is inactive</Text>
             }
             
             <TouchableOpacity
@@ -51,7 +52,7 @@ function DeviceActivationButton(props){
                 <Ionicons name="power" size={60} color={"white"} />
             </TouchableOpacity>
 
-            <Text>Hold down button for 3 seconds to turn {isDeviceOn? "off" : "on"} device</Text>
+            <Text style = {styles.infoText}>Hold down button for 3 seconds to turn {isDeviceOn? "off" : "on"} device</Text>
         </View>  
     );
 }
