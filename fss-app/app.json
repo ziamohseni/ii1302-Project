@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.5sensesecurity.fssapp"
+      "package": "com.fivesensesecurity.fssapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
