@@ -74,7 +74,9 @@ def main():
     firebase,usb_path = getFirebase()
     active = setupHubForFB(firebase)
     faceEncodings = getFaceEncodings(usb_path)
-    
+    ####################
+    alarm_instance = Alarm("alarm.mp3")
+    #####################
 #Part written by Adalet modified by Jonathan
 ###########################################################################
     
@@ -94,6 +96,7 @@ def main():
 ###########################################################################
 
 
+
     print("Starting TCP server")
 
     # Create a TCP/IP socket
@@ -110,9 +113,6 @@ def main():
     print("TCP server is listening on port "+str(server_address[1]))
     camthread = None
     
-    ####################
-    alarm_instance = Alarm("alarm.mp3")
-    #####################
 
     while True:
         # Wait for a connection
