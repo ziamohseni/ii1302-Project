@@ -7,15 +7,16 @@ import {
   off,
   set,
 } from "firebase/database";
-import { signOut } from "firebase/auth";
-import { database, auth } from "../services/firebaseConfig";
+import { database } from "../services/firebaseConfig";
 import { useUser } from "./UserContext";
+import { useNotifications } from "./NotificationsContext";
 
 // Create Raspberry Hubs Context
 const RaspberryHubsContext = createContext();
 
 // Provider component
 export const RaspberryHubsProvider = ({ children }) => {
+  const { expoPushToken, sendPushNotification } = useNotifications();
   const { user, profile } = useUser();
   const [hubs, setHubs] = useState([]);
   const [selectedHub, setSelectedHub] = useState(null);
@@ -59,6 +60,8 @@ export const RaspberryHubsProvider = ({ children }) => {
                 setSystemStatus(updatedHub.system_status);
                 setIsSystemArmed(updatedHub.system_status === "armed");
               }
+              // Send notification if the system is armed and a sensor is triggered
+              handleSendPushNotification(updatedHub);
             } else {
               setNoHubsFound(true);
             }
@@ -89,6 +92,21 @@ export const RaspberryHubsProvider = ({ children }) => {
     };
   }, [user, profile]);
 
+  // Function to send push notification when a sensor is triggered
+  const handleSendPushNotification = (hub) => {
+    if (hub.system_status === "armed" && hub.sensors) {
+      Object.entries(hub.sensors).forEach(([sensorId, sensor]) => {
+        if (sensor.status === "active" && sensor.triggered) {
+          if (expoPushToken) {
+            const title = `Alert at hub # ${hub.id}`;
+            const body = `${sensor.type} sensor with id ${sensorId} was triggered at hub # ${hub.id}`;
+            sendPushNotification(expoPushToken, title, body);
+          }
+        }
+      });
+    }
+  };
+
   // Function to select a hub
   const selectHub = (hubId) => {
     const hub = hubs.find((h) => h.id === hubId);
@@ -107,32 +125,53 @@ export const RaspberryHubsProvider = ({ children }) => {
         last_armed: serverTimestamp(),
       };
       await update(ref(database, `raspberry_hubs/${selectedHub.id}`), updates);
+      // Update triggered status of all sensors to false.
+      handleUpdateSensorTriggeredStatus(selectedHub.id, false);
+
       // Locally update the states to reflect the change immediately
       setSystemStatus(newStatus);
       setIsSystemArmed(newStatus === "armed");
     }
   };
 
-  const toggleDeviceStatus = async(deviceId) =>{
+  // Function to update the triggered status of all sensors
+  const handleUpdateSensorTriggeredStatus = async (hubId, triggered) => {
+    if (selectedHub && selectedHub.sensors) {
+      const sensorIds = Object.keys(selectedHub.sensors);
+      sensorIds.forEach(async (sensorId) => {
+        const updates = {
+          triggered: triggered,
+        };
+        await update(
+          ref(database, `raspberry_hubs/${hubId}/sensors/${sensorId}`),
+          updates
+        );
+      });
+    }
+  };
+
+  // Function to toggle the status of a device
+  const toggleDeviceStatus = async (deviceId) => {
     if (selectedHub && selectedHub.sensors && selectedHub.sensors[deviceId]) {
       const sensor = selectedHub.sensors[deviceId];
       const newStatus = sensor.status === "active" ? "inactive" : "active";
       let updates;
-      if(newStatus === "inactive"){
+      if (newStatus === "inactive") {
         updates = {
           status: newStatus,
           last_active: serverTimestamp(),
         };
-      }
-      else{
+      } else {
         updates = {
           status: newStatus,
         };
       }
-      
-      await update(ref(database, `raspberry_hubs/${selectedHub.id}/sensors/${deviceId}`), updates);
-    }
-    else{
+
+      await update(
+        ref(database, `raspberry_hubs/${selectedHub.id}/sensors/${deviceId}`),
+        updates
+      );
+    } else {
       console.log("cannot find sensor!");
     }
   };
