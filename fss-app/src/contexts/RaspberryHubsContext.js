@@ -45,7 +45,9 @@ export const RaspberryHubsProvider = ({ children }) => {
               const updatedHub = {
                 id: hubId,
                 ...hubData,
-                role: profile.hubs_owned.includes(hubId) ? "Admin" : "Subuser",
+                role: profile?.hubs_owned?.includes(hubId)
+                  ? "Admin"
+                  : "Subuser",
               };
               setHubs((prevHubs) => {
                 const index = prevHubs.findIndex((h) => h.id === hubId);
