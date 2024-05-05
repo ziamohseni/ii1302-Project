@@ -29,12 +29,14 @@ export const RaspberryHubsProvider = ({ children }) => {
   useEffect(() => {
     const hubRefs = [];
     const fetchHubs = async () => {
-      let hubIds = profile?.hubs_owned || profile?.hubs_accessible;
-      let isAdmin = !!profile?.hubs_owned;
+      let ownedAndAccessibleHubs = [
+        ...(profile?.hubs_owned || []),
+        ...(profile?.hubs_accessible || []),
+      ];
 
-      if (hubIds && hubIds.length > 0) {
+      if (ownedAndAccessibleHubs && ownedAndAccessibleHubs.length > 0) {
         setLoading(true);
-        hubIds.forEach((hubId) => {
+        ownedAndAccessibleHubs.forEach((hubId) => {
           const hubRef = ref(database, "raspberry_hubs/" + hubId);
           hubRefs.push(hubRef);
           onValue(hubRef, (snapshot) => {
@@ -43,7 +45,7 @@ export const RaspberryHubsProvider = ({ children }) => {
               const updatedHub = {
                 id: hubId,
                 ...hubData,
-                role: isAdmin ? "admin" : "sub-user",
+                role: profile.hubs_owned.includes(hubId) ? "Admin" : "Subuser",
               };
               setHubs((prevHubs) => {
                 const index = prevHubs.findIndex((h) => h.id === hubId);
