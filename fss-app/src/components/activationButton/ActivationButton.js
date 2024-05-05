@@ -1,5 +1,11 @@
-import React, { useState } from "react";
-import { Text, TouchableOpacity, View, Vibration } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  Vibration,
+  Animated,
+} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 // Contexts
 import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
@@ -10,12 +16,42 @@ import globalStyles from "../../styles/globalStyles";
 function ActivationButton() {
   const { isSystemArmed, toggleSystemStatus } = useRaspberryHubs();
   const [buttonPressTimer, setButtonPressTimer] = useState(null);
+  const [isBlinking, setIsBlinking] = useState(false);
+  const blinkAnimation = useRef(new Animated.Value(0)).current;
 
-  // Handle button press in and toggle system status after 3 seconds
+  const handleBlinkAnimation = () => {
+    blinkAnimation.setValue(0);
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(blinkAnimation, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+        Animated.timing(blinkAnimation, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]),
+      { iterations: 15 }
+    ).start(() => {
+      setIsBlinking(false);
+    });
+  };
+
+  useEffect(() => {
+    if (isBlinking) {
+      handleBlinkAnimation();
+    }
+  }, [isBlinking]);
+
   const handlePressIn = () => {
+    setIsBlinking(true);
     const timer = setTimeout(() => {
       toggleSystemStatus();
       Vibration.vibrate(100);
+      setIsBlinking(false);
     }, 3000);
     setButtonPressTimer(timer);
   };
@@ -25,8 +61,14 @@ function ActivationButton() {
     if (buttonPressTimer) {
       clearTimeout(buttonPressTimer);
       setButtonPressTimer(null);
+      setIsBlinking(false);
     }
   };
+
+  const borderColor = blinkAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [isSystemArmed ? "red" : "green", "white"],
+  });
 
   return (
     <View style={styles.buttonContainer}>
@@ -34,8 +76,11 @@ function ActivationButton() {
         ALARM {isSystemArmed ? "ON" : "OFF"}
       </Text>
 
-      <View
-        style={isSystemArmed ? styles.buttonOnBorder : styles.buttonOffBorder}
+      <Animated.View
+        style={[
+          isSystemArmed ? styles.buttonOnBorder : styles.buttonOffBorder,
+          isBlinking && { borderColor },
+        ]}
       >
         <TouchableOpacity
           style={[
@@ -48,7 +93,7 @@ function ActivationButton() {
         >
           <Ionicons name="power" size={200} color={"white"} />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
       <Text style={styles.infoText}>
         HOLD DOWN BUTTON FOR 3 SECONDS TO TURN {isSystemArmed ? "OFF" : "ON"}{" "}
