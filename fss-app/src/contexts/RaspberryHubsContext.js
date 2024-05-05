@@ -10,6 +10,7 @@ import {
 import { database } from "../services/firebaseConfig";
 import { useUser } from "./UserContext";
 import { useNotifications } from "./NotificationsContext";
+import audioPlayer from "../utils/AudioPlayerUtil";
 
 // Create Raspberry Hubs Context
 const RaspberryHubsContext = createContext();
@@ -96,6 +97,23 @@ export const RaspberryHubsProvider = ({ children }) => {
     };
   }, [user, profile]);
 
+  // Go through hubs and check if any sensor is triggered when the system is armed after 20 seconds
+  useEffect(() => {
+    // Set an interval to check the hubs every 20 seconds
+    const intervalId = setInterval(() => {
+      const armedHubs = hubs.filter((hub) => hub.system_status === "armed");
+      if (armedHubs.length > 0) {
+        armedHubs.forEach((hub) => {
+          handleSendPushNotification(hub);
+        });
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 20000);
+
+    return () => clearInterval(intervalId);
+  }, [hubs]);
+
   // Function to send push notification when a sensor is triggered
   const handleSendPushNotification = (hub) => {
     if (hub.system_status === "armed" && hub.sensors) {
@@ -106,6 +124,8 @@ export const RaspberryHubsProvider = ({ children }) => {
             const body = `${sensor.type} sensor with id ${sensorId} was triggered at hub # ${hub.id}`;
             sendPushNotification(expoPushToken, title, body);
           }
+          // Play alarm sound
+          audioPlayer.playSound("https://codewithzia.com/alarm-sound.wav");
         }
       });
     }
@@ -135,6 +155,11 @@ export const RaspberryHubsProvider = ({ children }) => {
       // Locally update the states to reflect the change immediately
       setSystemStatus(newStatus);
       setIsSystemArmed(newStatus === "armed");
+
+      // Stop the alarm sound if the system is disarmed
+      if (newStatus === "unarmed") {
+        audioPlayer.stopSound();
+      }
     }
   };
 
