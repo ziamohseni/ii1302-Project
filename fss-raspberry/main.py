@@ -167,7 +167,11 @@ def main():
                 if sensor_data[1] == "knock"and eval(sensor_data[2].capitalize()) and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
                     camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                     camthread.start()
-                
+##################################################################################################                    
+                elif sensor_data[1] == "door" and eval(sensor_data[2].capitalize()) == True:
+                    # Calling the alarm function from the Alarm class instance
+                    alarm_instance.start()
+##################################################################################################                    
 
             # Send a response back to the client
             connection.sendall(b"Message received. Thank you!\n")
@@ -179,12 +183,15 @@ def main():
             connection.close()
 
 if __name__ == "__main__":
+    main()
+
 ###############################################
+'''
     alarm = Alarm("alarm.mp3")
     alarm.start()
-    time.sleep(5)  # 5 seconds delay for example
+   # time.sleep(5)  # 5 seconds delay for example
     # Do something else while the alarm is playing...
     input("Press Enter to stop the alarm")
     alarm.stop()
-    # main()
+'''
 ###############################################

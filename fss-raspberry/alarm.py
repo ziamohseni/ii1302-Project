@@ -2,7 +2,10 @@ import os # Since there's no inbuilt way to stop a sound played using 'playsound
           # The 'os' module can be used to stop the sound, by terminating the process responsible for playing it.
 
 import multiprocessing
+import time
+
 from playsound import playsound
+
 
 # Make sure to install the playsound library by running ' pip install playsound ' . 
 class Alarm:
@@ -11,14 +14,21 @@ class Alarm:
         self.process = None
 
     def start(self):
+        if self.process and self.process.is_alive():
+            self.stop()
+                  
         # Start the alarm sound in a separate process
         self.process = multiprocessing.Process(target=self.run_alarm)
         self.process.start()
+              
+        time.sleep(5)  # 5 seconds delay for example
+        self.stop()
 
     def stop(self):
-        if self.process:
+        if self.process and self.process.is_alive():
             # Terminate the process responsible for playing the sound
             self.process.terminate()
+            self.process.join()
 
     def run_alarm(self):
         playsound(self.sound_file)
