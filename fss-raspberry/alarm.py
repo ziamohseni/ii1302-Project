@@ -1,6 +1,3 @@
-import os # Since there's no inbuilt way to stop a sound played using 'playsound' library, we can use 'os' module to stop the sound
-          # The 'os' module can be used to stop the sound, by terminating the process responsible for playing it.
-
 import subprocess
 import time
 import psutil
@@ -13,33 +10,40 @@ class Alarm:
     def __init__(self, sound_file):
         print("Initializing sound")
         self.sound_file = sound_file
-
-        self.process = subprocess.Popen(["ffplay","-loop","0",self.sound_file],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+        self.processcounter = 0
+        self.process = subprocess.Popen(["ffplay","-loop","0",self.sound_file],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1,universal_newlines=True)
         self.runthread = None
         self.psprocess = psutil.Process(pid=self.process.pid)
-        time.sleep(5)
+        for line in self.process.stdout:
+            if sound_file in line:
+                break
         self.psprocess.suspend()
     def start(self):
         print("Playing sound")
         # Resume the process responsible for playing the sound
     
-        while self.runthread and self.runthread.is_alive():
-            pass
+        if self.runthread:
+            self.stop()
         self.psprocess.resume()
-        self.runthread = threading.Thread(target=runfortime,args=(self,30))
+        self.runthread = threading.Thread(target=runfortime,args=(self,10,self.processcounter))
         self.runthread.start()
               
 
 
     def stop(self):
         print("Stopping sound")
-
+        self.processcounter+=1
         # Pause the process responsible for playing the sound
         self.psprocess.suspend()
+        self.runthread = None
 
-def runfortime(alarm,running_time):
+def runfortime(alarm,running_time,procnum):
     time.sleep(running_time)  
-    alarm.stop()
+    if alarm.processcounter == procnum:
+
+        
+        alarm.stop()
+
 
 '''
 def main(): # Example of how we can use the alarm sound in the main function
