@@ -13,8 +13,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "24.05.05.1001",
+      "buildNumber": "24.05.05.1937",
       "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      },
       "bundleIdentifier": "com.5sensesecurity.fssapp"
     },
     "android": {
