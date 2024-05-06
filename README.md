@@ -60,29 +60,32 @@ raspberry_hubs:
         type: "motion"
         status: "active"
         triggered: "false"
+        last_triggered: "timestamp" # This field is new. implemented for sprint 4
         last_active: "timestamp"
       sensor_id_2:
         id: "sensor_id_2"
         type: "window"
         status: "inactive"
         triggered: "false"
+        last_triggered: "timestamp"
         last_active: "timestamp"
       sensor_id_3:
         id: "sensor_id_3"
         type: "camera"
         status: "active"
         triggered: "false"
-        recent_snapshot:
+        recent_snapshot: {
           url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
           date_taken: "timestamp" # The date the snapshot was taken
           name: "person_name" # Used for face recognition
-        snapshot_history:
+        }
+        snapshot_history: [
           - url: "url" # URL to storage object (a picture taken when camera is activated by a sensor)
             date_taken: "timestamp"
             name: "person_name"
           - url: "url"
             date_taken: "timestamp"
-            name: "person_name"
+            name: "person_name"]
     system_status: "armed" # or unarmed (activated / deactivated)
     last_armed: "timestamp"
 ```
