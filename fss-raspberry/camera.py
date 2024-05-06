@@ -1,8 +1,8 @@
-from picamera2 import Picamera2, Preview
+from picamera2 import Picamera2
 import libcamera
 import time
 import face_recognition
-import numpy
+
 
 def do_face_recog(faceEncodings):
     facename = "unknown"
@@ -41,7 +41,7 @@ def take_picture(firebase,faceEncodings,prevthread):
     if prevthread != None:
         while prevthread.is_alive():
             pass
-    print("capturing image")
+    print("Capturing image")
     picam2 = Picamera2()
     camera_config = picam2.create_preview_configuration()
     camera_config["transform"] = libcamera.Transform(hflip=1, vflip=1)
@@ -111,5 +111,5 @@ def take_picture(firebase,faceEncodings,prevthread):
             
     
     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
-    print("camera done")
+    print("Camera done")
 

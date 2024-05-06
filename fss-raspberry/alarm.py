@@ -1,37 +1,50 @@
-import os # Since there's no inbuilt way to stop a sound played using 'playsound' library, we can use 'os' module to stop the sound
-          # The 'os' module can be used to stop the sound, by terminating the process responsible for playing it.
-
-import multiprocessing
+import subprocess
 import time
+import psutil
+import threading
 
-from playsound import playsound
 
 
 # Make sure to install the playsound library by running ' pip install playsound ' . 
 class Alarm:
     def __init__(self, sound_file):
+        print("Initializing sound")
         self.sound_file = sound_file
-        self.process = None
-
+        self.processcounter = 0
+        self.process = subprocess.Popen(["ffplay","-loop","0",self.sound_file],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1,universal_newlines=True)
+        self.runthread = None
+        self.psprocess = psutil.Process(pid=self.process.pid)
+        for line in self.process.stdout:
+            if sound_file in line:
+                break
+        self.psprocess.suspend()
     def start(self):
-        if self.process and self.process.is_alive():
+        print("Playing sound")
+        # Resume the process responsible for playing the sound
+    
+        if self.runthread:
             self.stop()
-                  
-        # Start the alarm sound in a separate process
-        self.process = multiprocessing.Process(target=self.run_alarm)
-        self.process.start()
+        self.psprocess.resume()
+        self.runthread = threading.Thread(target=runfortime,args=(self,10,self.processcounter))
+        self.runthread.start()
               
-        time.sleep(5)  # 5 seconds delay for example
-        self.stop()
+
 
     def stop(self):
-        if self.process and self.process.is_alive():
-            # Terminate the process responsible for playing the sound
-            self.process.terminate()
-            self.process.join()
+        print("Stopping sound")
+        self.processcounter+=1
+        # Pause the process responsible for playing the sound
+        self.psprocess.suspend()
+        self.runthread = None
 
-    def run_alarm(self):
-        playsound(self.sound_file)
+def runfortime(alarm,running_time,procnum):
+    time.sleep(running_time)  
+    if alarm.processcounter == procnum:
+
+        
+        alarm.stop()
+
+
 '''
 def main(): # Example of how we can use the alarm sound in the main function
 
