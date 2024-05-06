@@ -16,12 +16,7 @@
       "buildNumber": "24.05.06.0707",
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": [
-          "audio",
-          "fetch",
-          "processing",
-          "remote-notification"
-        ]
+        "UIBackgroundModes": ["audio", "fetch", "remote-notification"]
       },
       "bundleIdentifier": "com.5sensesecurity.fssapp"
     },

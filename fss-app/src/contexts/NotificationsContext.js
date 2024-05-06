@@ -120,6 +120,7 @@ export const NotificationsProvider = ({ children }) => {
       sound: "default",
       title: title,
       body: body,
+      "content-available": 1,
       data: { someData: "goes here" },
     };
 
