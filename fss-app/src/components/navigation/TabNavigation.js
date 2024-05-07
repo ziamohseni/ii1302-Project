@@ -11,6 +11,7 @@ import LoginScreen from "../../screens/LoginScreen";
 import HomeScreen from "../../screens/HomeScreen";
 import DevicesScreen from "../../screens/DevicesScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
+import NotificationsHistoryScreen from "../../screens/NotificationsHistoryScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -66,6 +67,22 @@ function TabNavigation() {
                     <Ionicons name="cog" size={26} color={color} />
                   ) : (
                     <Ionicons name="cog-outline" size={26} color={color} />
+                  ),
+              }}
+            />
+            <Tab.Screen
+              name="Notifications"
+              component={NotificationsHistoryScreen}
+              options={{
+                tabBarIcon: ({ focused, color }) =>
+                  focused ? (
+                    <Ionicons name="notifications" size={26} color={color} />
+                  ) : (
+                    <Ionicons
+                      name="notifications-outline"
+                      size={26}
+                      color={color}
+                    />
                   ),
               }}
             />
