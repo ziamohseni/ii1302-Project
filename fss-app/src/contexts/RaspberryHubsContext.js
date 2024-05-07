@@ -116,6 +116,36 @@ export const RaspberryHubsProvider = ({ children }) => {
     return () => clearInterval(intervalId);
   }, [hubs]);
 
+  // Check if user's hubs has pushTokens array, if not, add pushTokens attribute to the hub as an array
+  useEffect(() => {
+    if (profile && expoPushToken && hubs) {
+      hubs.forEach((hub) => {
+        const hubRef = ref(database, "raspberry_hubs/" + hub.id);
+        if (
+          hub.push_tokens &&
+          !hub.push_tokens.includes(expoPushToken) &&
+          !expoPushToken.includes("Error")
+        ) {
+          // If push_tokens exist and the current token isn't included, update the array
+          const updates = {
+            push_tokens: [...hub.push_tokens, expoPushToken],
+          };
+          update(hubRef, updates).catch((error) =>
+            console.error("Error updating hub data:", error)
+          );
+        } else if (!hub.push_tokens && !expoPushToken.includes("Error")) {
+          // If push_tokens do not exist, initialize with the current token
+          const updates = {
+            push_tokens: [expoPushToken],
+          };
+          update(hubRef, updates).catch((error) =>
+            console.error("Error initializing hub data:", error)
+          );
+        }
+      });
+    }
+  }, [hubs]);
+
   // Handle triggered alarm
   const handleTriggeredAlarm = (hub) => {
     if (hub.system_status === "armed" && hub.sensors) {

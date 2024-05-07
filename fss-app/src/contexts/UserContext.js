@@ -55,12 +55,12 @@ export const UserProvider = ({ children }) => {
     if (profile && expoPushToken && user) {
       if (
         !expoPushToken.includes("Error") &&
-        profile.pushToken !== expoPushToken
+        profile.push_token !== expoPushToken
       ) {
         const userProfileRef = ref(database, "users/" + user.uid);
-        update(userProfileRef, { pushToken: expoPushToken })
+        update(userProfileRef, { push_token: expoPushToken })
           .then(() => {
-            setProfile({ ...profile, pushToken: expoPushToken });
+            setProfile({ ...profile, push_token: expoPushToken });
           })
           .catch((error) => {
             console.error("Error updating user data:", error);

@@ -33,27 +33,30 @@ users:
     last_name: "Doe"
     hubs_owned: ["hub_id_1", "hub_id_2"] # admin can own multiple hubs. * Empty intially. we don't use "null".
     hubs_accessible: ["hub_id_1", "hub_id_2"] # admin has access to all owned hubs
+    push_token: "push_token_1"
 
   user_id_2:
     first_name: "Jane"
     last_name: "Smith"
     hubs_owned: "null"
     hubs_accessible: ["hub_id_1"] # sub-user has access to specific hubs
+    push_token: "push_token_2"
 
   user_id_3:
     first_name: "Alice"
     last_name: "Johnson"
     hubs_owned: "null"
     hubs_accessible: ["hub_id_1", "hub_id_2"] # sub-user has access to specific hubs
+    push_token: "push_token_3"
 
 raspberry_hubs:
   hub_id_1:
     admin: "user_id_1" # direct reference to the user who owns this hub
-    users:
-      user_id_2:
-        access_sensors: ["sensor_id_1"] # we don't use this for now, it is too complicated on app development.
-      user_id_3:
-        access_sensors: ["sensor_id_1", "sensor_id_2"]
+    # users: #### we don't use this for now, it is too complicated on app development.
+    #   user_id_2:
+    #     access_sensors: ["sensor_id_1"] # we don't use this for now, it is too complicated on app development.
+    #   user_id_3:
+    #     access_sensors: ["sensor_id_1", "sensor_id_2"]
     sensors:
       sensor_id_1:
         id: "sensor_id_1"
@@ -88,6 +91,7 @@ raspberry_hubs:
             name: "person_name"]
     system_status: "armed" # or unarmed (activated / deactivated)
     last_armed: "timestamp"
+    push_tokens: ["push_token_1", "push_token_2"]
 ```
 
 Notes:
