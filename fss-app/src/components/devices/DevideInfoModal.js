@@ -8,12 +8,12 @@ import DeviceActivationButton from "./DeviceActivationButton";
 import styles from "../../styles/deviceInfoModalStyles";
 import selectHubStyles from "../../styles/selectHubStyles";
 import globalStyles from "../../styles/globalStyles";
-
 //logos
-import cameraLogo from "../../../assets/camera.png";
+import cameraLogo from "../../../assets/photo-camera.png";
 import doorLogo from "../../../assets/door.png";
 import smokeLogo from "../../../assets/smoke.png";
 import knockLogo from "../../../assets/hand.png";
+import floodLogo from "../../../assets/flood.png";
 
 function DeviceInfoModal(props){
   
@@ -32,6 +32,8 @@ function DeviceInfoModal(props){
         return <Image source={smokeLogo} style={styles.logo} />;
       case "knock":
         return <Image source={knockLogo} style={styles.logo} />;
+      case "flooding":
+        return <Image source={floodLogo} style={styles.logo} />;
     }
   }
 
@@ -39,8 +41,8 @@ function DeviceInfoModal(props){
     return(
       <Text style = {styles.text}>
         <Text style = {styles.bold}>ID: </Text> {item.id + "\n"}
-        <Text style = {styles.bold}>Status:</Text> {formatText(item.status)+ "\n"} 
-        <Text style = {styles.bold}>Triggered:</Text> {formatText(item.triggered)+ "\n"}
+        <Text style = {styles.bold}>Status:</Text> {props.formatText(item.status)+ "\n"} 
+        <Text style = {styles.bold}>Triggered:</Text> {props.formatText(item.triggered)+ "\n"}
         {item.type === "camera"? 
         <><Text style = {styles.bold}>Last Snapshot:</Text> {formatDate(item.recent_snapshot.timestamp)} </>
         : 
@@ -51,17 +53,7 @@ function DeviceInfoModal(props){
     );
   }
 
-  function formatText(string){
-    if (typeof string === 'boolean') {
-      string = string.toString();
-    }
-    if(typeof string !== 'string'){
-      return "Not a String";
-    }
-    const formattedText = string.charAt(0).toUpperCase() + string.substring(1, string.length);
-    return formattedText;
-  }
-
+ 
   return (
     <Modal
       animationType="fade"
@@ -75,9 +67,9 @@ function DeviceInfoModal(props){
         <View style = {selectHubStyles.modalView}>
 
           <View style = {styles.deviceContainer}>
-            {getLogo(props.item.type)}
+            {getLogo(props.item.type.toLowerCase())}
             <Text style = {styles.title}>
-              Device: {props.item.type === "camera"? props.item.type : props.item.type + " sensor"}
+              Device: {props.formatText(props.item.type)} {props.item.type === "camera"? "": "sensor"}
             </Text>
           </View>
 

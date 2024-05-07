@@ -16,21 +16,29 @@ const devicesScreenStyles = StyleSheet.create({
   },
 
   deviceContainer: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 25,
   },
 
   deviceText: {
     fontSize: 16,
     fontWeight: "bold",
     color: globalStyles.darkColor.color,
-    textAlign: "center",
+    textAlign: "left",
+    paddingLeft: 15,
+  },
+
+  deviceTextContainer: {
+    flexDirection: 'column', 
+    paddingRight: 40,
+   
   },
 
   logo: {
-    width: 31,
-    height: 25,
+    width: 30,
+    height: 30,
   },
 
 });

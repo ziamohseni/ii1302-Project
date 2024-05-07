@@ -35,9 +35,9 @@ function DeviceActivationButton(props){
         <View  style={styles.buttonContainer}>
 
             {isDeviceOn?
-            <Text style = {styles.activationText}>Device is active</Text>
+            <Text style = {styles.activationText}>Device is Active</Text>
             :
-            <Text style = {styles.activationText}>Device is inactive</Text>
+            <Text style = {styles.activationText}>Device is Inactive</Text>
             }
             
             <TouchableOpacity
