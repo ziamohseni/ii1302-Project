@@ -86,8 +86,11 @@ def main():
      # Stream callback function to monitor changes in system status
     def system_status_callback(data_snapshot):
         active = data_snapshot["data"]
+        push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
 
-        # Process sensor status based on active state
+        for token in push_tokens:
+            sendNotification("Hub "+firebase.devNum+" "+active.capitalize(),"Hub "+firebase.devNum+" has become "+active.lower(),token,"Info")
+       # Process sensor status based on active state
         print(active)
 
 
@@ -131,6 +134,9 @@ def main():
             
             print(sensor_data)
             sensorfound = False
+            alarm_title_string = "Alarm Triggered at hub "+firebase.devNum+"!"
+            alarm_body_string = "Alarm triggered by "+sensor_data[1]+" sensor with id "+sensor_data[0]
+
             for sensorkey,sensorvalue in sensor_objects.items():
                 if sensorkey == sensor_data[0]:
                     sensorfound = True
@@ -149,8 +155,8 @@ def main():
                             # Calling the alarm function from the Alarm class instance
                             alarm_instance.start()
 ##################################################################################################
-                        for notiftoken in hub_data["notif_tokens"]:
-                            sendNotification("Alarm Triggered!","Alarm triggered by "+sensor_data[1]+" sensor with id "+sensor_data[0],notiftoken)
+                        for notiftoken in hub_data["push_tokens"]:
+                            sendNotification(alarm_title_string,alarm_body_string,notiftoken,"Alarm")
 
 
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
@@ -160,8 +166,8 @@ def main():
 
                 if eval(sensor_data[2].capitalize()) == True:
                     sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":time.time()}
-                    for notiftoken in hub_data["notif_tokens"]:
-                        sendNotification("Alarm Triggered!","Alarm triggered by "+sensor_data[1]+" sensor with id "+sensor_data[0],notiftoken)
+                    for notiftoken in hub_data["push_tokens"]:
+                        sendNotification(alarm_title_string,alarm_body_string,notiftoken,"Alarm")
                     if sensor_data[1] == "knock" and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
                         camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                         camthread.start()
