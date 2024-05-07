@@ -66,7 +66,7 @@ export const RaspberryHubsProvider = ({ children }) => {
                 setIsSystemArmed(updatedHub.system_status === "armed");
               }
               // Send notification if the system is armed and a sensor is triggered
-              handleSendPushNotification(updatedHub);
+              handleTriggeredAlarm(updatedHub);
             } else {
               setNoHubsFound(true);
             }
@@ -104,7 +104,7 @@ export const RaspberryHubsProvider = ({ children }) => {
       const armedHubs = hubs.filter((hub) => hub.system_status === "armed");
       if (armedHubs.length > 0) {
         armedHubs.forEach((hub) => {
-          handleSendPushNotification(hub);
+          handleTriggeredAlarm(hub);
         });
       } else {
         clearInterval(intervalId);
@@ -114,16 +114,11 @@ export const RaspberryHubsProvider = ({ children }) => {
     return () => clearInterval(intervalId);
   }, [hubs]);
 
-  // Function to send push notification when a sensor is triggered
-  const handleSendPushNotification = (hub) => {
+  // Handle triggered alarm
+  const handleTriggeredAlarm = (hub) => {
     if (hub.system_status === "armed" && hub.sensors) {
       Object.entries(hub.sensors).forEach(([sensorId, sensor]) => {
         if (sensor.status === "active" && sensor.triggered) {
-          if (expoPushToken) {
-            const title = `Alert at hub # ${hub.id}`;
-            const body = `${sensor.type} sensor with id ${sensorId} was triggered at hub # ${hub.id}`;
-            sendPushNotification(expoPushToken, title, body);
-          }
           // Play alarm sound
           audioPlayer.playSound("https://codewithzia.com/alarm-sound.wav");
         }
