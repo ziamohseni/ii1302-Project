@@ -17,7 +17,7 @@ const RaspberryHubsContext = createContext();
 
 // Provider component
 export const RaspberryHubsProvider = ({ children }) => {
-  const { expoPushToken, sendPushNotification } = useNotifications();
+  const { expoPushToken } = useNotifications();
   const { user, profile } = useUser();
   const [hubs, setHubs] = useState([]);
   const [selectedHub, setSelectedHub] = useState(null);
@@ -25,6 +25,8 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [isSystemArmed, setIsSystemArmed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [noHubsFound, setNoHubsFound] = useState(false);
+
+  console.log("expoPushToken", expoPushToken);
 
   // Fetch hubs from database
   useEffect(() => {

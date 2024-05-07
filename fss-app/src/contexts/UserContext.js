@@ -1,13 +1,15 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, database } from "../services/firebaseConfig";
-import { ref, get, set } from "firebase/database";
+import { ref, get, update } from "firebase/database";
+import { useNotifications } from "./NotificationsContext";
 
 // Create User Context
 const UserContext = createContext();
 
 // Provider component
 export const UserProvider = ({ children }) => {
+  const { expoPushToken } = useNotifications();
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +49,25 @@ export const UserProvider = ({ children }) => {
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
+
+  // Check if user has pushToken attribute in their profile, if not, add pushToken to their profile
+  useEffect(() => {
+    if (profile && expoPushToken && user) {
+      if (
+        !expoPushToken.includes("Error") &&
+        profile.pushToken !== expoPushToken
+      ) {
+        const userProfileRef = ref(database, "users/" + user.uid);
+        update(userProfileRef, { pushToken: expoPushToken })
+          .then(() => {
+            setProfile({ ...profile, pushToken: expoPushToken });
+          })
+          .catch((error) => {
+            console.error("Error updating user data:", error);
+          });
+      }
+    }
+  }, [profile, expoPushToken, user]);
 
   // Handle user sign out
   const handleSignOut = async () => {

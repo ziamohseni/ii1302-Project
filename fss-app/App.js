@@ -10,15 +10,15 @@ import TabNavigation from "./src/components/navigation/TabNavigation";
 
 export default function App() {
   return (
-    <UserProvider>
-      <NotificationsProvider>
+    <NotificationsProvider>
+      <UserProvider>
         <RaspberryHubsProvider>
           <NavigationContainer>
             <TabNavigation />
             <StatusBar style="dark" />
           </NavigationContainer>
         </RaspberryHubsProvider>
-      </NotificationsProvider>
-    </UserProvider>
+      </UserProvider>
+    </NotificationsProvider>
   );
 }
