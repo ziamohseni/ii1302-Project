@@ -36,6 +36,17 @@
       "eas": {
         "projectId": "598cae92-6156-480b-9261-7068928625ad"
       }
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "sounds": [
+            "./assets/alarm-sound.wav",
+            "./assets/emergency-alert-alarm.wav"
+          ]
+        }
+      ]
+    ]
   }
 }
