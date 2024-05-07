@@ -26,8 +26,6 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [noHubsFound, setNoHubsFound] = useState(false);
 
-  console.log("expoPushToken", expoPushToken);
-
   // Fetch hubs from database
   useEffect(() => {
     const hubRefs = [];
