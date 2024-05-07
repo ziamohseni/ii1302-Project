@@ -4,8 +4,8 @@ import globalStyles from "./globalStyles";
 const deviceInfoModalStyles = StyleSheet.create({
 
   logo: {
-    width: 31*2,
-    height: 25*2,
+    width: 30*2,
+    height: 30*2,
   },
 
   deviceContainer: {
