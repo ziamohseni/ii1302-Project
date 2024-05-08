@@ -8,10 +8,11 @@ from usbfirebaselogin import getFirebase
 import os
 import face_recognition
 import pickle
-
+from notification import sendNotification,saveNotifHistory
 ################
 from alarm import Alarm
 ###############
+
 
 def getFaceEncodings(usb_path):
     print("Encoding faces")
@@ -79,7 +80,7 @@ def main():
     active = setupHubForFB(firebase)
     faceEncodings = getFaceEncodings(usb_path)
     ####################
-    alarm_instance = Alarm("alarm.mp3")
+    alarm_instance = Alarm("alarm.wav")
     #####################
 #Part written by Adalet modified by Jonathan
 ###########################################################################
@@ -89,9 +90,15 @@ def main():
      # Stream callback function to monitor changes in system status
     def system_status_callback(data_snapshot):
         active = data_snapshot["data"]
+        push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
 
-        # Process sensor status based on active state
+        for token in push_tokens.values():
+            sendNotification("Hub "+firebase.devNum+" "+active.capitalize(),"Hub "+firebase.devNum+" has become "+active.lower(),token,"Info")
+        saveNotifHistory("Hub "+firebase.devNum+" "+active.capitalize(),"Hub "+firebase.devNum+" has become "+active.lower(),firebase,"Info")
+       # Process sensor status based on active state
         print(active)
+        if active == "unarmed":
+            alarm_instance.stop()
         LED_queue.put(active.capitalize()) 
 
 
@@ -126,37 +133,41 @@ def main():
         
         try:
             print("Connection from:", client_address)
-            new_hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
-            active = new_hub_data["system_status"]
-            sensor_objects = new_hub_data["sensors"]
+            hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
+            active = hub_data["system_status"]
+            sensor_objects = hub_data["sensors"]
             # Receive data from the client
             data = connection.recv(1024)  # Adjust buffer size as needed
             sensor_data = data.decode().strip().split(":")  
             
             print(sensor_data)
             sensorfound = False
+            alarm_title_string = "Alarm Triggered at hub "+firebase.devNum+"!"
+            alarm_body_string = "Alarm triggered by "+sensor_data[1]+" sensor with id "+sensor_data[0]
+
             for sensorkey,sensorvalue in sensor_objects.items():
                 if sensorkey == sensor_data[0]:
                     sensorfound = True
                     if active == "armed" and sensorvalue["status"] == "active":
-
-     
                         sensorvalue["triggered"] = eval(sensor_data[2].capitalize())
                         sensorvalue["type"] = sensor_data[1]
                         if sensorvalue["triggered"] == True:
-                            sensorvalue["last_active"] = time.time()
+                            sensorvalue["last_triggered"] = time.time()
                         sensorfound = True
                         if sensor_data[1] == "knock" and eval(sensor_data[2].capitalize()) == True and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
                             camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                             camthread.start()
                             
 ##################################################################################################
-                        elif sensor_data[1] == "door" and eval(sensor_data[2].capitalize()) == True:
+                        elif eval(sensor_data[2].capitalize()) == True:
                             # Calling the alarm function from the Alarm class instance
                             alarm_instance.start()
                             LED_queue.put('Alarm')
 
 ##################################################################################################
+                        for notiftoken in hub_data["push_tokens"]:
+                            sendNotification(alarm_title_string,alarm_body_string,notiftoken,"Alarm")
+                        saveNotifHistory(alarm_title_string,alarm_body_string,firebase,"Alarm")
 
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
                     break
@@ -164,24 +175,26 @@ def main():
             if not sensorfound and active == "armed":
 
                 if eval(sensor_data[2].capitalize()) == True:
-                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time()}
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":time.time()}
+                    for notiftoken in hub_data["push_tokens"]:
+                        sendNotification(alarm_title_string,alarm_body_string,notiftoken,"Alarm",firebase)
+                    saveNotifHistory(alarm_title_string,alarm_body_string,firebase,"Alarm")
+                    if sensor_data[1] == "knock" and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
+                        camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
+                        camthread.start()
+    ##################################################################################################                    
+                    else:
+                        # Calling the alarm function from the Alarm class instance
+                        alarm_instance.start()
+                        LED_queue.put('Alarm')
+    ##################################################################################################                    
+
                 else:
-                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":""}                    
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":""}                    
 
                 sensor_objects[sensor_data[0]] = sensor
                 firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor_data[0],sensor)
                 print(sensor)
-                if sensor_data[1] == "knock"and eval(sensor_data[2].capitalize()) and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
-                    camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
-                    camthread.start()
-##################################################################################################                    
-                elif sensor_data[1] == "door" and eval(sensor_data[2].capitalize()) == True:
-                    # Calling the alarm function from the Alarm class instance
-                    alarm_instance.start()
-                    LED_queue.put('Alarm')
-
-##################################################################################################                    
-
             # Send a response back to the client
             connection.sendall(b"Message received. Thank you!\n")
 
