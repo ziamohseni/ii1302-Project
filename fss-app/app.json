@@ -13,7 +13,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "24.05.06.0707",
+      "buildNumber": "24.05.08.0836",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": ["audio", "fetch", "remote-notification"]
@@ -36,17 +36,6 @@
       "eas": {
         "projectId": "598cae92-6156-480b-9261-7068928625ad"
       }
-    },
-    "plugins": [
-      [
-        "expo-notifications",
-        {
-          "sounds": [
-            "./assets/alarm-sound.wav",
-            "./assets/emergency-alert-alarm.wav"
-          ]
-        }
-      ]
-    ]
+    }
   }
 }
