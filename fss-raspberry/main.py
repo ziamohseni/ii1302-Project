@@ -1,3 +1,5 @@
+from LEDControl import LED_Control 
+import queue
 import socket
 import time
 import camera
@@ -68,8 +70,10 @@ def setupHubForFB(firebase):
     return active
 
 def main():
-    
-    
+    LED_queue = queue.Queue()
+    LED_queue.put('Boot')
+    LED_thread = threading.Thread(target=LED_Control, args= LED_queue)
+    LED_thread.start()
     
     firebase,usb_path = getFirebase()
     active = setupHubForFB(firebase)
@@ -88,6 +92,7 @@ def main():
 
         # Process sensor status based on active state
         print(active)
+        LED_queue.put(active.capitalize()) 
 
 
     # Start streaming Firebase data for system status changes
@@ -149,6 +154,8 @@ def main():
                         elif sensor_data[1] == "door" and eval(sensor_data[2].capitalize()) == True:
                             # Calling the alarm function from the Alarm class instance
                             alarm_instance.start()
+                            LED_queue.put('Alarm')
+
 ##################################################################################################
 
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
@@ -171,6 +178,8 @@ def main():
                 elif sensor_data[1] == "door" and eval(sensor_data[2].capitalize()) == True:
                     # Calling the alarm function from the Alarm class instance
                     alarm_instance.start()
+                    LED_queue.put('Alarm')
+
 ##################################################################################################                    
 
             # Send a response back to the client
