@@ -1,4 +1,4 @@
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, SafeAreaView } from "react-native";
 import NoHubsFound from "../components/global/NoHubsFound";
 // Contexts
 import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
@@ -13,15 +13,17 @@ function DevicesScreen() {
   const { noHubsFound } = useRaspberryHubs();
 
   return (
-    <ScrollView contentContainerStyle={globalStyles.containerWithPadding}>
-      <View>
-        <View style={styles.container}>
-          <SelectHub />
-          <DevicesList />
-        </View>
-      </View>
-      {noHubsFound && <NoHubsFound />}
-    </ScrollView>
+    <SafeAreaView style={globalStyles.containerWithoutPadding}>  
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        
+          <View style={styles.container}>
+            <SelectHub />
+            <DevicesList />
+          </View>
+      
+        {noHubsFound && <NoHubsFound />}
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

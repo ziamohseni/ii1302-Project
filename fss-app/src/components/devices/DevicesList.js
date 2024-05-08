@@ -75,7 +75,7 @@ function DevicesList() {
 
   return (
     
-    <ScrollView scrollEnabled={true} style={{ height: "90%"}}>
+    <View>
       <Text style={[styles.deviceText, {fontSize: 20}]}>
         List of devices in hub #{selectedHub && selectedHub.id}
       </Text>
@@ -91,7 +91,7 @@ function DevicesList() {
         />
       )}
     
-    </ScrollView>
+    </View>
 
   );
 }

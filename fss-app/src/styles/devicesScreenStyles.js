@@ -1,10 +1,15 @@
 import { StyleSheet } from "react-native";
 import globalStyles from "./globalStyles";
 
+//platform
+import { Platform } from "react-native";
+
 const devicesScreenStyles = StyleSheet.create({
   container: {
-    flexDirection: "column",
+    flex: 1,
     gap: 20,
+    padding: 20,
+    paddingBottom: Platform.OS === "ios"? 30 : 50,
   },
 });
 
