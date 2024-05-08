@@ -16,12 +16,6 @@ import knockLogo from "../../../assets/hand.png";
 import floodLogo from "../../../assets/flood.png";
 
 function DeviceInfoModal(props){
-  
-  function formatDate(timestamp){
-    if (!timestamp) return "Never been triggered";
-    let date = new Date(Math.floor(timestamp));
-    return date.toLocaleString();
-  }
 
   function getLogo(type) {
     switch (type) {
@@ -44,11 +38,11 @@ function DeviceInfoModal(props){
         <Text style = {styles.bold}>ID: </Text> {item.id + "\n"}
         <Text style = {styles.bold}>Status:</Text> {props.formatText(item.status)+ "\n"} 
         <Text style = {styles.bold}>Triggered:</Text> {props.formatText(item.triggered)+ "\n"}
-        <Text style = {styles.bold}>Last Triggered:</Text> {formatDate(item.last_triggered)+ "\n"}
+        <Text style = {styles.bold}>Last Triggered:</Text> {props.formatDate(item.last_triggered)+ "\n"}
         {item.type === "camera"? 
-        <><Text style = {styles.bold}>Last Snapshot:</Text> {formatDate(item.recent_snapshot.timestamp)} </>
+        <><Text style = {styles.bold}>Last Snapshot:</Text> {props.formatDate(item.recent_snapshot.timestamp) +"\n"} </>
         : 
-        <><Text style = {styles.bold}>Last Active:</Text> {item.status === "active" ? "Active now" :  formatDate(item.last_active)}</>
+        <><Text style = {styles.bold}>Last Active:</Text> {item.status === "active" ? "Active now" :  props.formatDate(item.last_active)}</>
         }
         
       </Text>

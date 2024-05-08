@@ -51,11 +51,12 @@ const devicesScreenStyles = StyleSheet.create({
   lastTrigText:{
     paddingLeft: 15,
     fontWeight: "500",
+    padding: 1,
   },
 
   logo: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
   },
 
 });

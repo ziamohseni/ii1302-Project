@@ -34,6 +34,12 @@ function DevicesList() {
     }
   }
 
+  function formatDate(timestamp){
+    if (!timestamp) return "Never been triggered";
+    let date = new Date(Math.floor(timestamp));
+    return date.toLocaleString();
+  }
+
   function formatText(string){
     if (typeof string === 'boolean') {
       string = string.toString();
@@ -76,7 +82,7 @@ function DevicesList() {
         key={item.id}
         style={styles.devicesLower}
         onPress={() => handleSensorPress(item)}>
-        <Text style={styles.lastTrigText}> Last triggered: {item.last_triggered? item.last_triggered : "Never been triggered!"} </Text>
+        <Text style={styles.lastTrigText}> Last triggered: {item.last_triggered? formatDate(item.last_triggered) : "Never been triggered!"} </Text>
       </View>
     </TouchableOpacity>
     
@@ -96,6 +102,7 @@ function DevicesList() {
 
       {modalVisible && (
         <DeviceInfoModal
+          formatDate = {formatDate}
           item={selectedItem}
           isModalVisable={modalVisible}
           closeModal={supressDeviceInfo}
