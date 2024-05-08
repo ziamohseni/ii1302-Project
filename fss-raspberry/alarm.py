@@ -25,7 +25,7 @@ class Alarm:
         if self.runthread:
             self.stop()
         self.psprocess.resume()
-        self.runthread = threading.Thread(target=runfortime,args=(self,10,self.processcounter))
+        self.runthread = threading.Thread(target=runfortime,args=(self,3600,self.processcounter))
         self.runthread.start()
               
 
