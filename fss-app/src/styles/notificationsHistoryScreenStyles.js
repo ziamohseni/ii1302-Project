@@ -27,21 +27,26 @@ const NotificationsHistoryScreenStyles = StyleSheet.create({
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
+    overflow: "hidden",
   },
   alarmNotificationContainer: {
     borderColor: globalStyles.warningColor.color,
+    backgroundColor: globalStyles.warningColorLight.color,
   },
   infoNotificationContainer: {
     borderColor: globalStyles.infoColor.color,
+    backgroundColor: globalStyles.infoColorLight.color,
   },
   successNotificationContainer: {
     borderColor: globalStyles.successColor.color,
+    backgroundColor: globalStyles.successColorLight.color,
   },
   notificationTitle: {
     fontWeight: "bold",
   },
   notificationBody: {
     color: globalStyles.darkColor.color,
+    marginRight: 10,
   },
   notificationCategory: {
     flexDirection: "row",

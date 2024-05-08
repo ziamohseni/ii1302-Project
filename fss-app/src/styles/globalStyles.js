@@ -7,8 +7,11 @@ const secondLightColor = "#dddddd";
 const darkColor = "#111111";
 const errorColor = "red";
 const successColor = "#4CAF50";
+const successColorLight = "#E8F5E9";
 const warningColor = "#FFC107";
+const warningColorLight = "#FFF8E1";
 const infoColor = "#2196F3";
+const infoColorLight = "#E3F2FD";
 
 // Global styles
 const globalStyles = StyleSheet.create({
@@ -30,11 +33,20 @@ const globalStyles = StyleSheet.create({
   successColor: {
     color: successColor,
   },
+  successColorLight: {
+    color: successColorLight,
+  },
   warningColor: {
     color: warningColor,
   },
+  warningColorLight: {
+    color: warningColorLight,
+  },
   infoColor: {
     color: infoColor,
+  },
+  infoColorLight: {
+    color: infoColorLight,
   },
   containerWithPadding: {
     flex: 1,

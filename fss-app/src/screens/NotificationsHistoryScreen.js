@@ -64,6 +64,8 @@ function NotificationsHistoryScreen() {
                         name={
                           notificationType === "alarm"
                             ? "warning"
+                            : notificationType === "camera"
+                            ? "camera"
                             : "information-circle"
                         }
                         size={26}
