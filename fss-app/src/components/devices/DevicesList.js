@@ -62,7 +62,7 @@ function DevicesList() {
   }
 
   let renderSensors = sensorsArray?.map((item) => (
-    <>
+
     <TouchableOpacity
       key={item.id}
       style={[styles.devices, globalStyles.shadow]}
@@ -86,7 +86,6 @@ function DevicesList() {
       </View>
     </TouchableOpacity>
     
-    </>
   ));
 
   return (
