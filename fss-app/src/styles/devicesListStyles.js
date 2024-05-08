@@ -9,10 +9,22 @@ const devicesScreenStyles = StyleSheet.create({
   },
 
   devices: {
+    flexDirection: "column",
+    gap: 5,
     backgroundColor: globalStyles.lightColor.color,
+    
     marginHorizontal: 10,
-    padding: 20,
+    marginTop: 10,
     borderRadius: 10,
+  },
+
+  devicesLower:{
+    borderColor: globalStyles.secondLightColor.color,
+    borderWidth: 1,
+    backgroundColor: "transparent",
+    padding: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomEndRadius: 10,
   },
 
   deviceContainer: {
@@ -20,6 +32,7 @@ const devicesScreenStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 25,
+    paddingVertical: 15,
   },
 
   deviceText: {
@@ -33,7 +46,11 @@ const devicesScreenStyles = StyleSheet.create({
   deviceTextContainer: {
     flexDirection: 'column', 
     paddingRight: 40,
-   
+  },
+
+  lastTrigText:{
+    paddingLeft: 15,
+    fontWeight: "500",
   },
 
   logo: {

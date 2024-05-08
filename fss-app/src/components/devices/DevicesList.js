@@ -56,6 +56,7 @@ function DevicesList() {
   }
 
   let renderSensors = sensorsArray?.map((item) => (
+    <>
     <TouchableOpacity
       key={item.id}
       style={[styles.devices, globalStyles.shadow]}
@@ -70,7 +71,16 @@ function DevicesList() {
           <Text style={styles.deviceText}>Status: {formatText(item.status)}</Text>
         </View>
       </View>
+
+      <View
+        key={item.id}
+        style={styles.devicesLower}
+        onPress={() => handleSensorPress(item)}>
+        <Text style={styles.lastTrigText}> Last triggered: {item.last_triggered? item.last_triggered : "Never been triggered!"} </Text>
+      </View>
     </TouchableOpacity>
+    
+    </>
   ));
 
   return (
@@ -80,7 +90,9 @@ function DevicesList() {
         List of devices in hub #{selectedHub && selectedHub.id}
       </Text>
 
-      <View style={styles.container}>{renderSensors}</View>
+      <View style={styles.container}>
+        {renderSensors}
+      </View>
 
       {modalVisible && (
         <DeviceInfoModal

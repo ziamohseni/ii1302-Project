@@ -18,6 +18,7 @@ import floodLogo from "../../../assets/flood.png";
 function DeviceInfoModal(props){
   
   function formatDate(timestamp){
+    if (!timestamp) return "Never been triggered";
     let date = new Date(Math.floor(timestamp));
     return date.toLocaleString();
   }
@@ -43,6 +44,7 @@ function DeviceInfoModal(props){
         <Text style = {styles.bold}>ID: </Text> {item.id + "\n"}
         <Text style = {styles.bold}>Status:</Text> {props.formatText(item.status)+ "\n"} 
         <Text style = {styles.bold}>Triggered:</Text> {props.formatText(item.triggered)+ "\n"}
+        <Text style = {styles.bold}>Last Triggered:</Text> {formatDate(item.last_triggered)+ "\n"}
         {item.type === "camera"? 
         <><Text style = {styles.bold}>Last Snapshot:</Text> {formatDate(item.recent_snapshot.timestamp)} </>
         : 
