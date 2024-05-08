@@ -5,29 +5,13 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import convertUnixTimestampToDate from "../utils/convertUnixTimestampToDate";
 // Contexts
 import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
-import { useNotifications } from "../contexts/NotificationsContext";
 // Styles
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/notificationsHistoryScreenStyles";
 
 function NotificationsHistoryScreen() {
   const { noHubsFound } = useRaspberryHubs();
-  const { getNotificationsFromStorage } = useNotifications();
   const [notifications, setNotifications] = useState([]);
-
-  // Get notifications from async-storage
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const notifications = await getNotificationsFromStorage();
-      if (notifications) {
-        const sortedNotifications = notifications.sort(
-          (a, b) => b.date - a.date
-        );
-        setNotifications(sortedNotifications);
-      }
-    };
-    fetchNotifications();
-  }, []);
 
   return (
     <SafeAreaView style={globalStyles.containerWithoutPadding}>

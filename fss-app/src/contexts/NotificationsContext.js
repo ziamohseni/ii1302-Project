@@ -9,7 +9,6 @@ import { Platform, Alert } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Set global notification handler
 Notifications.setNotificationHandler({
@@ -92,24 +91,6 @@ export const NotificationsProvider = ({ children }) => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener(async (notification) => {
         setNotification(notification);
-
-        // Save the notification object to async-storage as array and limit to 50
-        const notifications = await getNotificationsFromStorage();
-        if (notifications) {
-          if (notifications.length >= 50) {
-            notifications.shift();
-          }
-          notifications.push(notification);
-          await AsyncStorage.setItem(
-            "notifications",
-            JSON.stringify(notifications)
-          );
-        } else {
-          await AsyncStorage.setItem(
-            "notifications",
-            JSON.stringify([notification])
-          );
-        }
       });
 
     responseListener.current =
@@ -153,18 +134,11 @@ export const NotificationsProvider = ({ children }) => {
     });
   }
 
-  // Get notifications from async-storage
-  async function getNotificationsFromStorage() {
-    const notifications = await AsyncStorage.getItem("notifications");
-    return JSON.parse(notifications);
-  }
-
   return (
     <NotificationsContext.Provider
       value={{
         expoPushToken,
         notification,
-        getNotificationsFromStorage,
         sendPushNotification,
       }}
     >
