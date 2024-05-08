@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity} from "react-native";
 import { signOut } from "firebase/auth";
 
 //context
-import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 import { useUser } from "../../contexts/UserContext";
 
 // Styles
@@ -13,33 +12,49 @@ import loginStyles from "../../styles/loginScreenStyles";
 function ProfileInfo(){
     // Get user data from context
     const { user, profile, handleSignOut } = useUser();
-    // Get Raspberry Hubs data from context
-    const { hubs, selectHub } = useRaspberryHubs();
 
-    let renderHubs = profile.hubs_owned?.map((hub) => (
+    console.log(user);
 
-        <Text style = {styles.infoText}>
-            {hub}{profile.hubs_owned.indexOf(hub) !== profile.hubs_owned.length - 1? ", ":""}
-        </Text>
-    ));
+    function generateHubsString(hubs){
+        let res = "";
+        profile.hubs_owned.map((hub, index) => {
+            if (index !== profile.hubs_owned.length - 1) {
+                res = res + hub + ", ";
+            } else {
+                res = res + hub;
+            }
+        });
+        return res;
+    }
+
+    function renderHubs(hubs){
+        string = generateHubsString(hubs)
+        return(
+            <Text style = {styles.infoTextHub}>{string}</Text>
+        );
+    }
 
     return(
         <View style = {[styles.container, globalStyles.shadow]}>
             
-            <Text style = {styles.infoTitle}>
-                First Name: <Text style = {styles.infoText}> {profile?.first_name} </Text>
-            </Text> 
-            <Text style = {styles.infoTitle}>
-                Last Name: <Text style = {styles.infoText}>{profile?.last_name}</Text>
-            </Text>
-            <Text style = {styles.infoTitle}>
-                Email: <Text style = {styles.infoText}>{user?.email}</Text>
-            </Text>
-            <Text style = {styles.infoTitle}>
-                User ID: <Text style = {styles.infoText}>{user?.uid}</Text>
-            </Text>
-            <View style={styles.hubs}>
-                <Text style = {styles.infoTitle}>Hubs Owned: {renderHubs} </Text>
+            <View style ={styles.infoContainer}>
+                <Text style = {styles.infoTitle}>First Name </Text>
+                <Text style = {styles.infoText}> {profile?.first_name} </Text>
+            </View>
+
+            <View style ={styles.infoContainer}>
+                <Text style = {styles.infoTitle}>Last Name </Text>
+                <Text style = {styles.infoText}>{profile?.last_name}</Text>
+            </View>
+
+            <View style ={styles.infoContainer}>
+                <Text style = {styles.infoTitle}>Email </Text>
+                <Text style = {styles.infoText}>{user?.email}</Text>
+            </View>
+
+            <View style={styles.infoContainer}>
+                <Text style = {styles.infoTitle}>Hubs Owned </Text>
+                {renderHubs(profile.hubs_owned)}
             </View>
             
             <TouchableOpacity style = {globalStyles.buttonActive} onPress={handleSignOut}> 
