@@ -92,6 +92,7 @@ raspberry_hubs:
     system_status: "armed" # or unarmed (activated / deactivated)
     last_armed: "timestamp"
     push_tokens: ["push_token_1", "push_token_2"]
+    system_triggered: boolean
 ```
 
 Notes:

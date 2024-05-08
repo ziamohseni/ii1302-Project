@@ -8,15 +8,32 @@ import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 // Styles
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/notificationsHistoryScreenStyles";
+import SelectHub from "../components/global/SelectHub";
 
 function NotificationsHistoryScreen() {
-  const { noHubsFound } = useRaspberryHubs();
+  const { selectedHub, noHubsFound } = useRaspberryHubs();
   const [notifications, setNotifications] = useState([]);
+
+  // Get notifications from async-storage
+  useEffect(() => {
+    const notificationsArray = selectedHub && selectedHub.notification_history;
+    if (notificationsArray) {
+      const sortedNotifications = notificationsArray.sort(
+        (a, b) => b.time - a.time
+      );
+      setNotifications(sortedNotifications);
+    }
+
+    return () => {
+      setNotifications([]);
+    };
+  }, [selectedHub]);
 
   return (
     <SafeAreaView style={globalStyles.containerWithoutPadding}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
+          <SelectHub />
           <Text style={styles.title}>Notifications History</Text>
           {/* No Notification Found */}
           {!notifications.length && (
@@ -28,16 +45,13 @@ function NotificationsHistoryScreen() {
           <View style={styles.notificationsContainer}>
             {notifications &&
               notifications.map((notification, index) => {
-                // Notification data
-                const notificationData = notification.request.content;
                 // Notification type
-                const notificationType =
-                  notificationData.categoryIdentifier.toLowerCase();
+                const notificationType = notification.categoryId.toLowerCase();
                 // Notification container style
                 const notificationContainerStyle =
                   styles[`${notificationType}NotificationContainer`];
                 // Format date
-                const date = convertUnixTimestampToDate(notification.date);
+                const date = convertUnixTimestampToDate(notification.time);
 
                 return (
                   <View
@@ -59,10 +73,10 @@ function NotificationsHistoryScreen() {
                     {/* Notification */}
                     <View>
                       <Text style={styles.notificationTitle}>
-                        {notificationData.title}
+                        {notification.title}
                       </Text>
                       <Text style={styles.notificationBody}>
-                        {notificationData.body}
+                        {notification.body}
                       </Text>
                       <Text>{date}</Text>
                     </View>
