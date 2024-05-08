@@ -34,6 +34,12 @@ function DevicesList() {
     }
   }
 
+  function formatDate(timestamp){
+    if (!timestamp) return "Never been triggered";
+    let date = new Date(Math.floor(timestamp));
+    return date.toLocaleString();
+  }
+
   function formatText(string){
     if (typeof string === 'boolean') {
       string = string.toString();
@@ -56,6 +62,7 @@ function DevicesList() {
   }
 
   let renderSensors = sensorsArray?.map((item) => (
+
     <TouchableOpacity
       key={item.id}
       style={[styles.devices, globalStyles.shadow]}
@@ -70,20 +77,31 @@ function DevicesList() {
           <Text style={styles.deviceText}>Status: {formatText(item.status)}</Text>
         </View>
       </View>
+
+      <View
+        key={item.id}
+        style={styles.devicesLower}
+        onPress={() => handleSensorPress(item)}>
+        <Text style={styles.lastTrigText}> Last triggered: {item.last_triggered? formatDate(item.last_triggered) : "Never been triggered!"} </Text>
+      </View>
     </TouchableOpacity>
+    
   ));
 
   return (
     
-    <ScrollView scrollEnabled={true} style={{ height: "90%"}}>
+    <View>
       <Text style={[styles.deviceText, {fontSize: 20}]}>
         List of devices in hub #{selectedHub && selectedHub.id}
       </Text>
 
-      <View style={styles.container}>{renderSensors}</View>
+      <View style={styles.container}>
+        {renderSensors}
+      </View>
 
       {modalVisible && (
         <DeviceInfoModal
+          formatDate = {formatDate}
           item={selectedItem}
           isModalVisable={modalVisible}
           closeModal={supressDeviceInfo}
@@ -91,7 +109,7 @@ function DevicesList() {
         />
       )}
     
-    </ScrollView>
+    </View>
 
   );
 }
