@@ -2,6 +2,7 @@ import psutil
 import os
 import fssfirebase
 import wifilogin
+import time
 
 
 
@@ -36,18 +37,22 @@ def getUserAndPass():
 
 
             
-def getFirebase():
+def getFirebase(LED_q):
     
     wifi_status = False
     while not wifi_status:
         username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
         #wifi_status = wifilogin.connectWifi(wifissid,wifipass)
         wifi_status = True
+        if not wifi_status:
+            LED_q.put("WifiError")
+    time.sleep(20)
     while True:
         print("Logging in to firebase")
         try:
             firebase = fssfirebase.FssFirebase(username,password)
             break
         except fssfirebase.InvalidFBLoginInfoError:
+            LED_q.put("FirebaseError")
             username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
     return firebase,userDataUsbPath

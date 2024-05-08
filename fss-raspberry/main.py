@@ -73,10 +73,10 @@ def setupHubForFB(firebase):
 def main():
     LED_queue = queue.Queue()
     LED_queue.put('Boot')
-    LED_thread = threading.Thread(target=LED_Control, args= LED_queue)
+    LED_thread = threading.Thread(target=LED_Control, args=[LED_queue])
     LED_thread.start()
     
-    firebase,usb_path = getFirebase()
+    firebase,usb_path = getFirebase(LED_queue)
     active = setupHubForFB(firebase)
     faceEncodings = getFaceEncodings(usb_path)
     ####################
