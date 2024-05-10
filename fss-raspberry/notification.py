@@ -1,5 +1,13 @@
 import requests
 import time
+
+
+
+def saveAndSendToTokens(title,body,tokens,category,firebase):
+    for token in tokens:
+        sendNotification(title,body,token,category)
+    saveNotifHistory(title,body,firebase,category)
+
 def sendNotification(title,body,token,category):
     headers={"Content-Type":"application/json"}
     data = {

@@ -8,10 +8,9 @@ from usbfirebaselogin import getFirebase
 import os
 import face_recognition
 import pickle
-from notification import sendNotification,saveNotifHistory
-################
+from notification import saveAndSendToTokens
 from alarm import Alarm
-###############
+
 
 
 def getFaceEncodings(usb_path):
@@ -79,9 +78,7 @@ def main():
     firebase,usb_path = getFirebase(LED_queue)
     active = setupHubForFB(firebase)
     faceEncodings = getFaceEncodings(usb_path)
-    ####################
     alarm_instance = Alarm("alarm.wav")
-    #####################
 #Part written by Adalet modified by Jonathan
 ###########################################################################
     
@@ -92,9 +89,7 @@ def main():
         active = data_snapshot["data"]
         push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
 
-        for token in push_tokens.values():
-            sendNotification("Hub "+firebase.devNum+" "+active.capitalize(),"Hub "+firebase.devNum+" has become "+active.lower(),token,"Info")
-        saveNotifHistory("Hub "+firebase.devNum+" "+active.capitalize(),"Hub "+firebase.devNum+" has become "+active.lower(),firebase,"Info")
+        saveAndSendToTokens("Hub "+firebase.devNum+" "+active.capitalize(),"Hub "+firebase.devNum+" has become "+active.lower(),push_tokens.values(),"Info",firebase)
        # Process sensor status based on active state
         print(active)
         if active == "unarmed":
@@ -158,16 +153,16 @@ def main():
                             camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                             camthread.start()
                             
-##################################################################################################
+
                         elif eval(sensor_data[2].capitalize()) == True:
                             # Calling the alarm function from the Alarm class instance
                             alarm_instance.start()
                             LED_queue.put('Alarm')
 
-##################################################################################################
-                        for notiftoken in hub_data["push_tokens"]:
-                            sendNotification(alarm_title_string,alarm_body_string,notiftoken,"Alarm")
-                        saveNotifHistory(alarm_title_string,alarm_body_string,firebase,"Alarm")
+
+                        
+                        saveAndSendToTokens(alarm_title_string,alarm_body_string,hub_data["push_tokens"],"Alarm",firebase)
+                        
 
                     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensorkey,sensorvalue)
                     break
@@ -176,18 +171,17 @@ def main():
 
                 if eval(sensor_data[2].capitalize()) == True:
                     sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":time.time()}
-                    for notiftoken in hub_data["push_tokens"]:
-                        sendNotification(alarm_title_string,alarm_body_string,notiftoken,"Alarm",firebase)
-                    saveNotifHistory(alarm_title_string,alarm_body_string,firebase,"Alarm")
+                    
+                    saveAndSendToTokens(alarm_title_string,alarm_body_string,hub_data["push_tokens"],"Alarm",firebase)
+
                     if sensor_data[1] == "knock" and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
                         camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                         camthread.start()
-    ##################################################################################################                    
+              
                     else:
                         # Calling the alarm function from the Alarm class instance
                         alarm_instance.start()
                         LED_queue.put('Alarm')
-    ##################################################################################################                    
 
                 else:
                     sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":""}                    
@@ -207,13 +201,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-###############################################
-'''
-    alarm = Alarm("alarm.mp3")
-    alarm.start()
-   # time.sleep(5)  # 5 seconds delay for example
-    # Do something else while the alarm is playing...
-    input("Press Enter to stop the alarm")
-    alarm.stop()
-'''
-###############################################

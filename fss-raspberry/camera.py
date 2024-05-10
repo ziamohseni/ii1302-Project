@@ -2,7 +2,7 @@ from picamera2 import Picamera2
 import libcamera
 import time
 import face_recognition
-from notification import sendNotification,saveNotifHistory
+from notification import saveAndSendToTokens
 
 
 def do_face_recog(faceEncodings):
@@ -113,9 +113,8 @@ def take_picture(firebase,faceEncodings,prevthread):
     
     firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/sensors/camera",fbcamera)
 
-    for token in firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens").values():
-        sendNotification(facename.capitalize()+" At Door","Image of "+facename+" has been captured",token,"Camera")
-    saveNotifHistory(facename.capitalize()+" At Door","Image of "+facename+" has been captured",firebase,"Camera")
+    saveAndSendToTokens(facename.capitalize()+" At Door","Image of "+facename+" has been captured",firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens").values(),"Camera",firebase)
+    
 
     print("Camera done")
 
