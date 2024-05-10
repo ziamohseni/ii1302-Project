@@ -1,5 +1,4 @@
 import psutil
-import os
 import fssfirebase
 import wifilogin
 import time
@@ -8,7 +7,7 @@ import time
 
 def getUserAndPass():
     print("Getting usb data")
-    localuser = os.getlogin()
+    localuser = "admin"
     while True:
         try:
             userDataUsbPath = False
