@@ -41,11 +41,11 @@ def getFirebase(LED_q):
     wifi_status = False
     while not wifi_status:
         username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
-        #wifi_status = wifilogin.connectWifi(wifissid,wifipass)
-        wifi_status = True
+        wifi_status = wifilogin.connectWifi(wifissid,wifipass)
+        #wifi_status = True
         if not wifi_status:
             LED_q.put("WifiError")
-    time.sleep(20)
+    time.sleep(10)
     while True:
         print("Logging in to firebase")
         try:

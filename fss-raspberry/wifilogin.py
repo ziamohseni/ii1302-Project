@@ -1,26 +1,25 @@
-import subprocess
-
-
+import nmcli
 def connectWifi(wifissid,wifipass):
+    wifinterface = "wlan1"
     print("Connecting wifi")
     wificonnected = None
-    try:
-        wificonnected = subprocess.check_output(["nmcli","-f","GENERAL.STATE","con","show",wifissid])
-    except subprocess.CalledProcessError:
-        pass
 
+    wificonnected = nmcli.device.show(ifname=wifinterface)["GENERAL.CONNECTION"]
+    if wifissid == wificonnected:
+        return True
 
-
-    while "activated" not in str(wificonnected):
- 
-        try:
-            subprocess.check_output(["nmcli", "dev", "wifi", "connect", wifissid, "password", wifipass,"ifname", "wlan1"])
-
-            wificonnected = subprocess.check_output(["nmcli","-f","GENERAL.STATE","con","show",wifissid])
-        except subprocess.CalledProcessError:
-            return False
+    for wifinet in nmcli.device.wifi(ifname=wifinterface,rescan=True):
+        if wifissid == wifinet.ssid:
+            while wifissid != wificonnected:
         
-               
+                try:
+                    nmcli.device.wifi_connect(ssid=wifissid,password=wifipass,ifname=wifinterface)
+
+                    wificonnected = nmcli.device.show(ifname=wifinterface)["GENERAL.CONNECTION"]
+                except (nmcli._exception.ConnectionActivateFailedException,nmcli._exception.NotExistException):
+                    return False
+            
+                
 
     return True
         
