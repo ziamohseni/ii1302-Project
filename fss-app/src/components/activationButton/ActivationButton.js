@@ -67,7 +67,12 @@ function ActivationButton() {
 
   const borderColor = blinkAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [isSystemArmed ? "red" : "green", "white"],
+    outputRange: [
+      isSystemArmed
+        ? globalStyles.dangerColor.color
+        : globalStyles.successColor.color,
+      globalStyles.lightColor.color,
+    ],
   });
 
   return (
@@ -91,7 +96,11 @@ function ActivationButton() {
           onPressOut={handlePressOut}
           delayLongPress={3000}
         >
-          <Ionicons name="power" size={200} color={"white"} />
+          <Ionicons
+            name="power"
+            size={200}
+            color={globalStyles.lightColor.color}
+          />
         </TouchableOpacity>
       </Animated.View>
 

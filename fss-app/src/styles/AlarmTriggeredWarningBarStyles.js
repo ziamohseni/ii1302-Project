@@ -6,7 +6,7 @@ import { Platform } from "react-native";
 
 const AlarmTriggeredWarningBarStyles = StyleSheet.create({
   alarmContainer: {
-    backgroundColor: globalStyles.errorColor.color,
+    backgroundColor: globalStyles.dangerColor.color,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",

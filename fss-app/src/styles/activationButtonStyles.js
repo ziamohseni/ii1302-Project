@@ -14,16 +14,16 @@ const activationButtonStyles = StyleSheet.create({
     borderColor: globalStyles.secondLightColor.color,
   },
   buttonOff: {
-    backgroundColor: "green",
+    backgroundColor: globalStyles.successColor.color,
     borderRadius: 50,
   },
   buttonOn: {
-    backgroundColor: "red",
+    backgroundColor: globalStyles.dangerColor.color,
     borderRadius: 50,
   },
   buttonOffBorder: {
     borderWidth: 2,
-    borderColor: "green",
+    borderColor: globalStyles.successColor.color,
     borderRadius: 50,
     marginVertical: 30,
     padding: 15,
@@ -31,7 +31,7 @@ const activationButtonStyles = StyleSheet.create({
   },
   buttonOnBorder: {
     borderWidth: 2,
-    borderColor: "red",
+    borderColor: globalStyles.dangerColor.color,
     borderRadius: 50,
     marginVertical: 30,
     padding: 15,

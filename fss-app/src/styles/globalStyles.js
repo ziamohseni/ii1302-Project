@@ -12,6 +12,7 @@ const warningColor = "#FFC107";
 const warningColorLight = "#FFF8E1";
 const infoColor = "#2196F3";
 const infoColorLight = "#E3F2FD";
+const dangerColor = "#FF5252";
 
 // Global styles
 const globalStyles = StyleSheet.create({
@@ -47,6 +48,9 @@ const globalStyles = StyleSheet.create({
   },
   infoColorLight: {
     color: infoColorLight,
+  },
+  dangerColor: {
+    color: dangerColor,
   },
   containerWithPadding: {
     flex: 1,
