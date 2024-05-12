@@ -6,7 +6,7 @@ import { RaspberryHubsProvider } from "./src/contexts/RaspberryHubsContext";
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
 
 // Navigation
-import TabNavigation from "./src/components/navigation/TabNavigation";
+import RootNavigation from "./src/components/navigation/RootNavigation";
 
 export default function App() {
   return (
@@ -14,7 +14,7 @@ export default function App() {
       <UserProvider>
         <RaspberryHubsProvider>
           <NavigationContainer>
-            <TabNavigation />
+            <RootNavigation />
             <StatusBar style="dark" />
           </NavigationContainer>
         </RaspberryHubsProvider>

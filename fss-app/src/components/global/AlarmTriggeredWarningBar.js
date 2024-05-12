@@ -21,7 +21,7 @@ function AlarmTriggeredWarningBar({
     >
       <TouchableOpacity
         style={styles.container}
-        onPress={() => navigation.navigate("Notifications")}
+        onPress={() => navigation.navigate("AlarmTriggeredModal")}
       >
         <Animatable.View
           animation="flash"
