@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 // Colors
 const primaryColor = "#1E90FF";
 const lightColor = "#f9f9f9";
 const secondLightColor = "#dddddd";
 const darkColor = "#111111";
-const errorColor = "red";
+const errorColor = "#F44336";
 const successColor = "#4CAF50";
 const successColorLight = "#E8F5E9";
 const warningColor = "#FFC107";

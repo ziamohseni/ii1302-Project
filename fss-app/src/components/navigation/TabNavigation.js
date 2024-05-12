@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Platform } from "react-native";
 import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
+import AlarmTriggeredWarningBar from "../global/AlarmTriggeredWarningBar";
 // Context
 import { useUser } from "../../contexts/UserContext";
 // Styles
@@ -116,6 +117,8 @@ function TabNavigation() {
           />
         )}
       </Tab.Navigator>
+      {/* Red alarm bar */}
+      <AlarmTriggeredWarningBar miniBar={true} />
     </>
   );
 }
