@@ -67,12 +67,16 @@ def setupHubForFB(firebase):
     if not "system_is_silent" in hub_data.keys():
         hub_data["system_is_silent"] = False
         hub_data_changed = True
+    if not "system_triggered" in hub_data.keys():
+        hub_data["system_triggered"] = False
+        hub_data_changed = True
     active = hub_data["system_status"]
     if hub_data_changed:
         firebase.fbset("raspberry_hubs/"+firebase.devNum,hub_data)
     return active
 
 def main():
+    global active
     LED_queue = queue.Queue()
     LED_queue.put('Boot')
     LED_thread = threading.Thread(target=LED_Control, args=[LED_queue])
@@ -84,8 +88,12 @@ def main():
     alarm_instance = Alarm("alarm.wav")
     global armedboot
     global silencedboot
+    global triggeredboot
+
     armedboot = False
     silencedboot = False
+    triggeredboot = False
+    
 
 #Part written by Adalet modified by Jonathan
 ###########################################################################
@@ -95,6 +103,7 @@ def main():
      # Stream callback function to monitor changes in system status
     def system_status_callback(data_snapshot):
         global armedboot
+        global active
         if armedboot:
             active = data_snapshot["data"]
             push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
@@ -104,7 +113,7 @@ def main():
             print(active)
             if active == "unarmed":
                 alarm_instance.stop()
-            LED_queue.put(active.capitalize()) 
+        LED_queue.put(active.capitalize()) 
         armedboot = True
 
 
@@ -112,19 +121,46 @@ def main():
     firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_status", system_status_callback)
     
 ###########################################################################
-    def system_triggered_callback(data_snapshot):
-        global silencedboot
+    def system_silenced_callback(data_snapshot):
+        global silencedboot 
+        global active
         if silencedboot:
-            trigg = data_snapshot["data"]
-            push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
+            silenced = data_snapshot["data"]
+            hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
+            push_tokens = hub_data["push_tokens"]
+            trigg = hub_data["system_triggered"]
+
             if trigg == True:
+                if silenced == True:
+                    alarm_instance.stop()
+                    #LED_queue.put(active.capitalize())
+                    saveAndSendToTokens("Hub " +firebase.devNum+" silenced","Hub "+firebase.devNum+" has been silenced",push_tokens,"Info",firebase)
+                    print("Alarm silenced")
+                else:
+                    alarm_instance.start()
+                    #LED_queue.put('Alarm')
+                    saveAndSendToTokens("Hub " +firebase.devNum+" unsilenced","Hub "+firebase.devNum+" has been unsilenced",push_tokens,"Info",firebase)
+                    print("Alarm unsilenced")
+        silencedboot = True
+    firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_is_silent",system_silenced_callback)
+
+    def system_triggered_callback(data_snapshot):
+        global triggeredboot 
+        global active
+        time.sleep(0.1)
+        if triggeredboot and active=="armed":
+            triggered = data_snapshot["data"]
+            print(triggered)
+            push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
+            if triggered == False:
                 alarm_instance.stop()
                 LED_queue.put(active.capitalize())
-                saveAndSendToTokens("Hub " +firebase.devNum+" silenced","Hub "+firebase.devNum+" has been silenced",push_tokens.values(),"Info",firebase)
-                print("Alarm silenced")    
-        silencedboot = True
-    firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_is_silent",system_triggered_callback)
+                saveAndSendToTokens("Hub " +firebase.devNum+" stopped alarm","Hub "+firebase.devNum+" has stopped alarm",push_tokens.values(),"Info",firebase)
+                print("Alarm silenced")
+        triggeredboot = True
 
+
+    firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_triggered",system_triggered_callback)
 
     print("Starting TCP server")
 
@@ -134,7 +170,8 @@ def main():
     # Bind the socket to the address and port
   
     port = 8888
-    server_address = ('', port)  # Change to desired host and port
+    ip_address_to_rasp = "10.42.0.1"
+    server_address = (ip_address_to_rasp, port)  # Change to desired host and port
     server_socket.bind(server_address)
 
     # Listen for incoming connections
@@ -183,7 +220,7 @@ def main():
                             alarm_instance.start()
                             LED_queue.put('Alarm')
                             saveAndSendToTokens(alarm_title_string,alarm_body_string,hub_data["push_tokens"],"Alarm",firebase)
-                            firebase.fbupdate("raspberry_hubs/"+firebase.devNum,{"system_is_silent":False})
+                            firebase.fbupdate("raspberry_hubs/"+firebase.devNum,{"system_triggered":True})
 
 
                         
@@ -210,7 +247,7 @@ def main():
                         alarm_instance.start()
                         LED_queue.put('Alarm')
                         saveAndSendToTokens(alarm_title_string,alarm_body_string,hub_data["push_tokens"],"Alarm",firebase)
-                        firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/system_is_silent",False)
+                        firebase.fbupdate("raspberry_hubs/"+firebase.devNum,{"system_triggered":True})
 
                 else:
                     sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":""}                    
