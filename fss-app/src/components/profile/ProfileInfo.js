@@ -15,9 +15,6 @@ function ProfileInfo(){
     // Get user data from context
     const { user, profile, handleSignOut } = useUser();
 
-    console.log("prof", profile);
-    console.log("user", user);
-
     function generateHubsString(hubs){
         let res = "";
         profile.hubs_owned.map((hub, index) => {

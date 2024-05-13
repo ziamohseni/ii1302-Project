@@ -44,16 +44,16 @@ const profileInfoStyles = StyleSheet.create({
     marginLeft: 20,
   },
   imageContainer:{
-    paddingHorizontal: 13,
+    paddingHorizontal: 15,
     paddingVertical: 5,
   },
   image:{
     borderWidth: 2,
     borderColor: globalStyles.secondLightColor.color,
-    borderRadius: 15,
+    //borderRadius: 15,
     padding: 10,
-    width: 100,
-    height: 100
+    width: 90,
+    height: 90
   }
 
 });
