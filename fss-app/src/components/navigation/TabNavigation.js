@@ -5,6 +5,7 @@ import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
 import AlarmTriggeredWarningBar from "../global/AlarmTriggeredWarningBar";
 // Context
 import { useUser } from "../../contexts/UserContext";
+import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 // Screens
@@ -18,6 +19,7 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigation() {
   const { isLoading, isUserLoggedInAndVerified } = useUser();
+  const { isAlarmTriggered } = useRaspberryHubs();
 
   // Show loading spinner while checking if user is logged in
   if (isLoading) {
@@ -118,7 +120,7 @@ function TabNavigation() {
         )}
       </Tab.Navigator>
       {/* Red alarm bar */}
-      <AlarmTriggeredWarningBar miniBar={true} />
+      {isAlarmTriggered && <AlarmTriggeredWarningBar miniBar={true} />}
     </>
   );
 }

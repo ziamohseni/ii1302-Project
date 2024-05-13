@@ -25,6 +25,8 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [isSystemArmed, setIsSystemArmed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [noHubsFound, setNoHubsFound] = useState(false);
+  const [isAlarmTriggered, setIsAlarmTriggered] = useState(false);
+  const [isAlarmSilent, setIsAlarmSilent] = useState(false);
 
   // Fetch hubs from database
   useEffect(() => {
@@ -149,8 +151,16 @@ export const RaspberryHubsProvider = ({ children }) => {
     if (hub.system_status === "armed" && hub.sensors) {
       Object.entries(hub.sensors).forEach(([sensorId, sensor]) => {
         if (sensor.status === "active" && sensor.triggered) {
+          // Set alarm triggered status to true
+          setIsAlarmTriggered(true);
           // Play alarm sound
-          audioPlayer.playSound("https://codewithzia.com/alarm-sound.wav");
+          if (hub.system_is_silent === false) {
+            audioPlayer.playSound("https://codewithzia.com/alarm-sound.wav");
+            setIsAlarmSilent(false);
+          } else {
+            audioPlayer.stopSound();
+            setIsAlarmSilent(true);
+          }
         }
       });
     }
@@ -172,6 +182,8 @@ export const RaspberryHubsProvider = ({ children }) => {
       const updates = {
         system_status: newStatus,
         last_armed: serverTimestamp(),
+        system_is_silent: false,
+        system_status_changed_by: profile?.first_name || "User",
       };
       await update(ref(database, `raspberry_hubs/${selectedHub.id}`), updates);
       // Update triggered status of all sensors to false.
@@ -180,6 +192,8 @@ export const RaspberryHubsProvider = ({ children }) => {
       // Locally update the states to reflect the change immediately
       setSystemStatus(newStatus);
       setIsSystemArmed(newStatus === "armed");
+      setIsAlarmTriggered(false);
+      setIsAlarmSilent(false);
 
       // Stop the alarm sound if the system is disarmed
       if (newStatus === "unarmed") {
@@ -242,6 +256,8 @@ export const RaspberryHubsProvider = ({ children }) => {
         toggleSystemStatus,
         noHubsFound,
         toggleDeviceStatus,
+        isAlarmTriggered,
+        isAlarmSilent,
       }}
     >
       {children}
