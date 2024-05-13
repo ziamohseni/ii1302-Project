@@ -73,10 +73,10 @@ void handleFloodChange(bool floodStatus) {
   if (floodStatus != prevFloodStatus) {
     if (floodStatus) {
       Serial.println("Water status change detected: !Flooding"); //TCP_Client message
-      connect("02:FLOODING:false"); //TCP_Server message
+      connect("2:flooding:false"); //TCP_Server message
     } else {
       Serial.println("Water status change detected: Flooding!"); //TCP_Client message
-      connect("02:FLOODING:true"); //TCP_Server message
+      connect("2:flooding:true"); //TCP_Server message
     }
     prevFloodStatus = floodStatus;
   }
