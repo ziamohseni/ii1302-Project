@@ -6,7 +6,6 @@ const profileInfoStyles = StyleSheet.create({
     backgroundColor: globalStyles.lightColor.color,
     padding: 15,
     borderRadius: 15,
-    marginHorizontal: 20,
     marginVertical: 20,
   },
   infoTitle:{

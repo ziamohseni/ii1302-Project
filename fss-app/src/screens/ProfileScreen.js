@@ -1,12 +1,16 @@
-import { Button, Text, View } from "react-native";
-import { signOut } from "firebase/auth";
-import { auth } from "../services/firebaseConfig";
+import { Button, Text, View, SafeAreaView, ScrollView } from "react-native";
+import SelectHub from "../components/global/SelectHub";
+
 // Context
 import { useUser } from "../contexts/UserContext";
 import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 
 //ProfileInfo
 import ProfileInfo from "../components/profile/ProfileInfo";
+import homeScreenStyles from "../styles/homeScreenStyles";
+
+//styles
+import globalStyles from "../styles/globalStyles";
 
 function ProfileScreen() {
   // Get user data from context
@@ -15,20 +19,16 @@ function ProfileScreen() {
   const { hubs, selectHub } = useRaspberryHubs();
 
   return (
-    <View style={{ flex: 1}}>
-
-      <ProfileInfo />
+    <SafeAreaView style={globalStyles.containerWithoutPadding}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style = {homeScreenStyles.container}>
+          <SelectHub />
+          <ProfileInfo />
+        </View>
       
-      <View>
-        <Text>Raspberry Hubs:</Text>
-        {hubs.map((hub) => (
-          <View key={hub.id}>
-            <Text>Hub ID: {hub.id}</Text>
-            <Button title="Select Hub" onPress={() => selectHub(hub.id)} />
-          </View>
-        ))}
-      </View>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
+  
   );
 }
 
