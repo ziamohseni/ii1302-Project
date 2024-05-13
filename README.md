@@ -15,6 +15,7 @@ Choose version v20.12.2 (LTS)
 2. After cloning, change your directory to "fss-app". `cd fss-app`
 3. Run `npm install`.
 4. In the mean time download the "Expo Go" app from Apple Store or Google Play
+   `Note: Expo Go is not working at this stage of the development, it is complex for Expo Go to handle. We are using "Development Build".`
 5. Then run `npx expo start`, after server has started, scan the QR code to open the app.
 
 ### Technologies used in developing the mobile app
@@ -93,6 +94,8 @@ raspberry_hubs:
     last_armed: "timestamp"
     push_tokens: ["push_token_1", "push_token_2"]
     system_triggered: boolean
+    system_is_silent: boolean
+    system_status_changed_by: "user's first_name"
 ```
 
 Notes:
