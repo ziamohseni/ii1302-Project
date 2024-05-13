@@ -1,5 +1,6 @@
 import firebase #pip install firebase-rest-api
 import json
+import requests
 from requests.exceptions import HTTPError
 
 class InvalidFBLoginInfoError(Exception):
@@ -22,7 +23,7 @@ class FssFirebase:
 
         try:
             self.loginret = auth.sign_in_with_email_and_password(email,password)
-        except HTTPError:
+        except (HTTPError,ConnectionError,requests.exceptions.ConnectionError):
             raise InvalidFBLoginInfoError
 
 
