@@ -94,6 +94,7 @@ raspberry_hubs:
     last_armed: "timestamp"
     push_tokens: ["push_token_1", "push_token_2"]
     system_is_silent: boolean
+    system_triggered: boolean
     system_status_changed_by: "user's first_name"
 ```
 
