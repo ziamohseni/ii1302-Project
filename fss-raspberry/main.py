@@ -64,8 +64,8 @@ def setupHubForFB(firebase):
         if hub_data["system_status"] == "armed":
             hub_data["last_armed"] = time.time()
             hub_data_changed = True
-    if not "system_triggered" in hub_data.keys():
-        hub_data["system_triggered"] = False
+    if not "system_is_silent" in hub_data.keys():
+        hub_data["system_is_silent"] = False
         hub_data_changed = True
     active = hub_data["system_status"]
     if hub_data_changed:
@@ -117,13 +117,13 @@ def main():
         if silencedboot:
             trigg = data_snapshot["data"]
             push_tokens = firebase.fbget("raspberry_hubs/"+firebase.devNum+"/push_tokens")
-            if trigg == False:
+            if trigg == True:
                 alarm_instance.stop()
                 LED_queue.put(active.capitalize())
                 saveAndSendToTokens("Hub " +firebase.devNum+" silenced","Hub "+firebase.devNum+" has been silenced",push_tokens.values(),"Info",firebase)
                 print("Alarm silenced")    
         silencedboot = True
-    firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_triggered",system_triggered_callback)
+    firebase.fbstream("raspberry_hubs/"+firebase.devNum+"/system_is_silent",system_triggered_callback)
 
 
     print("Starting TCP server")
@@ -183,7 +183,7 @@ def main():
                             alarm_instance.start()
                             LED_queue.put('Alarm')
                             saveAndSendToTokens(alarm_title_string,alarm_body_string,hub_data["push_tokens"],"Alarm",firebase)
-                            firebase.fbupdate("raspberry_hubs/"+firebase.devNum,{"system_triggered":True})
+                            firebase.fbupdate("raspberry_hubs/"+firebase.devNum,{"system_is_silent":False})
 
 
                         
@@ -210,7 +210,7 @@ def main():
                         alarm_instance.start()
                         LED_queue.put('Alarm')
                         saveAndSendToTokens(alarm_title_string,alarm_body_string,hub_data["push_tokens"],"Alarm",firebase)
-                        firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/system_triggered",True)
+                        firebase.fbupdate("raspberry_hubs/"+firebase.devNum+"/system_is_silent",False)
 
                 else:
                     sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":""}                    
