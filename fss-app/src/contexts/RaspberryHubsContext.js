@@ -27,6 +27,7 @@ export const RaspberryHubsProvider = ({ children }) => {
   const [noHubsFound, setNoHubsFound] = useState(false);
   const [isAlarmTriggered, setIsAlarmTriggered] = useState(false);
   const [isAlarmSilent, setIsAlarmSilent] = useState(false);
+  const [triggeredHubs, setTriggeredHubs] = useState([]);
 
   // Fetch hubs from database
   useEffect(() => {
@@ -146,6 +147,19 @@ export const RaspberryHubsProvider = ({ children }) => {
     }
   }, [hubs]);
 
+  // Filter all hubs with triggered alarms on hubs update
+  useEffect(() => {
+    const triggeredHubsFound = hubs?.filter((hub) => {
+      if (hub.system_status === "armed" && hub.sensors) {
+        return Object.entries(hub.sensors).some(([sensorId, sensor]) => {
+          return sensor.status === "active" && sensor.triggered;
+        });
+      }
+      return false;
+    });
+    setTriggeredHubs(triggeredHubsFound);
+  }, [hubs]);
+
   // Handle triggered alarm
   const handleTriggeredAlarm = (hub) => {
     if (hub.system_status === "armed" && hub.sensors) {
@@ -192,8 +206,12 @@ export const RaspberryHubsProvider = ({ children }) => {
       // Locally update the states to reflect the change immediately
       setSystemStatus(newStatus);
       setIsSystemArmed(newStatus === "armed");
-      setIsAlarmTriggered(false);
       setIsAlarmSilent(false);
+
+      // Check if triggeredHubs is the last armed hub and set isAlarmTriggered to false
+      if (triggeredHubs.length < 2) {
+        setIsAlarmTriggered(false);
+      }
 
       // Stop the alarm sound if the system is disarmed
       if (newStatus === "unarmed") {
@@ -215,6 +233,18 @@ export const RaspberryHubsProvider = ({ children }) => {
           updates
         );
       });
+    }
+  };
+
+  // Function to update is alarm silent status to true
+  const updateSystemIsSilentStatusByHubId = async (hub_id) => {
+    if (hub_id) {
+      const updates = {
+        system_is_silent: true,
+      };
+      await update(ref(database, `raspberry_hubs/${hub_id}`), updates);
+      setIsAlarmSilent(true);
+      audioPlayer.stopSound();
     }
   };
 
@@ -258,6 +288,8 @@ export const RaspberryHubsProvider = ({ children }) => {
         toggleDeviceStatus,
         isAlarmTriggered,
         isAlarmSilent,
+        triggeredHubs,
+        updateSystemIsSilentStatusByHubId,
       }}
     >
       {children}

@@ -1,12 +1,17 @@
+import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+// Contexts
+import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 // Styles
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/alarmTriggeredScreenStyles";
 
 function AlarmTriggeredScreen() {
   const navigation = useNavigation();
+  const { isAlarmTriggered, hubs } = useRaspberryHubs();
+
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.innerContainer}>
