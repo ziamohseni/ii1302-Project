@@ -166,9 +166,13 @@ export const RaspberryHubsProvider = ({ children }) => {
       Object.entries(hub.sensors).forEach(([sensorId, sensor]) => {
         if (sensor.status === "active" && sensor.triggered) {
           // Set alarm triggered status to true
-          setIsAlarmTriggered(true);
+          if (hub.system_triggered) {
+            setIsAlarmTriggered(true);
+          } else {
+            setIsAlarmTriggered(false);
+          }
           // Play alarm sound
-          if (hub.system_is_silent === false) {
+          if (hub.system_is_silent === false && hub.system_triggered) {
             audioPlayer.playSound("https://codewithzia.com/alarm-sound.wav");
             setIsAlarmSilent(false);
           } else {
@@ -198,6 +202,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         last_armed: serverTimestamp(),
         system_is_silent: false,
         system_status_changed_by: profile?.first_name || "User",
+        system_triggered: false,
       };
       await update(ref(database, `raspberry_hubs/${selectedHub.id}`), updates);
       // Update triggered status of all sensors to false.
@@ -236,18 +241,6 @@ export const RaspberryHubsProvider = ({ children }) => {
     }
   };
 
-  // Function to update is alarm silent status to true
-  const updateSystemIsSilentStatusByHubId = async (hub_id) => {
-    if (hub_id) {
-      const updates = {
-        system_is_silent: true,
-      };
-      await update(ref(database, `raspberry_hubs/${hub_id}`), updates);
-      setIsAlarmSilent(true);
-      audioPlayer.stopSound();
-    }
-  };
-
   // Toggle system is silent status
   const toggleSystemIsSilentStatus = async (hub) => {
     if (hub) {
@@ -263,6 +256,34 @@ export const RaspberryHubsProvider = ({ children }) => {
     }
   };
 
+  // Function to toggle sensor triggered status to false
+  const changeSensorTriggeredStatusToFalse = async (hub) => {
+    // Update local state
+    setIsAlarmTriggered(false);
+    audioPlayer.stopSound();
+    // Update system_triggered status of the hub to false.
+    if (hub) {
+      const updates = {
+        system_triggered: false,
+        system_is_silent: false,
+      };
+      await update(ref(database, `raspberry_hubs/${hub.id}`), updates);
+    }
+    // Update triggered status of all sensors to false.
+    if (hub && hub.sensors) {
+      const sensorIds = Object.keys(hub.sensors);
+      sensorIds.forEach(async (sensorId) => {
+        const updates = {
+          triggered: false,
+        };
+        await update(
+          ref(database, `raspberry_hubs/${hub.id}/sensors/${sensorId}`),
+          updates
+        );
+      });
+    }
+  };
+
   // Function to toggle the status of a device
   const toggleDeviceStatus = async (deviceId) => {
     if (selectedHub && selectedHub.sensors && selectedHub.sensors[deviceId]) {
@@ -273,6 +294,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         updates = {
           status: newStatus,
           last_active: serverTimestamp(),
+          system_triggered: false,
         };
       } else {
         updates = {
@@ -305,7 +327,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         isAlarmSilent,
         triggeredHubs,
         toggleSystemIsSilentStatus,
-        updateSystemIsSilentStatusByHubId,
+        changeSensorTriggeredStatusToFalse,
       }}
     >
       {children}

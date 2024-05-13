@@ -49,6 +49,7 @@ const alarmTriggeredScreenStyles = StyleSheet.create({
     ...globalStyles.shadow,
   },
   triggeredHubInfo: {
+    width: "70%",
     fontSize: 16,
     color: globalStyles.darkColor.color,
   },

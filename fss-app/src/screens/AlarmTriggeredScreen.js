@@ -14,9 +14,15 @@ function AlarmTriggeredScreen() {
   const {
     isAlarmTriggered,
     triggeredHubs,
-    updateSystemIsSilentStatusByHubId,
     toggleSystemIsSilentStatus,
+    changeSensorTriggeredStatusToFalse,
   } = useRaspberryHubs();
+
+  // Handle toggle sensor triggered status to false and go back
+  const handleToggleSensorTriggeredStatusToFalseAndGoBack = (hub) => {
+    changeSensorTriggeredStatusToFalse(hub);
+    navigation.goBack();
+  };
 
   // Render triggered hubs
   const renderTriggeredHubs = triggeredHubs?.map((hub) => {
@@ -25,6 +31,17 @@ function AlarmTriggeredScreen() {
         <Text style={styles.triggeredHubInfo}>
           Hub #{hub.id} has been triggered.
         </Text>
+        {/* Retoggle sensor status to false */}
+        <TouchableOpacity
+          onPress={() => handleToggleSensorTriggeredStatusToFalseAndGoBack(hub)}
+        >
+          <Ionicons
+            name="refresh"
+            size={30}
+            color={globalStyles.darkColor.color}
+          />
+        </TouchableOpacity>
+        {/* Toggle system alarm sound */}
         <TouchableOpacity onPress={() => toggleSystemIsSilentStatus(hub)}>
           <Ionicons
             name={hub.system_is_silent ? "volume-mute" : "volume-high"}
