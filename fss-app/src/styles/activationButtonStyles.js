@@ -7,7 +7,6 @@ const activationButtonStyles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     paddingVertical: 30,
-    marginTop: 30,
     backgroundColor: globalStyles.lightColor.color,
     borderRadius: 20,
     borderWidth: 1,
