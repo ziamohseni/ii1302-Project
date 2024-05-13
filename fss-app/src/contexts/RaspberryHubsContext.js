@@ -248,6 +248,21 @@ export const RaspberryHubsProvider = ({ children }) => {
     }
   };
 
+  // Toggle system is silent status
+  const toggleSystemIsSilentStatus = async (hub) => {
+    if (hub) {
+      const newStatus = !hub.system_is_silent;
+      const updates = {
+        system_is_silent: newStatus,
+      };
+      await update(ref(database, `raspberry_hubs/${hub.id}`), updates);
+      setIsAlarmSilent(newStatus);
+      if (newStatus) {
+        audioPlayer.stopSound();
+      }
+    }
+  };
+
   // Function to toggle the status of a device
   const toggleDeviceStatus = async (deviceId) => {
     if (selectedHub && selectedHub.sensors && selectedHub.sensors[deviceId]) {
@@ -289,6 +304,7 @@ export const RaspberryHubsProvider = ({ children }) => {
         isAlarmTriggered,
         isAlarmSilent,
         triggeredHubs,
+        toggleSystemIsSilentStatus,
         updateSystemIsSilentStatusByHubId,
       }}
     >

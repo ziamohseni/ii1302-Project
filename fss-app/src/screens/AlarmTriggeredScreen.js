@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Animatable from "react-native-animatable";
 // Contexts
 import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 // Styles
@@ -10,16 +11,67 @@ import styles from "../styles/alarmTriggeredScreenStyles";
 
 function AlarmTriggeredScreen() {
   const navigation = useNavigation();
-  const { isAlarmTriggered, hubs } = useRaspberryHubs();
+  const {
+    isAlarmTriggered,
+    triggeredHubs,
+    updateSystemIsSilentStatusByHubId,
+    toggleSystemIsSilentStatus,
+  } = useRaspberryHubs();
+
+  // Render triggered hubs
+  const renderTriggeredHubs = triggeredHubs?.map((hub) => {
+    return (
+      <View key={hub.id} style={styles.triggeredHubContainer}>
+        <Text style={styles.triggeredHubInfo}>
+          Hub #{hub.id} has been triggered.
+        </Text>
+        <TouchableOpacity onPress={() => toggleSystemIsSilentStatus(hub)}>
+          <Ionicons
+            name={hub.system_is_silent ? "volume-mute" : "volume-high"}
+            size={30}
+            color={globalStyles.darkColor.color}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  });
 
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.innerContainer}>
         <View style={styles.content}>
-          <Text style={globalStyles.title}>Alarm Triggered</Text>
-          <Text style={globalStyles.text}>
-            An alarm has been triggered. Please evacuate the building
-          </Text>
+          {isAlarmTriggered ? (
+            <>
+              {/* Warning icon */}
+              <Animatable.View
+                animation="flash"
+                iterationCount="infinite"
+                style={globalStyles.shadow}
+              >
+                <Ionicons
+                  name="warning"
+                  size={60}
+                  color={globalStyles.lightColor.color}
+                />
+              </Animatable.View>
+              {/* Info */}
+              <View>
+                <Text style={styles.title}>Alarm has been triggered!</Text>
+                <Text style={styles.subTitle}>
+                  For more detailed information, please visit the
+                  'Notifications' and 'Devices' tabs. There, you can view
+                  specific details and statuses for each triggered hub and
+                  sensors.
+                </Text>
+              </View>
+              {/* Triggered hubs */}
+              {renderTriggeredHubs}
+            </>
+          ) : (
+            <Text style={styles.title}>
+              Everything is fine, you can close this message.
+            </Text>
+          )}
         </View>
         {/* Close button */}
         <View style={styles.closeButton}>
