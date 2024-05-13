@@ -18,7 +18,7 @@ const profileInfoStyles = StyleSheet.create({
   },
   infoContainer:{
     paddingHorizontal: 15,
-    paddingVertical: 2,
+    paddingVertical: 0,
     flexDirection: 'row',
     justifyContent: "space-between",
     alignItems: "center",
@@ -42,6 +42,18 @@ const profileInfoStyles = StyleSheet.create({
     fontSize: 18,
     textAlign: "left",
     marginLeft: 20,
+  },
+  imageContainer:{
+    paddingHorizontal: 13,
+    paddingVertical: 5,
+  },
+  image:{
+    borderWidth: 2,
+    borderColor: globalStyles.secondLightColor.color,
+    borderRadius: 15,
+    padding: 10,
+    width: 100,
+    height: 100
   }
 
 });

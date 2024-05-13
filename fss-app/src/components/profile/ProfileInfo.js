@@ -1,17 +1,22 @@
-import { View, Text, TouchableOpacity} from "react-native";
+import { View, Text, TouchableOpacity, Image} from "react-native";
 import { signOut } from "firebase/auth";
-
 //context
 import { useUser } from "../../contexts/UserContext";
-
 // Styles
 import globalStyles from "../../styles/globalStyles";
 import styles from "../../styles/profileInfoStyles";
 import loginStyles from "../../styles/loginScreenStyles";
+// logo
+import tempProfilePic from "../../../assets/profilePic.png"
+
+
 
 function ProfileInfo(){
     // Get user data from context
     const { user, profile, handleSignOut } = useUser();
+
+    console.log("prof", profile);
+    console.log("user", user);
 
     function generateHubsString(hubs){
         let res = "";
@@ -36,6 +41,10 @@ function ProfileInfo(){
         <>
         <View style = {[styles.container, globalStyles.shadow]}>
             
+            <View style = {styles.imageContainer}>
+                <Image source = {tempProfilePic} style = {styles.image} />
+            </View>
+
             <View style ={styles.infoContainer}>
                 <Text style = {styles.infoTitle}>First Name </Text>
                 <Text style = {styles.infoText}> {profile?.first_name} </Text>
