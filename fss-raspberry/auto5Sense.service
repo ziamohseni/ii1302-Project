@@ -3,9 +3,9 @@ Description=Auto 5sense
 After=mult-user.target
 
 [Service]
-WorkingDirectory=**PathToProject**
+WorkingDirectory=/home/admin/5Sense
 Type=forking
-ExecStart=tmux new -d -s 5sensetmux **PathToProjectPyBin** **PathToMain.py**
+ExecStart=tmux new -d -s 5sensetmux /home/admin/5Sense/5sensepython/bin/python /home/admin/5Sense/main.py
 ExecStop=tmux kill-session 5sensetmux
 [Install]
 WantedBy=multi-user.target
