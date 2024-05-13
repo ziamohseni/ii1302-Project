@@ -4,10 +4,8 @@ import globalStyles from "./globalStyles";
 const profileInfoStyles = StyleSheet.create({
   container: {
     backgroundColor: globalStyles.lightColor.color,
-    //padding: 15,
-    paddingTop: 15,
+    paddingTop: 15, 
     borderRadius: 15,
-    marginTop: 20,
     borderColor: globalStyles.secondLightColor.color,
     borderWidth: 1,
   },
