@@ -74,10 +74,10 @@ void handleDoorChange(bool doorStatus) {
   if (doorStatus != prevDoorStatus) {
     if (doorStatus) {
       Serial.println("Door open"); // TCP_Client message
-      connect("01:door:true"); //TCP_Server message
+      connect("1:door:true"); //TCP_Server message
     } else {
       Serial.println("Door closed"); //TCP_Client message
-      connect("01:door:false"); //TCP_Server message
+      connect("1:door:false"); //TCP_Server message
     }
     prevDoorStatus = doorStatus;
   }
