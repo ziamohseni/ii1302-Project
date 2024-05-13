@@ -5,6 +5,9 @@ import { auth } from "../services/firebaseConfig";
 import { useUser } from "../contexts/UserContext";
 import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 
+//ProfileInfo
+import ProfileInfo from "../components/profile/ProfileInfo";
+
 function ProfileScreen() {
   // Get user data from context
   const { user, profile, handleSignOut } = useUser();
@@ -12,12 +15,10 @@ function ProfileScreen() {
   const { hubs, selectHub } = useRaspberryHubs();
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Welcome!</Text>
-      <Text>User ID: {user?.uid}</Text>
-      <Text>First Name: {profile?.first_name}</Text>
-      <Text>Last Name: {profile?.last_name}</Text>
-      <Button title="Sign Out" onPress={handleSignOut} />
+    <View style={{ flex: 1}}>
+
+      <ProfileInfo />
+      
       <View>
         <Text>Raspberry Hubs:</Text>
         {hubs.map((hub) => (
