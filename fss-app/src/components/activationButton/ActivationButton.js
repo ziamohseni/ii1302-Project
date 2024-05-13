@@ -14,7 +14,7 @@ import styles from "../../styles/activationButtonStyles";
 import globalStyles from "../../styles/globalStyles";
 
 function ActivationButton() {
-  const { isSystemArmed, toggleSystemStatus } = useRaspberryHubs();
+  const { isSystemArmed, toggleSystemStatus, selectedHub } = useRaspberryHubs();
   const [buttonPressTimer, setButtonPressTimer] = useState(null);
   const [isBlinking, setIsBlinking] = useState(false);
   const blinkAnimation = useRef(new Animated.Value(0)).current;
@@ -80,6 +80,10 @@ function ActivationButton() {
       <Text style={styles.alarmStatusText}>
         ALARM {isSystemArmed ? "ON" : "OFF"}
       </Text>
+      {/* Show change by */}
+      {selectedHub && selectedHub.system_status_changed_by && (
+        <Text>{`Changed by: ${selectedHub.system_status_changed_by}`}</Text>
+      )}
 
       <Animated.View
         style={[
