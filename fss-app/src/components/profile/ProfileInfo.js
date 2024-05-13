@@ -13,8 +13,6 @@ function ProfileInfo(){
     // Get user data from context
     const { user, profile, handleSignOut } = useUser();
 
-    console.log(user);
-
     function generateHubsString(hubs){
         let res = "";
         profile.hubs_owned.map((hub, index) => {
@@ -35,6 +33,7 @@ function ProfileInfo(){
     }
 
     return(
+        <>
         <View style = {[styles.container, globalStyles.shadow]}>
             
             <View style ={styles.infoContainer}>
@@ -56,11 +55,17 @@ function ProfileInfo(){
                 <Text style = {styles.infoTitle}>Hubs Owned </Text>
                 {renderHubs(profile.hubs_owned)}
             </View>
-            
-            <TouchableOpacity style = {globalStyles.buttonActive} onPress={handleSignOut}> 
-                <Text style = {loginStyles.text}> SIGN OUT </Text> 
-            </TouchableOpacity>
+
+            <View style = {styles.signOutContainer}>
+                <Text style = {styles.signOutText}>
+                    Want to change account or sign out?
+                </Text>
+                <TouchableOpacity style = {globalStyles.buttonActive} onPress={handleSignOut}> 
+                    <Text style = {loginStyles.text}> SIGN OUT </Text> 
+                </TouchableOpacity>
+            </View>
         </View>
+        </>
     );
 }
 
