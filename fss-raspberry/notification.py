@@ -38,6 +38,8 @@ def saveNotifHistory(title,body,firebase,category):
         notifhistlist = []
     else:
         notifhistlist = list(notifhist.values())
+    while len(notifhistlist) > 100:
+        notifhistlist.pop(0)
 
     notifhistlist.append(data)
     firebase.fbset("raspberry_hubs/"+firebase.devNum+"/notification_history",notifhistlist)

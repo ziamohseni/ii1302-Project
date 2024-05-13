@@ -86,6 +86,7 @@ def main():
     active = setupHubForFB(firebase)
     faceEncodings = getFaceEncodings(usb_path)
     alarm_instance = Alarm("alarm.wav")
+    LED_queue.put(active.capitalize())
     global armedboot
     global silencedboot
     global triggeredboot
