@@ -29,13 +29,12 @@ const deviceInfoModalStyles = StyleSheet.create({
   bold:{
     fontWeight: "bold",
   },
-
   buttonOff: {
-    backgroundColor: "green",
+    backgroundColor: globalStyles.successColor.color,
     borderRadius: 20,
   },
   buttonOn: {
-    backgroundColor: "red",
+    backgroundColor: globalStyles.dangerColor.color,
     borderRadius: 20,
   },
   buttonContainer: {
