@@ -9,6 +9,7 @@ import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/notificationsHistoryScreenStyles";
 import SelectHub from "../components/global/SelectHub";
+import RecentCameraSnapshot from "../components/notificationsscreen/RecentCameraSnapshot";
 
 function NotificationsHistoryScreen() {
   const { selectedHub, noHubsFound } = useRaspberryHubs();
@@ -16,6 +17,7 @@ function NotificationsHistoryScreen() {
 
   // Get notifications from async-storage
   useEffect(() => {
+    // Get notifications
     const notificationsArray = selectedHub && selectedHub.notification_history;
     if (notificationsArray) {
       const sortedNotifications = notificationsArray.sort(
@@ -33,7 +35,13 @@ function NotificationsHistoryScreen() {
     <SafeAreaView style={globalStyles.containerWithoutPadding}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={styles.container}>
+          {/* Select hub */}
           <SelectHub />
+          {/* Recent Camera Snapshot */}
+          <Text style={styles.title}>Recent Camera Snapshot</Text>
+          <RecentCameraSnapshot />
+
+          {/* Notifications */}
           <Text style={styles.title}>Notifications History</Text>
           {/* No Notification Found */}
           {!notifications.length && (
@@ -41,7 +49,7 @@ function NotificationsHistoryScreen() {
               <Text>No notifications found</Text>
             </View>
           )}
-          {/* Notifications */}
+          {/* Notifications item */}
           <View style={styles.notificationsContainer}>
             {notifications &&
               notifications.map((notification, index) => {

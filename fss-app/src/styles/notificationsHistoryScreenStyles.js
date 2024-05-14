@@ -66,6 +66,33 @@ const NotificationsHistoryScreenStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
+  // Camera snapshot
+  recentCameraSnapshotContainer: {
+    flexDirection: "row",
+    gap: 10,
+    padding: 10,
+    backgroundColor: globalStyles.lightColor.color,
+    borderColor: globalStyles.secondLightColor.color,
+    borderWidth: 2,
+    borderRadius: 5,
+    overflow: "hidden",
+  },
+  recentCameraSnapshot: {
+    flex: 1,
+    flexDirection: "column",
+    gap: 10,
+  },
+  recentCameraSnapshotImage: {
+    width: "100%",
+    height: 200,
+    borderRadius: 5,
+  },
+  noRecentCameraSnapshot: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default NotificationsHistoryScreenStyles;
