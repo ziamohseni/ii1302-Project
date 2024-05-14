@@ -13,7 +13,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "24.05.13.1147",
+      "buildNumber": "24.05.14.2355",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": ["audio", "fetch", "remote-notification"]
