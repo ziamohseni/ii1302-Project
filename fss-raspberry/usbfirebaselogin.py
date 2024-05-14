@@ -36,15 +36,17 @@ def getUserAndPass():
 
 
             
-def getFirebase(LED_q):
+def getFirebase(LED_q,re_login):
     
     wifi_status = False
-    while not wifi_status:
+    while not wifi_status and re_login == False:
         username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
-        wifi_status = wifilogin.connectWifi(wifissid,wifipass)
-        #wifi_status = True
+        #wifi_status = wifilogin.connectWifi(wifissid,wifipass)
+        wifi_status = True
         if not wifi_status:
             LED_q.put("WifiError")
+    if re_login:
+        username,password,wifissid,wifipass,userDataUsbPath = getUserAndPass()
     time.sleep(10)
     while True:
         print("Logging in to firebase")

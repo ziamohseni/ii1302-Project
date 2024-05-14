@@ -82,7 +82,8 @@ def main():
     LED_thread = threading.Thread(target=LED_Control, args=[LED_queue])
     LED_thread.start()
     
-    firebase,usb_path = getFirebase(LED_queue)
+    firebase,usb_path = getFirebase(LED_queue,False)
+    starttime = time.time()
     active = setupHubForFB(firebase)
     faceEncodings = getFaceEncodings(usb_path)
     alarm_instance = Alarm("alarm.wav")
@@ -169,7 +170,7 @@ def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     # Bind the socket to the address and port
-  
+    
     port = 8888
     ip_address_to_rasp = "10.42.0.1"
     server_address = (ip_address_to_rasp, port)  # Change to desired host and port
@@ -188,6 +189,9 @@ def main():
         
         try:
             print("Connection from:", client_address)
+            if time.time() -starttime >= 3300:
+                firebase,usb_path = getFirebase(LED_queue,True) 
+                starttime = time.time()
             hub_data = firebase.fbget("raspberry_hubs/"+firebase.devNum)
             active = hub_data["system_status"]
             sensor_objects = hub_data["sensors"]
