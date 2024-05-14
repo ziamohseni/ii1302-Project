@@ -47,6 +47,14 @@ const devicesScreenStyles = StyleSheet.create({
     fontWeight: "bold",
     color: globalStyles.darkColor.color,
     textAlign: "left",
+    paddingLeft: 20,
+  },
+
+  listText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: globalStyles.darkColor.color,
+    textAlign: "left",
     paddingLeft: 5,
   },
 

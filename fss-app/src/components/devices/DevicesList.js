@@ -74,11 +74,19 @@ function DevicesList() {
     >
       <View style={styles.deviceContainer}>
         {getLogo(item.type.toLowerCase())}
-        <View style={styles.deviceTextContainer}>
-          <Text style={styles.deviceText}>
-            Sensor: {formatText(item.type)}
-          </Text>
-          <Text style={styles.deviceText}>Status: {formatText(item.status)}</Text>
+
+        <View style = {{flexDirection: "row"}}>
+          <View style={styles.deviceTextContainer}>
+            <Text style={styles.deviceText}>
+              Sensor: {formatText(item.type)}
+            </Text> 
+            <Text style={styles.deviceText}>Status: {formatText(item.status)} </Text> 
+          </View>
+          
+          <Ionicons 
+            name = {item.status === "active"? "checkmark-outline" : "close-outline"} 
+            size = {20}
+          />
         </View>
       </View>
 
@@ -114,7 +122,7 @@ function DevicesList() {
   return (
     
     <View>
-      <Text style={[styles.deviceText, {fontSize: 20}]}>
+      <Text style={[styles.listText, {fontSize: 20}]}>
        List of devices in hub #{selectedHub && selectedHub.id}
       </Text>
 
