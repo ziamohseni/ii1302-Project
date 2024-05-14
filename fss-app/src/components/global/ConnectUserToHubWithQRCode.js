@@ -9,7 +9,11 @@ import {
   Pressable,
 } from "react-native";
 import { CameraView, Camera } from "expo-camera/next";
+import { ref, update } from "firebase/database";
+import { database } from "../../services/firebaseConfig";
 import Ionicons from "@expo/vector-icons/Ionicons";
+// Contexts
+import { useUser } from "../../contexts/UserContext";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 import selectHubStyles from "../../styles/selectHubStyles";
@@ -18,7 +22,28 @@ function ConnectUserToHubWithQRCode() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const { user, profile } = useUser();
 
+  // Function to add hub to user's profile under hubs_accessible array
+  const addHubToUser = async (hubId) => {
+    if (profile?.hubs_accessible?.includes(hubId)) {
+      alert("You are already connected to this hub.");
+      return;
+    } else {
+      const userRef = ref(database, "users/" + user.uid);
+      const updates = {
+        hubs_accessible: profile.hubs_accessible
+          ? [...profile.hubs_accessible, hubId]
+          : [hubId],
+      };
+      await update(userRef, updates);
+      setModalVisible(false);
+      setScanned(false);
+      alert("Hub connected successfully!");
+    }
+  };
+
+  // Request camera permissions
   useEffect(() => {
     const getCameraPermissions = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -28,9 +53,10 @@ function ConnectUserToHubWithQRCode() {
     getCameraPermissions();
   }, []);
 
+  // Handle barcode scanning
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    addHubToUser(data);
   };
 
   if (hasPermission === null) {
