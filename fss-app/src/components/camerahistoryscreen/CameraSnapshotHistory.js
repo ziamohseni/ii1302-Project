@@ -13,8 +13,6 @@ const CameraSnapshotHistory = () => {
   const [loading, setLoading] = useState(true);
   const [cameraSnapshotHistory, setCameraSnapshotHistory] = useState([]);
 
-  console.log("cameraSnapshots", cameraSnapshotHistory[0]?.url);
-
   // Get camera snapshots
   useEffect(() => {
     // Function Get camera snapshots
