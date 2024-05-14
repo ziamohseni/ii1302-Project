@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 // Navigations
 import TabNavigation from "./TabNavigation";
 import AlarmTriggeredScreen from "../screens/AlarmTriggeredScreen";
+import CameraHistoryScreen from "../screens/CameraHistoryScreen";
 // Styles
 import globalStyles from "../styles/globalStyles";
 
@@ -28,6 +29,21 @@ const RootNavigation = () => {
             gestureEnabled: true,
             contentStyle: {
               backgroundColor: globalStyles.dangerColor.color,
+              borderTopRightRadius: Platform.OS === "ios" ? 20 : 0,
+              borderTopLeftRadius: Platform.OS === "ios" ? 20 : 0,
+              overflow: "hidden",
+            },
+          }}
+        />
+        <RootStack.Screen
+          name="CameraHistoryModal"
+          component={CameraHistoryScreen}
+          options={{
+            animation: "slide_from_bottom",
+            gestureDirection: "vertical",
+            gestureEnabled: true,
+            contentStyle: {
+              backgroundColor: globalStyles.lightColor.color,
               borderTopRightRadius: Platform.OS === "ios" ? 20 : 0,
               borderTopLeftRadius: Platform.OS === "ios" ? 20 : 0,
               overflow: "hidden",
