@@ -38,7 +38,7 @@ function DeviceInfoModal(props){
         <Text style = {styles.bold}>ID: </Text> {item.id + "\n"}
         <Text style = {styles.bold}>Status:</Text> {props.formatText(item.status)+ "\n"} 
         <Text style = {styles.bold}>Triggered:</Text> {props.formatText(item.triggered)+ "\n"}
-        <Text style = {styles.bold}>Last Triggered:</Text> {props.formatDate(item.last_triggered)+ "\n"}
+        <Text style = {styles.bold}>Last Triggered:</Text> {item.triggered?"Triggered now! \n":props.formatDate(item.last_triggered)+ "\n"}
         {item.type === "camera"? 
         <><Text style = {styles.bold}>Last Snapshot:</Text> {props.formatDate(item.recent_snapshot.timestamp) +"\n"} </>
         : 
