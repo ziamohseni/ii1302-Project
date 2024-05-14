@@ -8,6 +8,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RecentCameraSnapshot from "../components/notificationsscreen/RecentCameraSnapshot";
+import CameraSnapshotHistory from "../components/camerahistoryscreen/CameraSnapshotHistory";
 // Styles
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/cameraHistoryScreenStyles";
@@ -18,12 +19,15 @@ const CameraHistoryScreen = () => {
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.innerContainer}>
-        <ScrollView contentContainerStyle={styles.content}>
-          {/* Recent Snapshot */}
-          <Text style={styles.title}>Recent Camera Snapshot</Text>
-          <RecentCameraSnapshot />
-          {/* Camera History */}
-          <Text style={styles.title}>Camera History</Text>
+        <ScrollView>
+          <View style={styles.content}>
+            {/* Recent Snapshot */}
+            <Text style={styles.title}>Recent Camera Snapshot</Text>
+            <RecentCameraSnapshot />
+            {/* Camera History */}
+            <Text style={styles.title}>Camera History</Text>
+            <CameraSnapshotHistory />
+          </View>
         </ScrollView>
         {/* Close button */}
         <View style={styles.closeButton}>

@@ -15,13 +15,13 @@ const devicesScreenStyles = StyleSheet.create({
     flexDirection: "column",
     gap: 20,
     marginTop: Platform.OS === "ios" ? 10 : 40,
-    paddingHorizontal: 20,
   },
   content: {
     flex: 1,
     flexDirection: "column",
     gap: 20,
     flexGrow: 1,
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 20,
