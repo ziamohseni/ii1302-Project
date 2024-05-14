@@ -92,7 +92,7 @@ function DevicesList() {
     
     <View>
       <Text style={[styles.deviceText, {fontSize: 20}]}>
-        List of devices in hub #{selectedHub && selectedHub.id}
+       List of devices in hub #{selectedHub && selectedHub.id}
       </Text>
 
       <View style={styles.container}>

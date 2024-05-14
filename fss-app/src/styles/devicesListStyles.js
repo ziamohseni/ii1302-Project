@@ -12,8 +12,6 @@ const devicesScreenStyles = StyleSheet.create({
     flexDirection: "column",
     gap: 5,
     backgroundColor: globalStyles.lightColor.color,
-    
-    marginHorizontal: 10,
     marginTop: 10,
     borderRadius: 10,
   },
@@ -40,7 +38,7 @@ const devicesScreenStyles = StyleSheet.create({
     fontWeight: "bold",
     color: globalStyles.darkColor.color,
     textAlign: "left",
-    paddingLeft: 15,
+    paddingLeft: 5,
   },
 
   deviceTextContainer: {
