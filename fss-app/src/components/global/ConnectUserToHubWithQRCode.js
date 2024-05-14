@@ -24,9 +24,13 @@ function ConnectUserToHubWithQRCode() {
   const [modalVisible, setModalVisible] = useState(false);
   const { user, profile, fetchUserProfile } = useUser();
 
+  // TODO: Check the hubId against the hubs in the database to ensure it is a valid hub
   // Function to add hub to user's profile under hubs_accessible array
   const addHubToUser = async (hubId) => {
-    if (profile?.hubs_accessible?.includes(hubId)) {
+    if (
+      profile?.hubs_accessible?.includes(hubId) ||
+      profile?.hubs_owned?.includes(hubId)
+    ) {
       alert("You are already connected to this hub.");
       return;
     } else {
