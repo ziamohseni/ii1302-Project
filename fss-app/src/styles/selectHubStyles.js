@@ -8,14 +8,6 @@ const selectHubStyles = StyleSheet.create({
     backgroundColor: globalStyles.lightColor.color,
     padding: 20,
     borderRadius: 10,
-    shadowColor: globalStyles.darkColor.color,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   centeredView: {
     flex: 1,

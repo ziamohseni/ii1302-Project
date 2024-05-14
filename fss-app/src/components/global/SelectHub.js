@@ -13,7 +13,7 @@ function SelectHub() {
   return (
     <View>
       <TouchableOpacity
-        style={selectHubStyles.selectHubContainer}
+        style={[selectHubStyles.selectHubContainer, globalStyles.shadow]}
         onPress={() => setModalVisible(true)}
       >
         <Text>
