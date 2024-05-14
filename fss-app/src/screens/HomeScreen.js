@@ -3,13 +3,12 @@ import ActivationButton from "../components/activationButton/ActivationButton";
 import SelectHub from "../components/global/SelectHub";
 import NoHubsFound from "../components/global/NoHubsFound";
 import AlarmTriggeredWarningBar from "../components/global/AlarmTriggeredWarningBar";
+import Ionicons from "@expo/vector-icons/Ionicons";
 // Contexts
 import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 // Styles
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/homeScreenStyles";
-//logo
-import icon from "../../assets/adaptive-icon.png";
 
 function HomeScreen() {
   const { noHubsFound, selectedHub } = useRaspberryHubs();
@@ -30,7 +29,11 @@ function HomeScreen() {
     return (
       <View style={styles.lastArmedContainer}>
         <View style={styles.imageContainer}>
-          <Image source={icon} style={{ width: 90, height: 90 }} />
+          <Ionicons 
+            name = {selectedHub?.system_status === "unarmed"? "lock-open-outline" : "lock-closed-outline"} 
+            size={50} 
+            style = {styles.lock}
+          />
         </View>
         <View>
           <Text style={styles.lastArmedText}>

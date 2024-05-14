@@ -31,6 +31,10 @@ const homeScreenStyles = StyleSheet.create({
   timeText:{
     fontSize: 16,
     fontWeight: "bold"
+  },
+  lock:{
+    padding: 15,
+    paddingRight: 30,
   }
 });
 
