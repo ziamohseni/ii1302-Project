@@ -59,9 +59,6 @@ function ProfileInfo() {
         </View>
 
         <View style={styles.signOutContainer}>
-          <Text style={styles.signOutText}>
-            Want to change account or sign out?
-          </Text>
           <TouchableOpacity
             style={globalStyles.buttonActive}
             onPress={handleSignOut}

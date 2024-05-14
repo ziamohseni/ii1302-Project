@@ -77,7 +77,7 @@ function ConnectUserToHubWithQRCode() {
         <Text style={styles.addButtonText}>CONNECT TO A HUB</Text>
         <View>
           <Ionicons
-            name="person-add"
+            name="qr-code-outline"
             size={22}
             color={globalStyles.primaryColor.color}
           />
