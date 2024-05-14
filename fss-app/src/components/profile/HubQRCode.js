@@ -49,11 +49,11 @@ const HubQRCode = () => {
           <View style={selectHubStyles.modalView}>
             <Text style={selectHubStyles.selectText}>
               Sub user can scan the QR code below to get access to hub #:{" "}
-              {selectedHub.id}
+              {selectedHub?.id}
             </Text>
             <View style={{ alignSelf: "center" }}>
               <QRCode
-                value={selectedHub.id}
+                value={selectedHub?.id}
                 size={200}
                 logo={require("../../../assets/fss-logo.png")}
                 logoBackgroundColor={globalStyles.lightColor.color}

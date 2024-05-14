@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, database } from "../services/firebaseConfig";
-import { ref, get, update } from "firebase/database";
+import { ref, get, update, set } from "firebase/database";
 import { useNotifications } from "./NotificationsContext";
 
 // Create User Context
@@ -24,19 +24,7 @@ export const UserProvider = ({ children }) => {
         setUser(user);
         setIsUserLoggedInAndVerified(user && user.emailVerified);
         // Fetch user profile from Realtime Database
-        const userProfileRef = ref(database, "users/" + user.uid);
-        get(userProfileRef)
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              setProfile(snapshot.val());
-            } else {
-              setProfile(null);
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching user data:", error);
-            setProfile(null);
-          });
+        fetchUserProfile(user);
       } else {
         // User is signed out
         setIsUserLoggedInAndVerified(false);
@@ -69,6 +57,23 @@ export const UserProvider = ({ children }) => {
     }
   }, [profile, expoPushToken, user]);
 
+  // Fetch user profile from Realtime Database
+  const fetchUserProfile = async (user) => {
+    const userProfileRef = ref(database, "users/" + user.uid);
+    get(userProfileRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          setProfile(snapshot.val());
+        } else {
+          setProfile(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        setProfile(null);
+      });
+  };
+
   // Handle user sign out
   const handleSignOut = async () => {
     try {
@@ -89,6 +94,7 @@ export const UserProvider = ({ children }) => {
         isLoading,
         isUserLoggedInAndVerified,
         handleSignOut,
+        fetchUserProfile,
       }}
     >
       {children}

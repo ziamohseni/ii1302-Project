@@ -22,7 +22,7 @@ function ConnectUserToHubWithQRCode() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const { user, profile } = useUser();
+  const { user, profile, fetchUserProfile } = useUser();
 
   // Function to add hub to user's profile under hubs_accessible array
   const addHubToUser = async (hubId) => {
@@ -39,6 +39,7 @@ function ConnectUserToHubWithQRCode() {
       await update(userRef, updates);
       setModalVisible(false);
       setScanned(false);
+      fetchUserProfile(user);
       alert("Hub connected successfully!");
     }
   };
