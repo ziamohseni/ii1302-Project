@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Text, TouchableOpacity, View, Modal, Image} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import DeviceInfoModal from "./DevideInfoModal";
+import * as Animatable from "react-native-animatable";
 // Contexts
 import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 // Styles
@@ -85,14 +86,18 @@ function DevicesList() {
         onPress={() => handleSensorPress(item)}>
 
         {item.triggered ?
-        <View style = {{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+        <Animatable.View 
+          style = {{flexDirection: "row", justifyContent: "center", alignItems: "center"}}
+          animation="flash"
+          iterationCount="infinite"
+        >
           <Text style={styles.trigText}>DEVICE IS TRIGGERED  </Text>
           <Ionicons
             name="warning"
             size={26}
             color={"white"}
           />
-        </View>
+        </Animatable.View>
         :
         <Text style={styles.lastTrigText}> Last triggered: 
           {item.last_triggered? formatDate(item.last_triggered) : " Never been triggered!"} 
