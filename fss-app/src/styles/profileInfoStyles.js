@@ -4,30 +4,30 @@ import globalStyles from "./globalStyles";
 const profileInfoStyles = StyleSheet.create({
   container: {
     backgroundColor: globalStyles.lightColor.color,
-    paddingTop: 15, 
+    paddingTop: 15,
     borderRadius: 15,
     borderColor: globalStyles.secondLightColor.color,
     borderWidth: 1,
   },
-  infoTitle:{
+  infoTitle: {
     fontWeight: "bold",
     fontSize: 16,
     paddingVertical: 5,
   },
-  infoContainer:{
+  infoContainer: {
     paddingHorizontal: 15,
     paddingVertical: 0,
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  infoText:{
+  infoText: {
     fontWeight: "normal",
   },
-  infoTextHub:{
+  infoTextHub: {
     textAlign: "right",
   },
-  signOutContainer:{
+  signOutContainer: {
     backgroundColor: globalStyles.lightColor.color,
     padding: 15,
     borderColor: globalStyles.secondLightColor.color,
@@ -36,24 +36,22 @@ const profileInfoStyles = StyleSheet.create({
     borderBottomLeftRadius: 13,
     marginTop: 20,
   },
-  signOutText:{
+  signOutText: {
     fontSize: 18,
     textAlign: "left",
-    marginLeft: 20,
   },
-  imageContainer:{
+  imageContainer: {
     paddingHorizontal: 15,
     paddingVertical: 5,
   },
-  image:{
+  image: {
     borderWidth: 2,
     borderColor: globalStyles.secondLightColor.color,
     //borderRadius: 15,
     padding: 10,
     width: 90,
-    height: 90
-  }
-
+    height: 90,
+  },
 });
 
 export default profileInfoStyles;

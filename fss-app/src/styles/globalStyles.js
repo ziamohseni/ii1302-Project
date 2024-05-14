@@ -85,7 +85,6 @@ const globalStyles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 20,
     paddingHorizontal: 10,
-    marginHorizontal: 20,
     marginVertical: 10,
     borderRadius: 5,
     elevation: 3,
