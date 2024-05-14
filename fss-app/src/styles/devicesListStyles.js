@@ -5,14 +5,13 @@ const devicesScreenStyles = StyleSheet.create({
   container: {
     flexDirection: "column",
     gap: 20,
-    paddingVertical: 10,
+    paddingVertical: 10, 
   },
 
   devices: {
     flexDirection: "column",
     gap: 5,
     backgroundColor: globalStyles.lightColor.color,
-    
     marginHorizontal: 10,
     marginTop: 10,
     borderRadius: 10,
@@ -22,6 +21,15 @@ const devicesScreenStyles = StyleSheet.create({
     borderColor: globalStyles.secondLightColor.color,
     borderWidth: 1,
     backgroundColor: "transparent",
+    padding: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomEndRadius: 10,
+  },
+
+  devicesLowerTriggered:{
+    borderColor: globalStyles.secondLightColor.color,
+    borderWidth: 1,
+    backgroundColor: globalStyles.dangerColor.color,
     padding: 10,
     borderBottomLeftRadius: 10,
     borderBottomEndRadius: 10,
@@ -52,6 +60,13 @@ const devicesScreenStyles = StyleSheet.create({
     paddingLeft: 15,
     fontWeight: "500",
     padding: 1,
+  },
+
+  trigText:{
+    textAlign: "center",
+    fontWeight: "500",
+    padding: 1,
+    color: "white",
   },
 
   logo: {
