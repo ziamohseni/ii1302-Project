@@ -79,6 +79,7 @@ export const RaspberryHubsProvider = ({ children }) => {
       } else {
         setHubs([]);
         setLoading(false);
+        setNoHubsFound(true);
       }
     };
 

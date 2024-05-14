@@ -16,8 +16,8 @@ function ProfileInfo() {
 
   function generateHubsString(hubs) {
     let res = "";
-    profile.hubs_owned.map((hub, index) => {
-      if (index !== profile.hubs_owned.length - 1) {
+    hubs?.map((hub, index) => {
+      if (index !== hubs.length - 1) {
         res = res + hub + ", ";
       } else {
         res = res + hub;
@@ -53,10 +53,19 @@ function ProfileInfo() {
           <Text style={styles.infoText}>{user?.email}</Text>
         </View>
 
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoTitle}>Hubs Owned </Text>
-          {renderHubs(profile.hubs_owned)}
-        </View>
+        {profile?.hubs_owned && (
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTitle}>Hubs Owned </Text>
+            {renderHubs(profile?.hubs_owned)}
+          </View>
+        )}
+
+        {profile?.hubs_accessible && (
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTitle}>Hubs Accessible </Text>
+            {renderHubs(profile?.hubs_accessible)}
+          </View>
+        )}
 
         <View style={styles.signOutContainer}>
           <TouchableOpacity
