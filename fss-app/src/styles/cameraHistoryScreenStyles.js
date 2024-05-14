@@ -16,6 +16,9 @@ const devicesScreenStyles = StyleSheet.create({
     gap: 20,
     marginTop: Platform.OS === "ios" ? 10 : 40,
   },
+  selectHubContainer: {
+    paddingHorizontal: 20,
+  },
   content: {
     flex: 1,
     flexDirection: "column",

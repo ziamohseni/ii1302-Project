@@ -19,6 +19,7 @@ const CameraSnapshotHistory = () => {
   useEffect(() => {
     // Function Get camera snapshots
     const getCameraSnapshots = async () => {
+      setLoading(true);
       if (selectedHub) {
         let snapshots = selectedHub.sensors.camera.snapshot_history;
         snapshots = Object.values(snapshots);
@@ -59,6 +60,12 @@ const CameraSnapshotHistory = () => {
           </Text>
         </View>
       ))}
+      {/* No Snapshots */}
+      {cameraSnapshotHistory.length === 0 && !loading && (
+        <Text style={styles.noSnapshotText}>
+          No snapshots history available
+        </Text>
+      )}
     </View>
   );
 };

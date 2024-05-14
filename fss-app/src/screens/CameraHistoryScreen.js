@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import RecentCameraSnapshot from "../components/notificationsscreen/RecentCameraSnapshot";
 import CameraSnapshotHistory from "../components/camerahistoryscreen/CameraSnapshotHistory";
+import SelectHub from "../components/global/SelectHub";
 // Styles
 import globalStyles from "../styles/globalStyles";
 import styles from "../styles/cameraHistoryScreenStyles";
@@ -19,6 +20,11 @@ const CameraHistoryScreen = () => {
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={styles.innerContainer}>
+        {/* Select Hub */}
+        <View style={styles.selectHubContainer}>
+          <SelectHub />
+        </View>
+        {/* Content */}
         <ScrollView>
           <View style={styles.content}>
             {/* Recent Snapshot */}
