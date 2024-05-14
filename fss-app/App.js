@@ -6,7 +6,7 @@ import { RaspberryHubsProvider } from "./src/contexts/RaspberryHubsContext";
 import { NotificationsProvider } from "./src/contexts/NotificationsContext";
 
 // Navigation
-import RootNavigation from "./src/components/navigation/RootNavigation";
+import RootNavigation from "./src/navigation/RootNavigation";
 
 export default function App() {
   return (

@@ -2,9 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Platform } from "react-native";
 // Navigations
 import TabNavigation from "./TabNavigation";
-import AlarmTriggeredScreen from "../../screens/AlarmTriggeredScreen";
+import AlarmTriggeredScreen from "../screens/AlarmTriggeredScreen";
 // Styles
-import globalStyles from "../../styles/globalStyles";
+import globalStyles from "../styles/globalStyles";
 
 const RootStack = createNativeStackNavigator();
 const RootNavigation = () => {

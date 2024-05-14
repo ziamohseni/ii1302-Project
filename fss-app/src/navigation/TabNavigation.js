@@ -1,19 +1,19 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Platform } from "react-native";
-import ActivityIndicatorComponent from "../global/ActivityIndicatorComponent";
-import AlarmTriggeredWarningBar from "../global/AlarmTriggeredWarningBar";
+import ActivityIndicatorComponent from "../components/global/ActivityIndicatorComponent";
+import AlarmTriggeredWarningBar from "../components/global/AlarmTriggeredWarningBar";
 // Context
-import { useUser } from "../../contexts/UserContext";
-import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
+import { useUser } from "../contexts/UserContext";
+import { useRaspberryHubs } from "../contexts/RaspberryHubsContext";
 // Styles
-import globalStyles from "../../styles/globalStyles";
+import globalStyles from "../styles/globalStyles";
 // Screens
-import LoginScreen from "../../screens/LoginScreen";
-import HomeScreen from "../../screens/HomeScreen";
-import DevicesScreen from "../../screens/DevicesScreen";
-import ProfileScreen from "../../screens/ProfileScreen";
-import NotificationsHistoryScreen from "../../screens/NotificationsHistoryScreen";
+import LoginScreen from "../screens/LoginScreen";
+import HomeScreen from "../screens/HomeScreen";
+import DevicesScreen from "../screens/DevicesScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import NotificationsHistoryScreen from "../screens/NotificationsHistoryScreen";
 
 const Tab = createBottomTabNavigator();
 
