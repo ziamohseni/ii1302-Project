@@ -18,6 +18,7 @@ import floodLogo from "../../../assets/flood.png";
 function DeviceInfoModal(props){
 
   function getLogo(type) {
+    if(type === "smokedetect") type = "smoke";
     switch (type) {
       case "camera":
         return <Image source={cameraLogo} style={styles.logo} />;

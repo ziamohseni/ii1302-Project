@@ -22,6 +22,7 @@ function DevicesList() {
   const [selectedItem, setSelectedItem] = useState(null);
 
   function getLogo(type) {
+    if(type === "smokedetect") type = "smoke";
     switch (type) {
       case "camera":
         return <Image source={cameraLogo} style={styles.logo} />;
@@ -49,6 +50,7 @@ function DevicesList() {
     if(typeof string !== 'string'){
       return "Not a String";
     }
+    if(string === "smokedetect") string = "smoke";
     string = string.toLowerCase();
     const formattedText = string.charAt(0).toUpperCase() + string.substring(1, string.length);
     return formattedText;
