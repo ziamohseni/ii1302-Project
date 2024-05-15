@@ -212,9 +212,10 @@ def main():
                         sensorvalue["triggered"] = eval(sensor_data[2].capitalize())
                         sensorvalue["type"] = sensor_data[1]
                         if sensorvalue["triggered"] == True:
-                            sensorvalue["last_triggered"] = time.time()
+                            sensorvalue["last_triggered"] = time.time()*1000
                         sensorfound = True
                         if sensor_data[1] == "knock" and eval(sensor_data[2].capitalize()) == True and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
+                            sensorvalue["triggered"] = False
                             saveAndSendToTokens(knock_title_string,knock_body_string,hub_data["push_tokens"],"Alarm",firebase)
                             camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                             camthread.start()
@@ -238,11 +239,12 @@ def main():
             if not sensorfound and active == "armed":
 
                 if eval(sensor_data[2].capitalize()) == True:
-                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":time.time()}
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time()*1000,"last_triggered":time.time()*1000}
                     
                     
 
                     if sensor_data[1] == "knock" and (not "camera" in sensor_objects.keys() or sensor_objects["camera"]["status"] == "active"):
+                        sensor["triggered"] = False
                         saveAndSendToTokens(knock_title_string,knock_body_string,hub_data["push_tokens"],"Alarm",firebase)
                         camthread = threading.Thread(target = camera.take_picture, args = (firebase,faceEncodings,camthread))
                         camthread.start()
@@ -255,7 +257,7 @@ def main():
                         firebase.fbupdate("raspberry_hubs/"+firebase.devNum,{"system_triggered":True})
 
                 else:
-                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time(),"last_triggered":""}                    
+                    sensor = {"type":sensor_data[1],"triggered":eval(sensor_data[2].capitalize()),"status":"active","id":sensor_data[0],"last_active":time.time()*1000,"last_triggered":""}                    
 
                 sensor_objects[sensor_data[0]] = sensor
                 firebase.fbset("raspberry_hubs/"+firebase.devNum+"/sensors/"+sensor_data[0],sensor)
