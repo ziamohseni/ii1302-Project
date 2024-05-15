@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image } from "react-native";
-import { signOut } from "firebase/auth";
+import ConnectUserToHubButton from "./ConnectUserToHubButton";
 import ConnectUserToHubWithQRCode from "../global/ConnectUserToHubWithQRCode";
 //context
 import { useUser } from "../../contexts/UserContext";
@@ -74,7 +74,7 @@ function ProfileInfo() {
           >
             <Text style={loginStyles.text}> SIGN OUT </Text>
           </TouchableOpacity>
-          <ConnectUserToHubWithQRCode />
+          <ConnectUserToHubButton />
         </View>
       </View>
     </>
