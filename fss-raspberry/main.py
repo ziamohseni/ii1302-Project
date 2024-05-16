@@ -70,6 +70,10 @@ def setupHubForFB(firebase):
     if not "system_triggered" in hub_data.keys():
         hub_data["system_triggered"] = False
         hub_data_changed = True
+    if not "sensors" in hub_data.keys():
+        fbcamera = {"type":"camera","status":"active","id":"camera"}
+        hub_data["sensors"] = {"camera":fbcamera}
+        hub_data_changed = True
     active = hub_data["system_status"]
     if hub_data_changed:
         firebase.fbset("raspberry_hubs/"+firebase.devNum,hub_data)
