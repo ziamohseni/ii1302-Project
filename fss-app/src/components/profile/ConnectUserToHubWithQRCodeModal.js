@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Modal, Pressable } from "react-native";
-import { ref, update } from "firebase/database";
+import { ref, update, get } from "firebase/database";
 import { database } from "../../services/firebaseConfig";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import ScannerCamera from "../global/ScannerCamera";
@@ -35,12 +35,16 @@ function ConnectUserToHubWithQRCodeModal({ modalVisible, setModalVisible }) {
 
       // Add user to the hub's users array
       const hubRef = ref(database, "raspberry_hubs/" + hubId);
-      const hubUpdates = {
-        users: selectedHub.users
-          ? [...selectedHub.users, user.uid]
-          : [user.uid],
-      };
-      await update(hubRef, hubUpdates);
+      const hubSnapshot = await get(hubRef);
+      if (hubSnapshot.exists()) {
+        const hubData = hubSnapshot.val();
+        const updatedUsers = hubData.users
+          ? [...hubData.users, user.uid]
+          : [user.uid];
+        await update(hubRef, { users: updatedUsers });
+      } else {
+        console.error("Hub not found");
+      }
 
       // Close the modal and fetch the updated user profile
       setModalVisible(false);
