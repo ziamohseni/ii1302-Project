@@ -13,7 +13,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "buildNumber": "24.05.15.0707",
+      "buildNumber": "24.05.16.1225",
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": ["audio", "fetch", "remote-notification"]
@@ -21,7 +21,7 @@
       "bundleIdentifier": "com.5sensesecurity.fssapp"
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
