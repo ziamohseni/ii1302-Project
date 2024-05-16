@@ -53,11 +53,7 @@ users:
 raspberry_hubs:
   hub_id_1:
     admin: "user_id_1" # direct reference to the user who owns this hub
-    # users: #### we don't use this for now, it is too complicated on app development.
-    #   user_id_2:
-    #     access_sensors: ["sensor_id_1"] # we don't use this for now, it is too complicated on app development.
-    #   user_id_3:
-    #     access_sensors: ["sensor_id_1", "sensor_id_2"]
+    users: ["user_id_2", "user_id_3"]
     sensors:
       sensor_id_1:
         id: "sensor_id_1"
