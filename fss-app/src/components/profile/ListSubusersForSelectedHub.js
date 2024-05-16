@@ -4,6 +4,7 @@ import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 import { database } from "../../services/firebaseConfig";
 import { ref, get } from "firebase/database";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import RemoveSubuserFromSelectedHub from "./RemoveSubuserFromSelectedHub";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 import styles from "../../styles/listSubusersForSelectedHubStyles";
@@ -16,7 +17,7 @@ const ListSubusersForSelectedHub = () => {
     if (selectedHub?.users) {
       const fetchUsers = async () => {
         try {
-          const usersDataPromises = selectedHub.users.map(async (userId) => {
+          const usersDataPromises = selectedHub?.users.map(async (userId) => {
             const userRef = ref(database, `users/${userId}`);
             const userSnapshot = await get(userRef);
             return { id: userId, ...userSnapshot.val() };
@@ -37,12 +38,10 @@ const ListSubusersForSelectedHub = () => {
     };
   }, [selectedHub]);
 
-  console.log("users", users);
-
   return (
     <View style={styles.container}>
       <Text>List of subusers in hub #{selectedHub?.id}</Text>
-      {users.map((user) => (
+      {users?.map((user) => (
         <View key={user.id} style={styles.subUserContainer}>
           {/* Subuser info */}
           <View style={styles.subUserInfo}>
@@ -54,9 +53,11 @@ const ListSubusersForSelectedHub = () => {
             <Text>{user.first_name || "Unnamed User"}</Text>
           </View>
           {/* Delete subuser button */}
-          <View>
-            <Text>Delete</Text>
-          </View>
+          {selectedHub?.role === "Admin" && (
+            <View>
+              <RemoveSubuserFromSelectedHub user={user} />
+            </View>
+          )}
         </View>
       ))}
       {/* No subusers found */}
