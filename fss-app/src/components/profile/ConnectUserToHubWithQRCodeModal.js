@@ -5,12 +5,14 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import ScannerCamera from "../global/ScannerCamera";
 // Contexts
 import { useUser } from "../../contexts/UserContext";
+import { useRaspberryHubs } from "../../contexts/RaspberryHubsContext";
 // Styles
 import globalStyles from "../../styles/globalStyles";
 import selectHubStyles from "../../styles/selectHubStyles";
 
 function ConnectUserToHubWithQRCodeModal({ modalVisible, setModalVisible }) {
   const { user, profile, fetchUserProfile } = useUser();
+  const { selectedHub } = useRaspberryHubs();
 
   // TODO: Check the hubId against the hubs in the database to ensure it is a valid hub
   // Function to add hub to user's profile under hubs_accessible array
@@ -22,6 +24,7 @@ function ConnectUserToHubWithQRCodeModal({ modalVisible, setModalVisible }) {
       alert("You are already connected to this hub.");
       return;
     } else {
+      // Add hub to user's profile hubs_accessible array
       const userRef = ref(database, "users/" + user.uid);
       const updates = {
         hubs_accessible: profile.hubs_accessible
@@ -29,6 +32,17 @@ function ConnectUserToHubWithQRCodeModal({ modalVisible, setModalVisible }) {
           : [hubId],
       };
       await update(userRef, updates);
+
+      // Add user to the hub's users array
+      const hubRef = ref(database, "raspberry_hubs/" + hubId);
+      const hubUpdates = {
+        users: selectedHub.users
+          ? [...selectedHub.users, user.uid]
+          : [user.uid],
+      };
+      await update(hubRef, hubUpdates);
+
+      // Close the modal and fetch the updated user profile
       setModalVisible(false);
       fetchUserProfile(user);
       alert("Hub connected successfully!");
