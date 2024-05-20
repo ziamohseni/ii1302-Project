@@ -10,14 +10,7 @@ import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB4I3wplJvc_VJ_P8iWKL3FTp9LHc8maeI",
-  authDomain: "ii1302-5sense.firebaseapp.com",
-  databaseURL:
-    "https://ii1302-5sense-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "ii1302-5sense",
-  storageBucket: "ii1302-5sense.appspot.com",
-  messagingSenderId: "515915135675",
-  appId: "1:515915135675:web:597f05fff474ec60fd879e",
+  // I have removed my firebaseConfig for security reasons. You can get your firebaseConfig from your firebase project settings.
 };
 
 // Initialize Firebase
